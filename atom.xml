@@ -1,0 +1,983 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Lucia&#39;s Note</title>
+  
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://yoursite.com/"/>
+  <updated>2017-05-25T16:29:44.773Z</updated>
+  <id>http://yoursite.com/</id>
+  
+  <author>
+    <name>Lucia.M</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>GIT/MAVEN 打包生成软件安装脚本</title>
+    <link href="http://yoursite.com/2017/05/25/script/"/>
+    <id>http://yoursite.com/2017/05/25/script/</id>
+    <published>2017-05-25T15:22:46.000Z</published>
+    <updated>2017-05-25T16:29:44.773Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="场景需求"><a href="#场景需求" class="headerlink" title="场景需求"></a>场景需求</h1><p>测试人员通过TAG迁出相应的代码，使用MAVEN打成war包后，再与相应的依赖包打成TAR包，做成一键安装软件</p>
+<p> <img src="http://oh4uobiuk.bkt.clouddn.com/autoinstall.png" alt="autoinstall"></p>
+<h2 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h2><p>├── backup # 生成的软件安装包备份目录</p>
+<p>├── git_mvn # 从git迁出的源代码目录</p>
+<p>│ └──XXXX</p>
+<p>├── package # 软件安装包</p>
+<p>│ ├── conf # 软件配置目录</p>
+<p>│ ├── rpm # 软件依赖所需的rpm包目录</p>
+<p>│ ├── XXXX_setup.sh 软件安装执行脚本（MASTER）</p>
+<p>│ ├── script # 软件所需的其他脚本</p>
+<p>│ ├── software</p>
+<p>│ ├── sql # 软件所需的初始化语句</p>
+<p>│ └── war # 软件war包</p>
+<p>└──package.sh # 打包脚本</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>从OSC@GIT上根据 TAG 迁出的源代码打成 war 包，将其放置在 package/war 目录下，将 package 下 的所有文件及目录打成软件安装包（softeware_version.tar.gz）</p>
+<p>= package.sh</p>
+<h1 id="场景分析"><a href="#场景分析" class="headerlink" title="场景分析"></a>场景分析</h1><ul>
+<li>搭建 GIT / MAVEN 环境</li>
+<li>编写 package.sh<h2 id="搭建GIT环境"><a href="#搭建GIT环境" class="headerlink" title="搭建GIT环境"></a>搭建GIT环境</h2></li>
+</ul>
+<h3 id="Step-1-安装所需的包"><a href="#Step-1-安装所需的包" class="headerlink" title="Step 1: 安装所需的包"></a>Step 1: 安装所需的包</h3><p>源代码编译GIT之前，确保系统安装了所需的包或者通过以下命令来安装它</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@lucia ~]# yum install curl-devel expat-devel gettext-devel openssl-devel zlib-devel perl-ExtUtils-MakeMaker package -y</div><div class="line">[root@lucia ~]# yum install gcc  -y (下载 编译器 )</div><div class="line">[root@lucia ~]# yum install wget (使用wget 下载软件包)</div></pre></td></tr></table></figure>
+<h3 id="Step-2：下载并编译GIT源代码"><a href="#Step-2：下载并编译GIT源代码" class="headerlink" title="Step 2：下载并编译GIT源代码"></a>Step 2：下载并编译GIT源代码</h3><p>从 git-scm 下载最新Git源代码或者简单的使用以下载命令下载Git 1.8.5.6<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@lucia ~]# cd /usr/src</div><div class="line">[root@lucia src]# wget https://www.kernel.org/pub/software/scm/git/git-1.8.5.6.tar.gz</div><div class="line">[root@lucia src]# tar -zxvf git-1.8.5.6.tar.gz</div></pre></td></tr></table></figure></p>
+<p>在下载提取源代码后，使用以下命令来编译源代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[root@lucia src]# cd git-1.8.5.6</div><div class="line">[root@lucia git-1.8.5.6]# make prefix=/usr/local/git all</div><div class="line">[root@lucia git-1.8.5.6]# make prefix=/usr/local/git install</div><div class="line">[root@lucia git-1.8.5.6]# echo &quot;export PATH=$PATH:/usr/local/git/bin&quot; &gt;&gt; /etc/bashrc # 设置环境变量</div><div class="line">[root@lucia git-1.8.5.6]# source /etc/bashrc</div></pre></td></tr></table></figure>
+<h3 id="Step-4：下载apache-maven"><a href="#Step-4：下载apache-maven" class="headerlink" title="Step 4：下载apache-maven"></a>Step 4：下载apache-maven</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">[root@lucia git-1.8.5.6]# cd /usr/src/</div><div class="line">[root@lucia src]# wget -c --no-check-certificate --no-cookies --header &quot;Cookie: oraclelicense=accept-securebackup-cookie&quot; http://download.oracle.com/otn-pub/java/jdk/7u60-b19/jdk-7u60-linux-x64.rpm    # JDK 下载地址 http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html</div><div class="line">[root@lucia src]# wget http://mirrors.cnnic.cn/apache/maven/maven-3/3.3.3/binaries/apache-maven-3.3.3-bin.tar.gz</div><div class="line">[root@lucia src]# tar -zxvf apache-maven-3.3.3-bin.tar.gz</div><div class="line">[root@lucia src]# mv apache-maven-3.3.3 /usr/local/maven3</div><div class="line"> </div><div class="line">[root@lucia src]# cat &gt;&gt; /etc/profile &lt;&lt; EOF  # 设置环境变量</div><div class="line">&gt; MAVEN_HOME=/usr/local/maven3</div><div class="line">&gt; export MAVEN_HOME</div><div class="line">&gt; export PATH=$&#123;PATH&#125;:$&#123;MAVEN_HOME&#125;/bin</div><div class="line">&gt; EOF</div><div class="line">[root@lucia src]# source /etc/profile</div></pre></td></tr></table></figure>
+<h3 id="Step-5：-告诉GIT你的名字和email"><a href="#Step-5：-告诉GIT你的名字和email" class="headerlink" title="Step 5： 告诉GIT你的名字和email"></a>Step 5： 告诉GIT你的名字和email</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@lucia src]# git config --global user.name &quot;lucia&quot;</div><div class="line">[root@lucia src]# git config --global user.email &quot;luciaxxxxx@XXX.com</div></pre></td></tr></table></figure>
+<h3 id="Step-6-拉取GIT源代码进行MAVEN打包"><a href="#Step-6-拉取GIT源代码进行MAVEN打包" class="headerlink" title="Step 6 : 拉取GIT源代码进行MAVEN打包"></a>Step 6 : 拉取GIT源代码进行MAVEN打包</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[root@lucia src]# mkdir -p /lucia/git_maven</div><div class="line">[root@lucia src]# cd /lucia/git_maven</div><div class="line">[root@lucia git_maven]# git clone git@git.oschina.net:XXXXX/XXXXX.git （需要验证用户名及密码，跳过验证一步，需要主机信任）</div><div class="line">[root@lucia git_maven]# cd XXXX</div><div class="line">[root@lucia git_maven]# mvn package</div></pre></td></tr></table></figure>
+<h2 id="编写package-sh"><a href="#编写package-sh" class="headerlink" title="编写package.sh"></a>编写package.sh</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line">#!/bin/bash</div><div class="line"># defined Dirctory</div><div class="line">GIT_REPO=https://git.oschina.net/XXXXX/XXXXX.git   #software 仓库URL地址</div><div class="line">SCRIPTS_DIR=/lucia                        # 定义脚本所在位置 SCRIPTS_DIR=`pwd` 或者指定安装路径 /Lucia</div><div class="line">PACKAGE_DIR=$&#123;SCRIPTS_DIR&#125;/package        # 定义软件安装脚本所在的目录</div><div class="line">BACKUP_DIR=$&#123;SCRIPTS_DIR&#125;/backup          # 定义生成软件安装包备份目录</div><div class="line">GIT_PAG=$&#123;SCRIPTS_DIR&#125;/git_mvn            # 定义源代码所放目录</div><div class="line">SW_GIT=$&#123;GIT_PAG&#125;/XXXX                    # 定义软件源代码名字</div><div class="line">TIMESTAMP=$(date +&apos;%Y%m%d%H%M%S&apos;)         # 定义时间戳生成格式</div><div class="line">#define TarName</div><div class="line">PRODUCT_NAME=XXXX                                        # 定义项目名称</div><div class="line">PRODUCT_VERSION=1.0.10                                   # 定义项目版本</div><div class="line">PACKAGE_NAME=$&#123;PRODUCT_NAME&#125;_$&#123;PRODUCT_VERSION&#125;.tar.gz   # 定义软件安装包名称格式</div><div class="line">TAG_NAME=TAG_XXXX1000_1.0.10_build20160115               # TAG</div><div class="line"> </div><div class="line">function add_gitPage()&#123;</div><div class="line">	[ -d $&#123;SW_GIT&#125; ] &amp;&amp; rm -rf $&#123;SW_GIT&#125;                     </div><div class="line">	mkdir -p $&#123;GIT_PAG&#125; </div><div class="line">    cd $&#123;GIT_PAG&#125;  </div><div class="line">	git clone $&#123;GIT_REPO&#125;                             # 拉取全局代码                        </div><div class="line">	cd $&#123;SW_GIT&#125;</div><div class="line">	git checkout -b new_branch_name $&#123;TAG_NAME&#125;       #新建且切换分支，根据TAG迁出代码</div><div class="line">	source /etc/profile</div><div class="line">	mvn package                                       #打包</div><div class="line">	cd $&#123;SW_GIT&#125;/target</div><div class="line">	mv *.war $&#123;TAG_NAME&#125;.war </div><div class="line">&#125;</div><div class="line">function add_tarPage()&#123;</div><div class="line">	cd $&#123;PACKAGE_DIR&#125;/war</div><div class="line">	rm -rf TAG_XXXX*                                  #删除之前war目录中的项目war包</div><div class="line">	\cp $&#123;SW_GIT&#125;/target/$&#123;TAG_NAME&#125;.war ./   </div><div class="line">	[ -d $&#123;BACKUP_DIR&#125; ] || mkdir -p $&#123;BACKUP_DIR&#125;</div><div class="line">	</div><div class="line">	cd $&#123;SCRIPTS_DIR&#125;</div><div class="line">	[ -f $&#123;PACKAGE_NAME&#125; ] &amp;&amp; mv $&#123;PACKAGE_NAME&#125; $&#123;BACKUP_DIR&#125;/$&#123;PACKAGE_NAME&#125;_$&#123;TIMESTAMP&#125;</div><div class="line">	</div><div class="line">	cd $&#123;PACKAGE_DIR&#125;</div><div class="line">		tar -zcvf $&#123;PRODUCT_NAME&#125;_$&#123;PRODUCT_VERSION&#125;.tar.gz *</div><div class="line">		mv $&#123;PRODUCT_NAME&#125;_$&#123;PRODUCT_VERSION&#125;.tar.gz $&#123;SCRIPTS_DIR&#125;</div><div class="line">	</div><div class="line">&#125;</div><div class="line">add_gitPage</div><div class="line">add_tarPage</div></pre></td></tr></table></figure>
+<p>通过执行sh package.sh 生成XXXX_Version.tar.gz；即可完成一键安装包的制作</p>
+<h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><ul>
+<li>附1：如何主机信任？（OSC）</li>
+</ul>
+<p>代码库→点击管理→点击部署公钥管理→点击添加公钥<br>点击查看怎样生成公钥，将公钥添加到此处（此处不多解释）</p>
+<ul>
+<li>附2：GIT环境安装脚本<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">#!/bin/bash</div><div class="line"># this script is order to install git</div><div class="line">yum install curl-devel expat-devel gettext-devel openssl-devel zlib-devel perl-ExtUtils-MakeMaker package wget gcc -y</div><div class="line">if [ $? = 0 ];then</div><div class="line">    cd /usr/src</div><div class="line">    wget https://www.kernel.org/pub/software/scm/git/git-1.8.5.6.tar.gz</div><div class="line">    if  [ $? = 0 ];then</div><div class="line">    tar -zxvf git-1.8.5.6.tar.gz</div><div class="line">    cd git-1.8.5.6    </div><div class="line">    make prefix=/usr/local/git all</div><div class="line">    make prefix=/usr/local/git install</div><div class="line">    echo &quot;export PATH=$PATH:/usr/local/git/bin&quot; &gt;&gt; /etc/bashrc </div><div class="line">    source /etc/bashrc</div><div class="line">    else    </div><div class="line">    echo wget git_tar failed</div><div class="line">else</div><div class="line">echo yum install failed</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="题外话"><a href="#题外话" class="headerlink" title="题外话"></a>题外话</h3><p>若需要执行tar包中的xxxx_setup.sh，需要写install.sh去调用它</p>
+<ul>
+<li>install.sh 的思路如下：<ul>
+<li>定义软件名称、版本、等（与package中的版本保持一致）</li>
+<li>判断最大盘符</li>
+<li>定义安装目录 (define XXXX)</li>
+<li>设置环境变量 (source /etc/profile)</li>
+<li>解压缩一键安装包 (tar -zxf XXX -C XXX)</li>
+<li>执行一键安装包中的XXXX_setup.sh脚本<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">#判断最大盘符</div><div class="line">maxPath=&quot;$(df -k | grep `df -k | grep -v Filesystem | awk &apos;&#123;print $4&#125;&apos; | awk &apos;&#123;max=max&gt;$1?max:$1&#125;END&#123;print max&#125;&apos;` | awk &apos;&#123;print $6&#125;&apos;)&quot;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;场景需求&quot;&gt;&lt;a href=&quot;#场景需求&quot; class=&quot;headerlink&quot; title=&quot;场景需求&quot;&gt;&lt;/a&gt;场景需求&lt;/h1&gt;&lt;p&gt;测试人员通过TAG迁出相应的代码，使用MAVEN打成war包后，再与相应的依赖包打成TAR包，做成一键安装软件&lt;/p&gt;
+&lt;p
+    
+    </summary>
+    
+    
+      <category term="shell" scheme="http://yoursite.com/tags/shell/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>PPTP_VPN Client 安装</title>
+    <link href="http://yoursite.com/2017/05/25/pptp/"/>
+    <id>http://yoursite.com/2017/05/25/pptp/</id>
+    <published>2017-05-25T15:19:54.000Z</published>
+    <updated>2017-05-25T16:29:44.773Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h1><h2 id="实验需求"><a href="#实验需求" class="headerlink" title="实验需求"></a>实验需求</h2><p>客户内网服务器vpn拨号，根据获取PPP账号进行SSH连接</p>
+<h2 id="实验实现"><a href="#实验实现" class="headerlink" title="实验实现"></a>实验实现</h2><p>服务器：CentOS 6.5-minimal<br>软 件：PPTP_VPN Client</p>
+<h1 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h1><h2 id="安装软件PPTP-VPN-Client"><a href="#安装软件PPTP-VPN-Client" class="headerlink" title="安装软件PPTP_VPN_Client"></a>安装软件PPTP_VPN_Client</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum -y install pptp pptp-setup</div></pre></td></tr></table></figure>
+<h2 id="使用pptpsetup命令创建VPN节点"><a href="#使用pptpsetup命令创建VPN节点" class="headerlink" title="使用pptpsetup命令创建VPN节点"></a>使用pptpsetup命令创建VPN节点</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">pptpsetup  --create myvpn --server XX.XXX.XX.XX --username aaa --password 123456 --encrypt --start</div><div class="line">#------pptpsetup命令及说明--------#</div><div class="line"># pptpsetup  --create &lt;TUNNEL&gt; --server &lt;ip address/hostname&gt; [--domain &lt;DOMAIN NAME&gt;] --u sername &lt;USERNAME&gt; [--password &lt;PASSWORD&gt;] [--encrypt] [--start]</div><div class="line"># pptpsetup –delete &lt;TUNNEL&gt; 删除一个节点</div></pre></td></tr></table></figure>
+<p><strong>Options:</strong></p>
+<ul>
+<li>TUNNEL 创建的连接名称，自指定。</li>
+<li>SERVER PPTP SERVER的IP或域名。</li>
+<li>DOMAIN 所在的域，很多Windows的服务器都是使- 用“域”来管理认证的。</li>
+<li>USERNAME VPN 用户名（域用户名）</li>
+<li>PASSWORD VPN上用户密码，也可以没这个参数，命令稍后会自动询问，这样保证账号安全</li>
+<li>–encrypt 表示启用加密，不必指定加密方式，命令会读取配置文件中的加密方式<br>当没使用–encrypt 连接时出现下面的错误时，表示使用了加密，这点也可以和VPN的管理员联系确认一下，遇到下面的情况可以加上该参数。</li>
+<li>CHAP authentication succeeded</li>
+<li>LCP terminated by peer (ZM-76-^@&lt;M-Mt^@^@^BM-f ) 类似乱码</li>
+<li>–start 创建连接完后马上连接</li>
+</ul>
+<h3 id="使用该命令后实际上创建了两个配置文件"><a href="#使用该命令后实际上创建了两个配置文件" class="headerlink" title="使用该命令后实际上创建了两个配置文件"></a>使用该命令后实际上创建了两个配置文件</h3><ul>
+<li>/etc/ppp/chap-secrets</li>
+<li>/etc/ppp/peers/连接名</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"># written by pptpsetup</div><div class="line">pty &quot;pptp 58.247.83.58 --nolaunchpppd&quot;</div><div class="line">lock</div><div class="line">noauth</div><div class="line">nobsdcomp</div><div class="line">nodeflate</div><div class="line">name vpn</div><div class="line">remotename myvpn</div><div class="line">ipparam myvpn</div><div class="line">require-mppe-128</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">#defaultroute  #使用本连接作为默认路由,本文单网卡没意义，可以不添加，说明见附录</div><div class="line">persist #当连接丢失时让pppd再次拨号，已验证</div><div class="line">require-mppe-128</div><div class="line">refuse-pap</div><div class="line">refuse-chap</div><div class="line">refuse-eap</div><div class="line">refuse-mschap</div></pre></td></tr></table></figure>
+<h2 id="设置拨号脚本"><a href="#设置拨号脚本" class="headerlink" title="设置拨号脚本"></a>设置拨号脚本</h2><p>拨号脚本pon 和poff在下面的目录 /usr/share/doc/ppp-*/scripts/ 里:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">cp /usr/share/doc/ppp-2.4.5/scripts/pon /usr/sbin</div><div class="line">cp /usr/share/doc/ppp-2.4.5/scripts/poff /usr/sbin</div><div class="line">chmod +x /usr/sbin/pon /usr/sbin/poff</div><div class="line">#使pon和poff脚本拥有执行权限</div></pre></td></tr></table></figure></p>
+<p>这样就可以通过pon/poff 来启停VPN连接。也可以使用 pppd call / killall pppd来启动/停止。</p>
+<h2 id="设置开机自动拨号，并在拨号后改变路由"><a href="#设置开机自动拨号，并在拨号后改变路由" class="headerlink" title="设置开机自动拨号，并在拨号后改变路由"></a>设置开机自动拨号，并在拨号后改变路由</h2><p>把启动拨号的命令添加到/etc/rc.d/local文件中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">pppd call myvpn</div><div class="line">sleep 10s</div><div class="line">ip route delete default</div><div class="line">ip route add default dev ppp0</div></pre></td></tr></table></figure>
+<blockquote>
+<ul>
+<li>注明：查看VPN Log；相应的LOG可以在/var/log/message 中查看</li>
+<li>相关文档参考：<a href="http://netside.blog.51cto.com/766556/870961" target="_blank" rel="external">http://netside.blog.51cto.com/766556/870961</a></li>
+</ul>
+</blockquote>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;目的&quot;&gt;&lt;a href=&quot;#目的&quot; class=&quot;headerlink&quot; title=&quot;目的&quot;&gt;&lt;/a&gt;目的&lt;/h1&gt;&lt;h2 id=&quot;实验需求&quot;&gt;&lt;a href=&quot;#实验需求&quot; class=&quot;headerlink&quot; title=&quot;实验需求&quot;&gt;&lt;/a&gt;实验需求&lt;/h
+    
+    </summary>
+    
+    
+      <category term="vpn" scheme="http://yoursite.com/tags/vpn/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Intro</title>
+    <link href="http://yoursite.com/2017/01/16/MyLife/"/>
+    <id>http://yoursite.com/2017/01/16/MyLife/</id>
+    <published>2017-01-16T11:55:18.000Z</published>
+    <updated>2017-05-25T16:29:44.770Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote>
+<ul>
+<li>文章都经过本人测试后才执笔，若出现某些代码块无法执行或者书写错误，望指正。</li>
+<li>本人属野生酱油路人甲，文章若出现专业词语表达错误，望指正。</li>
+<li>求批评求指正：Emial @ Me</li>
+</ul>
+</blockquote>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;文章都经过本人测试后才执笔，若出现某些代码块无法执行或者书写错误，望指正。&lt;/li&gt;
+&lt;li&gt;本人属野生酱油路人甲，文章若出现专业词语表达错误，望指正。&lt;/li&gt;
+&lt;li&gt;求批评求指正：Emial @ Me&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/b
+    
+    </summary>
+    
+    
+      <category term="随笔" scheme="http://yoursite.com/tags/%E9%9A%8F%E7%AC%94/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>SHELL笔记 01</title>
+    <link href="http://yoursite.com/2017/01/16/SHELL%E7%AC%94%E8%AE%B0-01/"/>
+    <id>http://yoursite.com/2017/01/16/SHELL笔记-01/</id>
+    <published>2017-01-16T11:26:37.000Z</published>
+    <updated>2017-05-25T16:29:44.771Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p><strong>1. 终端提示符</strong></p>
+<ul>
+<li>$表示普通用户 </li>
+<li>#表示管理员root<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">username@hostname $ </div><div class="line">root@hostname #</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>&ensp;</p>
+<p><strong>2. shell脚本通常是以shebang(#!)起始的文本文件</strong></p>
+<ul>
+<li>shebang是一个文本行，其中#!位于解释器路径之前。/bin/bash是Bash的解释器命令路径。<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">#!/bin/bash</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>&ensp;<br><strong>3. 运行脚本的方式</strong></p>
+<ul>
+<li>将脚本作为bash的命令行参数</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ bash script.sh   #假设脚本位于当前目录下 </div><div class="line">$ bash /home/path/script.sh   #使用script.sh的完整路径</div><div class="line"># 如果将脚本作为bash的命令行参数来运行，那么就用不着脚本中的shebang</div></pre></td></tr></table></figure>
+<ul>
+<li>另一种是授予脚本执行权限，将其变为可执行文件。<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ #该命令赋予所有用户script.sh文件的可执行权限。</div><div class="line">$ chmod a+x script.sh</div><div class="line"># 这个脚本能以下列方式执行：</div><div class="line">$ ./script.sh || /home/path/script.sh</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>&ensp;<br><strong>4. 启动shell说明</strong></p>
+<blockquote>
+<ul>
+<li>启动shell时，它一开始会执行一组命令来定义诸如提示文本、颜色等各类设置。</li>
+<li>这组命令来自位于用户主目录中的脚本文件~/.bashrc（对于登录shell则是~/.bash_profile）。</li>
+<li>Bash还维护了一个历史记录文件~/.bash_history，用于保存用户运行过的命令。</li>
+</ul>
+</blockquote>
+<p>&ensp;<br><strong>5. 在Bash中，每个命令或是命令序列是通过使用分号或换行符来分隔</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ cmd1 ; cmd2</div><div class="line"></div><div class="line">$ # 它等同于：</div><div class="line">$ cmd1</div><div class="line">$ cmd2</div></pre></td></tr></table></figure>
+<p>&ensp;<br><strong>6. 注释</strong></p>
+<ul>
+<li>注释部分以#为起始，一直延续到行尾。</li>
+</ul>
+<hr>
+<h1 id="终端打印"><a href="#终端打印" class="headerlink" title="终端打印"></a>终端打印</h1><h2 id="echo"><a href="#echo" class="headerlink" title="echo"></a>echo</h2><ul>
+<li>在默认情况下，echo在每次调用后会添加一个换行符\n<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$ #使用/不使用双引号 </div><div class="line">$ echo &quot;Welcome to Bash&quot; || echo Welcome to Bash</div><div class="line">Welcome to Bash</div><div class="line"></div><div class="line">$ #使用单引号</div><div class="line">$ echo &apos;Welcome to Bash&apos;</div><div class="line">Welcome to Bash</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><strong>这些方法看起来相似，但各有一些特殊用途和副作用。思考下面这行命令：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"># 以下命令基于centos 6.5 环境下执行</div><div class="line">[root@lucia test]# echo hello world !  # ①</div><div class="line">hello world !</div><div class="line">[root@lucia test]# echo &quot;hello world !&quot; # ②</div><div class="line">-bash: !&quot;: event not found</div><div class="line">[root@lucia test]# echo &quot;hello world ! &quot; # ③</div><div class="line">hello world ! </div><div class="line">[root@lucia test]# echo &apos;hello world !&apos; # ④</div><div class="line">hello world !</div></pre></td></tr></table></figure></p>
+<blockquote>
+<ul>
+<li>用echo命令输出不加引号的字符串时，将字符串中的各个单词作为字符串输出，各字符串之间用一个空格分割。<strong>①成功输出</strong></li>
+<li>! 当后面跟随的字母不是“空格、换行、回车、=和(”时，做命令替换。<strong>故而②报错，③成功输出</strong></li>
+<li>当shell碰到第一个单引号时，它忽略掉其后右引号的所有特殊字符。<strong>故而④成功输出</strong> </li>
+</ul>
+</blockquote>
+<p><strong>不加引号和加引号的区别：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[root@lucia test]# echo hello;world</div><div class="line">hello</div><div class="line">-bash: world: command not found</div><div class="line">[root@lucia test]# echo &quot;hello;world&quot;</div><div class="line">hello;world</div></pre></td></tr></table></figure>
+<ul>
+<li>tips:使用不带引号的echo时，无法再所要显示的文本中使用分号(;)，分号在Bash shell中用作命令定界符</li>
+</ul>
+<p><strong>单引号和双引号的区别：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[root@lucia test]# var1=hello</div><div class="line">[root@lucia test]# var2=world</div><div class="line">[root@lucia test]# echo &quot;$var1 $var2&quot;</div><div class="line">hello world</div><div class="line">[root@lucia test]# echo &apos;$var1 $var2&apos;</div><div class="line">$var1 $var2</div><div class="line">[root@lucia test]#</div></pre></td></tr></table></figure></p>
+<blockquote>
+<ul>
+<li>单引号（’ ‘）和双引号类似，但它不允许解释变量引用，因此，在单引号内的字符$的特殊意思无效了。</li>
+<li>在单引号内，除了字符’，每个特殊字符都只是字面的意思。</li>
+<li>单引号（全局引用）比双引号（部分引用）更严格的处理引用部分。</li>
+</ul>
+</blockquote>
+<p>&ensp;</p>
+<h3 id="在echo中转义换行符"><a href="#在echo中转义换行符" class="headerlink" title="在echo中转义换行符"></a>在echo中转义换行符</h3><ul>
+<li>选项-n来忽略结尾的换行符。</li>
+<li>转义序列参数echo –e “包含转义序列的字符串”这种形式<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">echo -e &quot;1\t2\t3&quot;</div><div class="line">1 2 3</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="打印彩色输出"><a href="#打印彩色输出" class="headerlink" title="打印彩色输出"></a>打印彩色输出</h3><p><strong>颜色设置:重置=0,其中“F”为字体颜色，编号30 ~ 37；“B”为背景色，编号40~47</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">F       B</div><div class="line">30      40      黑色</div><div class="line">31      41      红色</div><div class="line">32      42      绿色</div><div class="line">33      43      黄色</div><div class="line">34      44      蓝色</div><div class="line">35      45      紫红色</div><div class="line">36      46      青蓝色</div><div class="line">37      47      白色</div></pre></td></tr></table></figure>
+<ul>
+<li><p>要打印彩色文本，可输入如下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">echo -e &quot;\e[1;31m This is red text \e[0m&quot;</div><div class="line"># \e[1;31将颜色设为红色，\e[0m将颜色重新置回</div></pre></td></tr></table></figure>
+</li>
+<li><p>要设置彩色背景，可输入如下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">echo -e &quot;\e[1;42m Green Background \e[0m&quot;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>&ensp;</p>
+<h2 id="printf"><a href="#printf" class="headerlink" title="printf"></a>printf</h2><p> <strong>printf并不像echo命令自动添加换行符\n,但可以通过各种参数在printf中使用格式化字符串 </strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ printf &quot;Hello world&quot;</div></pre></td></tr></table></figure>
+<p>比如在下面的脚本中：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">#!/bin/bash</div><div class="line">#文件名: printf.sh</div><div class="line">printf &quot;%-5s %-10s %-4s\n&quot; No Name Mark</div><div class="line">printf &quot;%-5s %-10s %-4.2f\n&quot; 1 Sarath 80.3456</div><div class="line">printf &quot;%-5s %-10s %-4.2f\n&quot; 2 James 90.9989</div><div class="line">printf &quot;%-5s %-10s %-4.2f\n&quot; 3 Jeff 77.564</div></pre></td></tr></table></figure></p>
+<p>我们会得到如下格式化的输出：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">No    Name       Mark</div><div class="line">1     Sarath     80.35</div><div class="line">2     James      91.00</div><div class="line">3     Jeff       77.56</div></pre></td></tr></table></figure></p>
+<blockquote>
+<ul>
+<li>%s、%c、%d和%f都是格式替换符（format substitution character），其所对应的参数可以置于<br>带引号的格式字符串之后。</li>
+<li>-表示左对齐，默认字符串采用右对齐方式</li>
+<li>-Xs指明了一个格式为左对齐且宽度为X的字符串替换,宽度指定了保留给某个变量的字符数。如果内容不足X个字符，余下的则以空格符填充。</li>
+<li>对于浮点数，可以使用其他参数对小数部分进行舍入。<br>对于Mark字段，将其格式化为%-4.2f，其中.2指定保留2个小数位。</li>
+<li>注意，在每行格式字符串后都有一个换行符（\n）。</li>
+</ul>
+</blockquote>
+<hr>
+<h1 id="变量和环境变量"><a href="#变量和环境变量" class="headerlink" title="变量和环境变量"></a>变量和环境变量</h1><h2 id="概念小结"><a href="#概念小结" class="headerlink" title="概念小结"></a>概念小结</h2><ul>
+<li>在Bash中，每一个变量的值都是字符串，值都以字符串的形式存储</li>
+<li>环境变量：一些特殊的变量会被shell环境和操作系统环境用来存储特别的值</li>
+<li>env查看所有与终端相关的环境变量  </li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[root@lucia tmp]# env</div><div class="line">HOSTNAME=lucia</div><div class="line">SELINUX_ROLE_REQUESTED=</div><div class="line">TERM=xterm</div><div class="line">SHELL=/bin/bash</div><div class="line">...</div></pre></td></tr></table></figure>
+<p><strong>对于进程A，其运行时环境变量</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">PID=`pgrep A`</div><div class="line">cat /proc/$PID/environ</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[root@lucia tmp]# cat /proc/1/environ </div><div class="line">HOME=/TERM=linuxPATH=/sbin:/bin:/usr/sbin:/usr/bin</div><div class="line"></div><div class="line">[root@lucia tmp]# cat /proc/1/environ | tr &apos;\0&apos; \n&apos;</div><div class="line">HOME=/</div><div class="line">TERM=linux</div><div class="line">PATH=/sbin:/bin:/usr/sbin:/usr/bin</div></pre></td></tr></table></figure>
+<blockquote>
+<p>每一个变量以name=value的形式描述，用null字符（\O）分隔<br>将\0替换\n，重新输出格式化，每一行显示一组“变量=值”</p>
+</blockquote>
+<ul>
+<li>环境变量是未在当前进程中定义，而从父进程中继承而来的变量</li>
+<li>export命令用来设置环境变量临时变量（<strong>当前shell脚本</strong>执行的任何应用程序都会继承这个变量）</li>
+</ul>
+<p>&ensp;</p>
+<p>标准环境变量PATH类似于下面的格式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@lucia tmp]# echo $PATH</div><div class="line">/usr/local/ruby/bin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin:/usr/local/git/bin:/root/bin</div></pre></td></tr></table></figure></p>
+<blockquote>
+<ul>
+<li>在给出所要执行的命令后，shell会自动在PATH环境变量所包含的目录列表中（各目录路径之<br>间以冒号分隔）查找对应的可执行文件。</li>
+<li>PATH通常定义在/etc/environment或/etc/profile或~/.bashrc中。</li>
+</ul>
+</blockquote>
+<p><strong>如果需要在PATH中添加一条新路径，可以使用：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ export PATH=&quot;$PATH:/home/user/bin&quot;</div><div class="line"></div><div class="line">$ # 或者</div><div class="line"></div><div class="line">$ PATH=&quot;$PATH:/home/user/bin&quot;</div><div class="line">$ export PATH</div></pre></td></tr></table></figure></p>
+<p>&ensp;</p>
+<h2 id="使用函数添加环境变量"><a href="#使用函数添加环境变量" class="headerlink" title="使用函数添加环境变量"></a>使用函数添加环境变量</h2><p>假设我们要将myapp安装到/opt/myapp，它的二进制文件在bin目录中，库文件在lib目录中。</p>
+<p>实现方法如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">export PATH=/opt/myapp/bin:$PATH</div><div class="line">export LD_LIBRARY_PATH=/opt/myapp/lib:$LD_LIBRARY_PATH</div></pre></td></tr></table></figure></p>
+<p>PATH和LD_LIBRARY_PATH现在看起来应该像这样：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">PATH=/opt/myapp/bin:/usr/bin:/bin</div><div class="line">LD_LIBRARY_PATH=/opt/myapp/lib:/usr/lib:/lib</div></pre></td></tr></table></figure></p>
+<p>不过我们可以把下面的函数加入.bashrc，让一切变得更轻松些：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">prepend() &#123; [ -d &quot;$2&quot; ] &amp;&amp; eval $1=\&quot;$2&apos;:&apos;\$$1\&quot; &amp;&amp; export $1; &#125;</div></pre></td></tr></table></figure></p>
+<p>像下面这样来使用该函数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">prepend PATH /opt/myapp/bin</div><div class="line">prepend LD_LIBRARY_PATH /opt/myapp/lib</div></pre></td></tr></table></figure></p>
+<p><strong>工作原理</strong></p>
+<blockquote>
+<ul>
+<li>我们定义了名为prepend()的函数，它首先检查该函数第二个参数所指定的目录是否存在。</li>
+<li>如果存在，eval表达式将第一个参数所指定的变量值设置成第二个参数的值加上“:”（路径分隔符），随后再跟上首个参数的原始值。</li>
+</ul>
+</blockquote>
+<p>有一点需要留意。在进行添加时，如果变量为空，则会在末尾留下一个“:”<br>要解决这个问题，可以将该函数再进行一些修改：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">prepend() &#123; [ -d &quot;$2&quot; ] &amp;&amp; eval $1=\&quot;$2\$\&#123;$1:+&apos;:&apos;\$$1\&#125;\&quot; &amp;&amp; export $1 ; &#125;</div></pre></td></tr></table></figure></p>
+<p>在这个函数中，我们引入了一种shell参数扩展的形式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$&#123;parameter:+expression&#125;</div></pre></td></tr></table></figure></p>
+<p>如果parameter有值且不为空，则使用expression的值。<br>通过这次修改，在追加环境变量时，当且仅当旧值存在，才会增加。</p>
+<hr>
+<p><strong>tips:</strong></p>
+<ul>
+<li>eval cmdline :</li>
+</ul>
+<p><em>eval会对后面的cmdline进行两遍扫描，第一次cmdline若为普通命令，则执行此命令，若含有变量的间接引用，替换间接引用的语义</em></p>
+<p>例如输出最后一个参数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[root@lucia ~]# set 11 22 33 44</div><div class="line">[root@lucia ~]# echo &quot;$#&quot;</div><div class="line">4</div><div class="line">[root@lucia ~]# echo &quot;\$$#&quot;</div><div class="line">$4</div><div class="line">[root@lucia ~]# eval echo &quot;\$$#&quot;</div><div class="line">44</div></pre></td></tr></table></figure></p>
+<p><em>eval命令将会首先扫描命令行进行所有的替换，然后再执行命令。该命令使用于那些一次扫描无法实现其功能的变量</em></p>
+<p>&ensp;</p>
+<h2 id="补充知识"><a href="#补充知识" class="headerlink" title="补充知识"></a>补充知识</h2><h3 id="识别当前使用的shell"><a href="#识别当前使用的shell" class="headerlink" title="识别当前使用的shell"></a>识别当前使用的shell</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">echo $shell || echo $0</div></pre></td></tr></table></figure>
+<p>&ensp;</p>
+<h3 id="检查是否为超级用户"><a href="#检查是否为超级用户" class="headerlink" title="检查是否为超级用户"></a>检查是否为超级用户</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">#!/bin/bash</div><div class="line"></div><div class="line">if [ $UID -ne 0 ];then</div><div class="line">        echo Non root user.Please run as root.</div><div class="line">else</div><div class="line">        echo Root user.</div><div class="line">fi</div></pre></td></tr></table></figure>
+<p>&ensp;</p>
+<h3 id="修改Bash提示字符串（username-hostname-）"><a href="#修改Bash提示字符串（username-hostname-）" class="headerlink" title="修改Bash提示字符串（username@hostname:~$）"></a>修改Bash提示字符串（username@hostname:~$）</h3><ul>
+<li>利用PS1(Prompt Sign)环境变量来定制提示文本</li>
+<li>默认的shell提示文本是在文件~/.bashrc中的某一行设置的</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@lucia ~]# echo $PS1</div><div class="line">[\u@\h \W]\$</div></pre></td></tr></table></figure>
+<p>\u可以扩展为用户名<br>\h可以扩展为主机名<br>\w可以扩展为当前工作目录</p>
+<p><strong>颜色设置</strong><br>在PS1中设置字符序列颜色的格式为：[\e[F;Bm]<br>其中“F”为字体颜色，编号30 ~ 37；“B”为背景色，编号40~47</p>
+<p>颜色表：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">F       B</div><div class="line">30      40      黑色</div><div class="line">31      41      红色</div><div class="line">32      42      绿色</div><div class="line">33      43      黄色</div><div class="line">34      44      蓝色</div><div class="line">35      45      紫红色</div><div class="line">36      46      青蓝色</div><div class="line">37      47      白色</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@lucia ~]# export PS1=&apos;[\[\e[32;40m\]\u@\h \w]\$&apos;</div><div class="line">[root@lucia ~]# </div><div class="line">#提示符变成绿字黑底</div></pre></td></tr></table></figure>
+<h3 id="定制提示字符串"><a href="#定制提示字符串" class="headerlink" title="定制提示字符串"></a>定制提示字符串</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@lucia ~]#PS1=&quot;PROMPT&gt;&quot;</div><div class="line">PROMPT&gt; Type commands here #提示字符串已经改变</div></pre></td></tr></table></figure>
+<p>&ensp;</p>
+<hr>
+<h1 id="使用shell进行数字运算"><a href="#使用shell进行数字运算" class="headerlink" title="使用shell进行数字运算"></a>使用shell进行数字运算</h1><h2 id="获取字符串长度"><a href="#获取字符串长度" class="headerlink" title="获取字符串长度"></a>获取字符串长度</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">length=$&#123;#var&#125;</div><div class="line">#length 表示字符串所包含的字符数</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ var=12345678901234567890</div><div class="line">$ echo $&#123;#var&#125;</div><div class="line">20</div></pre></td></tr></table></figure>
+<p>&ensp;</p>
+<h2 id="基本算术（整数）操作"><a href="#基本算术（整数）操作" class="headerlink" title="基本算术（整数）操作"></a>基本算术（整数）操作</h2><p><strong>举例</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">#!/bin/bash</div><div class="line">no1=4;</div><div class="line">no2=5;</div></pre></td></tr></table></figure></p>
+<h3 id="操作符-let"><a href="#操作符-let" class="headerlink" title="操作符  let"></a>操作符  let</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">let result=no1+no2</div><div class="line">echo $result</div></pre></td></tr></table></figure>
+<p>附：自增自减/简写形式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">let no1++  || let no1--</div><div class="line">let no+=6  || let no-=6</div></pre></td></tr></table></figure></p>
+<p>&ensp;</p>
+<h3 id="操作符"><a href="#操作符" class="headerlink" title="操作符 [ ]"></a>操作符 [ ]</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">result=$[ no1 + no2 ] ||  result=$[ $no1 + 5 ]</div></pre></td></tr></table></figure>
+<p>&nesp;</p>
+<h3 id="操作符-1"><a href="#操作符-1" class="headerlink" title="操作符 (())"></a>操作符 (())</h3><p>使用(())时，变量名之前需要加上$：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">result=$(( no1 + 50 ))</div></pre></td></tr></table></figure></p>
+<p>&nesp;</p>
+<h3 id="操作符-expr"><a href="#操作符-expr" class="headerlink" title="操作符 expr"></a>操作符 expr</h3><p>expr同样可以用于基本算术操作：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">result=`expr 3 + 4`</div><div class="line">result=$(expr $no1 + 5)</div></pre></td></tr></table></figure></p>
+<p><strong>以上这些方法只能用于整数运算，而不支持浮点数。</strong></p>
+<h2 id="高级算术操作"><a href="#高级算术操作" class="headerlink" title="高级算术操作"></a>高级算术操作</h2><h3 id="操作符-bc"><a href="#操作符-bc" class="headerlink" title="操作符 bc"></a>操作符 bc</h3><p> bc是一个用于数学运算的高级工具，这个精密计算器包含了大量的选项。我们可以<br>借助它执行浮点数运算并应用一些高级函数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">echo &quot;4 * 0.56&quot; | bc</div><div class="line">2.24</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">no=54;</div><div class="line">result=`echo &quot;$no * 1.5&quot; | bc`</div><div class="line">echo $result</div><div class="line">81.0</div></pre></td></tr></table></figure>
+<h4 id="设定小数精度"><a href="#设定小数精度" class="headerlink" title="设定小数精度"></a>设定小数精度</h4><ul>
+<li>参数scale=2将小数位个数设置为2，bc将会输出包含两个小数位的数值。<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">echo &quot;scale=2;3/8&quot; | bc</div><div class="line">0.37</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="进制转换"><a href="#进制转换" class="headerlink" title="进制转换"></a>进制转换</h4><ul>
+<li>用bc可以将一种进制系统转换为另一种</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">#!/bin/bash</div><div class="line">#用途：数字转换</div><div class="line">no=100</div><div class="line">echo &quot;obase=2;$no&quot; | bc  #十进制转换成二进制</div><div class="line">1100100</div><div class="line">no=1100100</div><div class="line">echo &quot;obase=10;ibase=2;$no&quot; | bc #二进制转换回十进制</div><div class="line">100</div></pre></td></tr></table></figure>
+<h4 id="计算平方以及平方根"><a href="#计算平方以及平方根" class="headerlink" title="计算平方以及平方根"></a>计算平方以及平方根</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">echo &quot;sqrt(100)&quot; | bc </div><div class="line">echo &quot;10^10&quot; | bc</div></pre></td></tr></table></figure>
+<hr>
+<h1 id="文件描述符及重定向"><a href="#文件描述符及重定向" class="headerlink" title="文件描述符及重定向"></a>文件描述符及重定向</h1><h2 id="文件描述符说明"><a href="#文件描述符说明" class="headerlink" title="文件描述符说明"></a>文件描述符说明</h2><p><strong>文件描述符是与某个打开的文件或数据流相关联的整数，文件描述符0、1以及2是系统预留的。</strong></p>
+<ul>
+<li>0 —— stdin（标准输入）</li>
+<li>1 —— stdout（标准输出）</li>
+<li>2 —— stderr（标准错误）</li>
+</ul>
+<p>文件打开3种模式</p>
+<ul>
+<li><p><strong>只读模式</strong></p>
+<p>&lt; 操作符用于从文件中读取至stdin </p>
+</li>
+<li><p><strong>截断写入模式</strong></p>
+<p>> 操作符用于截断模式的文件写入（数据在目标文件内容被截断之后写入)</p>
+</li>
+<li><p><strong>追加写入模式</strong></p>
+<p>>&gt;操作符用于追加模式的文件写入</p>
+</li>
+</ul>
+<hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ # 当命令输出错误信息时，stderr信息就会被打印出来</div><div class="line">$ ls +</div><div class="line">ls: cannot access +: No such file or directory</div></pre></td></tr></table></figure>
+<p>这里，+是一个非法参数，因此将返回错误信息。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ # 下面的命令会将stderr文本打印到屏幕上，而不是文件中（而且因为并没有stdout</div><div class="line">的输出，所以out.txt没有内容）</div><div class="line">$ ls + &gt; out.txt </div><div class="line">ls: cannot access +: No such file or directory</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ # 下面的命令中，我们将stderr重定向到out.txt：</div><div class="line">$ ls + 2&gt; out.txt #正常运行</div></pre></td></tr></table></figure>
+<p>你可以将stderr单独重定向到一个文件，将stdout重定向到另一个文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ cmd 2&gt;stderr.txt 1&gt;stdout.txt</div></pre></td></tr></table></figure></p>
+<p>还可以利用下面这个更好的方法将stderr转换成stdout，使得stderr和stdout<br>都被重定向到同一个文件中：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ cmd &gt; output.txt 2&gt;&amp;1 || cmd &amp;&gt; output.txt</div></pre></td></tr></table></figure></p>
+<p><strong>tee既可以将数据重定向到文件，还可以提供一份重定向数据的副本作为后续命令的stdin</strong></p>
+<p>要在终端中打印stdout，同时将它重定向到一个文件中，那么可以这样使用tee:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">command | tee FILE1 FILE2</div></pre></td></tr></table></figure></p>
+<p>在下面的代码中，tee命令接收到来自stdin的数据。它将stdout的一份副本写入文件out.txt，同时将另一份副本作为后续命令的stdin。<br>命令cat -n将从stdin中接收到的每一行数据前加上行号并写入stdout:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ cat a* | tee out.txt | cat -n</div><div class="line">cat: a1: Permission denied</div><div class="line">1 a1</div><div class="line">2 a1</div></pre></td></tr></table></figure></p>
+<p>查看out.txt的内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ cat out.txt</div><div class="line">a1</div><div class="line">a1</div></pre></td></tr></table></figure></p>
+<p>注意，cat: a1: Permission denied 并没有在文件内容中出现。这是因为这些信息属于stderr，而tee只能从stdin中读取</p>
+<h2 id="文件重定向到命令"><a href="#文件重定向到命令" class="headerlink" title="文件重定向到命令"></a>文件重定向到命令</h2><p>借助重定向，我们可以像使用stdin那样从文件中读取数据：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ cmd &lt; file</div></pre></td></tr></table></figure></p>
+<h2 id="脚本内部的文本块进行重定向"><a href="#脚本内部的文本块进行重定向" class="headerlink" title="脚本内部的文本块进行重定向"></a>脚本内部的文本块进行重定向</h2><p>对文本块（多行文本）进行重定向，源文本就位于shell脚本中。<br>一个实用的例子是向log文件中写入头部数据<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">#!/bin/bash</div><div class="line">cat&lt;&lt;EOF&gt;log.txt</div><div class="line">LOG FILE HEADER</div><div class="line">This is a test log file</div><div class="line">Function: System statistics</div><div class="line">EOF</div></pre></td></tr></table></figure></p>
+<p>在cat &lt;<eof>log.txt与下一个EOF行之间的所有文本行都会被当做stdin数据。log.txt<br>文件的内容打印如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ cat log.txt</div><div class="line">LOG FILE HEADER</div><div class="line">This is a test log file</div><div class="line">Function: System statistics</div></pre></td></tr></table></figure></eof></p>
+<h2 id="自定义描述符"><a href="#自定义描述符" class="headerlink" title="自定义描述符"></a>自定义描述符</h2><p>使用exec命令创建自己的文件描述符<br>创建一个文件描述符进行文件读取：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ exec 3&lt;input.txt #使用文件描述符3打开并读取文件</div></pre></td></tr></table></figure></p>
+<p>我们可以这样使用它：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ echo this is a test line &gt; input.txt</div><div class="line">$ exec 3&lt;input.txt</div></pre></td></tr></table></figure></p>
+<p>现在你就可以在命令中使用文件描述符3了。例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ cat&lt;&amp;3</div><div class="line">this is a test line</div></pre></td></tr></table></figure></p>
+<p>如果要再次读取，我们就不能继续使用文件描述符3了，而是需要用exec重新分配文件描述<br>符3来进行二次读取。</p>
+<p>创建一个文件描述符用于写入（截断模式）：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ exec 4&gt;output.txt #打开文件进行写入</div></pre></td></tr></table></figure></p>
+<p>例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ exec 4&gt;output.txt</div><div class="line">$ echo newline &gt;&amp;4</div><div class="line">$ cat output.txt</div><div class="line">newline</div></pre></td></tr></table></figure></p>
+<p>创建一个文件描述符用于写入（追加模式）：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ exec 5&gt;&gt;input.txt</div></pre></td></tr></table></figure></p>
+<p>例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ exec 5&gt;&gt;input.txt</div><div class="line">$ echo appended line &gt;&amp;</div><div class="line">$ cat input.txt</div><div class="line">newline</div><div class="line">appended line</div></pre></td></tr></table></figure></p>
+<h1 id="数组和关联数组"><a href="#数组和关联数组" class="headerlink" title="数组和关联数组"></a>数组和关联数组</h1><p>数组是shell脚本非常重要的组成部分，它借助索引将多个独立的数据存储为一个集合。<br>普通数组只能使用整数作为数组索引。<br>关联数组可以使用字符串作为数组索引。</p>
+<h2 id="数组的说明"><a href="#数组的说明" class="headerlink" title="数组的说明"></a>数组的说明</h2><p>(1) 定义数组的方法有很多种。可以在单行中使用一列值来定义一个数组：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">array_var=(1 2 3 4 5 6)</div><div class="line">#这些值将会存储在以0为起始索引的连续位置上</div></pre></td></tr></table></figure></p>
+<p>另外，还可以将数组定义成一组“索引-值”：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">array_var[0]=&quot;test1&quot;</div><div class="line">array_var[1]=&quot;test2&quot;</div><div class="line">array_var[2]=&quot;test3&quot;</div><div class="line">array_var[3]=&quot;test4&quot;</div><div class="line">array_var[4]=&quot;test5&quot;</div><div class="line">array_var[5]=&quot;test6&quot;</div></pre></td></tr></table></figure></p>
+<p>(2) 打印出特定索引的数组元素内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">echo $&#123;array_var[0]&#125;</div><div class="line">test1</div><div class="line">index=5</div><div class="line">echo $&#123;array_var[$index]&#125;</div><div class="line">test6</div></pre></td></tr></table></figure></p>
+<p>(3) 以清单形式打印出数组中的所有值：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ echo $&#123;array_var[*]&#125;  || echo $&#123;array_var[@]&#125; </div><div class="line">test1 test2 test3 test4 test5 test6</div></pre></td></tr></table></figure></p>
+<p>(4) 打印数组长度（即数组中元素的个数）：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ echo $&#123;#array_var[*]&#125;`</div><div class="line">6</div></pre></td></tr></table></figure></p>
+<h2 id="定义关联数组"><a href="#定义关联数组" class="headerlink" title="定义关联数组"></a>定义关联数组</h2><p>声明语句将一个变量名声明为关联数组<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ declare -A ass_array</div></pre></td></tr></table></figure></p>
+<p>声明之后，可以用两种方法将元素添加到关联数组中。</p>
+<p> 利用内嵌“索引-值”列表的方法，提供一个“索引-值”列表：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ ass_array=([index1]=val1 [index2]=val2)</div></pre></td></tr></table></figure></p>
+<p> 使用独立的“索引-值”进行赋值：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ ass_array[index1]=val1</div><div class="line">$ ass_array&apos;index2]=val2</div></pre></td></tr></table></figure></p>
+<p>举个例子，试想如何用关联数组为水果制定价格：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ declare -A fruits_value</div><div class="line">$ fruits_value=([apple]=&apos;100dollars&apos; [orange]=&apos;150 dollars&apos;)</div></pre></td></tr></table></figure></p>
+<p>用下面的方法显示数组内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ echo &quot;Apple costs $&#123;fruits_value[apple]&#125;&quot;</div><div class="line">Apple costs 100 dollars</div></pre></td></tr></table></figure></p>
+<h2 id="列出数组索引"><a href="#列出数组索引" class="headerlink" title="列出数组索引"></a>列出数组索引</h2><p>每一个数组元素都有一个索引用于查找。普通数组和关联数组具有不同的索引类型。我们可<br>以用下面的方法获取数组的索引列表：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ echo $&#123;!array_var[*]&#125; || echo $&#123;!array_var[@]</div></pre></td></tr></table></figure></p>
+<p>以先前提到的fruits_value数组为例，运行如下命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ echo $&#123;!fruits_value[*]&#125;</div><div class="line">orange apple</div></pre></td></tr></table></figure></p>
+<p>对于普通数组，这个方法同样可行。</p>
+<h1 id="使用别名"><a href="#使用别名" class="headerlink" title="使用别名"></a>使用别名</h1><p>别名就是一种便捷方式，以省去用户输入一长串命令序列的麻烦。<br>alias命令创建别名。</p>
+<ul>
+<li><p>可以按照下面的方式创建一个别名：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ alias new_command=&apos;command sequence&apos;</div></pre></td></tr></table></figure>
+</li>
+<li><p>为安装命令apt-get install创建别名：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ alias install=&apos;sudo yum install&apos;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>这样一来，我们就可以用install pidgin代替sudo yum install pidgin了。</p>
+<blockquote>
+<p> alias命令的作用只是暂时的。一旦关闭当前终端，所有设置过的别名就失效了。<br>为了使别名设置一直保持作用，可以将它放入~/.bashrc文件中。因为每当一个新<br>的shell进程生成时，都会执行 ~/.bashrc中的命令。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ echo &apos;alias cmd=&quot;command seq&quot;&apos; &gt;&gt; ~/.bashrc</div></pre></td></tr></table></figure></p>
+</blockquote>
+<ul>
+<li><p>删除别名，只用将其对应的语句（如果有的话）从 ~/.bashrc中删除，或者使用unalias命令。或者使用alias example=，这会取消名为example的别名。</p>
+</li>
+<li><p>我们可以创建一个别名rm，它能够删除原始文件，同时在backup目录中保留副本：</p>
+</li>
+</ul>
+<p><del>alias rm=’cp $@ ~/backup &amp;&amp; rm $@’</del></p>
+<p>(错误命令,请勿效仿)</p>
+<p>正确设置如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">alias saferm=&apos;saferm()&#123;cp $@ ~/backup; rm $@;&#125;;saferm $@&apos;</div><div class="line">saferm abc.txt</div></pre></td></tr></table></figure></p>
+<p>如果命令比较复杂，建议写出shell脚本搜索<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">#! /bin/sh</div><div class="line"># /home/yourname/saferm</div><div class="line">cp $@ ~/backup</div><div class="line">rm $@</div></pre></td></tr></table></figure></p>
+<p>然后建立一个alias<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">chmod +x /home/yourname/saferm</div><div class="line">alias saferm=/home/yourname/saferm</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>创建别名时，如果已经有同名的别名存在，那么原有的别名设置将被新的设<br>置取代。</p>
+</blockquote>
+<p>alias命令能够为任何重要的命令创建别名，不过你未必总是希望用别名来执行这个命令。<br>我们可以将希望使用的命令进行转义，从而忽略当前定义的别名。例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ \command</div></pre></td></tr></table></figure></p>
+<p>字符\对命令实施转义，使我们可以执行原本的命令，而不是这些命令的别名替身。</p>
+<h1 id="调试脚本"><a href="#调试脚本" class="headerlink" title="调试脚本"></a>调试脚本</h1><ul>
+<li><p>使用选项–x，启用shell脚本的跟踪调试功能：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ bash -x script.sh</div><div class="line"># 打印出脚本所执行的每一行命令以及当前状态</div></pre></td></tr></table></figure>
+</li>
+<li><p>使用set -x和set +x对脚本进行部分调试。例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">#!/bin/bash</div><div class="line">#文件名: debug.sh</div><div class="line">for i in &#123;1..6&#125;;</div><div class="line">do</div><div class="line">set -x</div><div class="line">echo $i</div><div class="line">set +x</div><div class="line">done</div><div class="line">echo &quot;Script executed&quot;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>在上面的脚本中，只会打印出echo $i的调试信息，因为使用了-x和+x对调试区域</p>
+<blockquote>
+<ul>
+<li>set –x：在执行时显示参数和命令。</li>
+<li>set +x：禁止调试。</li>
+<li>set –v：当命令进行读取时显示输入。</li>
+<li>set +v：禁止打印输入。</li>
+<li>shebang从#!/bin/bash改成 #!/bin/bash -xv，这样一来，不用任何其他选项就可以<br>启用调试功能了</li>
+</ul>
+</blockquote>
+<p><strong>自定义格式显示调试信息</strong><br>这可以通过传递 _DEBUG环境变量来建立这类调试风格。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">#!/bin/bash</div><div class="line">function DEBUG()</div><div class="line">&#123;</div><div class="line">[ &quot;$_DEBUG&quot; == &quot;on&quot; ] &amp;&amp; $@ || :</div><div class="line">&#125;</div><div class="line">for i in &#123;1..10&#125;</div><div class="line">do</div><div class="line">DEBUG echo $i</div><div class="line">done</div></pre></td></tr></table></figure>
+<p>我们在每一个需要打印调试信息的语句前加上DEBUG。如果没有把 _DEBUG=on传递<br>给脚本，那么调试信息就不会打印出来。在Bash中，命令“:”告诉shell不要进行任<br>何操作（占位符）。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">[root@lucia test]# _DEBUG=on ./debug.sh </div><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">[root@lucia test]# ./debug.sh</div></pre></td></tr></table></figure></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;简介&quot;&gt;&lt;a href=&quot;#简介&quot; class=&quot;headerlink&quot; title=&quot;简介&quot;&gt;&lt;/a&gt;简介&lt;/h1&gt;&lt;p&gt;&lt;strong&gt;1. 终端提示符&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$表示普通用户 &lt;/li&gt;
+&lt;li&gt;#表示管理员root&lt;fi
+    
+    </summary>
+    
+    
+      <category term="SHELL笔记" scheme="http://yoursite.com/tags/SHELL%E7%AC%94%E8%AE%B0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>搭建hexo主题博客</title>
+    <link href="http://yoursite.com/2017/01/16/%E6%90%AD%E5%BB%BAhexo%E4%B8%BB%E9%A2%98%E5%8D%9A%E5%AE%A2/"/>
+    <id>http://yoursite.com/2017/01/16/搭建hexo主题博客/</id>
+    <published>2017-01-16T05:56:33.000Z</published>
+    <updated>2017-05-25T16:29:44.774Z</updated>
+    
+    <content type="html"><![CDATA[<p>[toc]</p>
+<h1 id="简要"><a href="#简要" class="headerlink" title="简要"></a>简要</h1><p><strong>相关说明</strong></p>
+<ul>
+<li>Github Pages 实现静态网页部署</li>
+<li>Hexo主题美化博客</li>
+</ul>
+<p><strong>实现目标</strong></p>
+<ul>
+<li>博客生成</li>
+<li>域名绑定</li>
+<li>双线路</li>
+<li>博客备份</li>
+</ul>
+<p><strong>准备工作</strong>  </p>
+<ul>
+<li><a href="https://git-for-windows.github.io/" target="_blank" rel="external">安装msysgit</a></li>
+<li><a href="https://nodejs.org/en/download/" target="_blank" rel="external">安装Node.js</a></li>
+</ul>
+<h1 id="搭建"><a href="#搭建" class="headerlink" title="搭建"></a>搭建</h1><ul>
+<li>命令行操作均在Git Bash下进行</li>
+</ul>
+<h2 id="Hexo"><a href="#Hexo" class="headerlink" title="Hexo"></a>Hexo</h2><h3 id="安装-Hexo"><a href="#安装-Hexo" class="headerlink" title="安装 Hexo"></a>安装 Hexo</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ # 更换 taobao的npm源</div><div class="line">npm install -g cnpm --registry=https://registry.npm.taobao.org</div><div class="line">$ # 安装 hexo</div><div class="line">$ npm install hexo-cli -g</div><div class="line">$ npm install hexo --save</div></pre></td></tr></table></figure>
+<h3 id="初始化-Hexo"><a href="#初始化-Hexo" class="headerlink" title="初始化 Hexo"></a>初始化 Hexo</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ # 新建 Hexo文件夹</div><div class="line">$ mkdir X:/yourfile/Hexo</div><div class="line">$ # 初始化</div><div class="line">$ hexo init</div><div class="line">$ npm install</div></pre></td></tr></table></figure>
+<h3 id="安装-Hexo插件"><a href="#安装-Hexo插件" class="headerlink" title="安装 Hexo插件"></a>安装 Hexo插件</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">npm install hexo-generator-index --save</div><div class="line">npm install hexo-generator-archive --save</div><div class="line">npm install hexo-generator-category --save</div><div class="line">npm install hexo-generator-tag --save</div><div class="line">npm install hexo-server --save</div><div class="line">npm install hexo-deployer-git --save</div><div class="line">npm install hexo-deployer-heroku --save</div><div class="line">npm install hexo-deployer-rsync --save</div><div class="line">npm install hexo-deployer-openshift --save</div><div class="line">npm install hexo-renderer-marked@0.2 --save</div><div class="line">npm install hexo-renderer-stylus@0.2 --save</div><div class="line">npm install hexo-generator-feed@1 --save</div><div class="line">npm install hexo-generator-sitemap@1 --save</div></pre></td></tr></table></figure>
+<h3 id="查看Hexo-本地效果"><a href="#查看Hexo-本地效果" class="headerlink" title="查看Hexo 本地效果"></a>查看Hexo 本地效果</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">hexo generate || hexo g</div><div class="line">hexo server   || hexo s</div></pre></td></tr></table></figure>
+<p><strong>效果url：localhost:4000</strong></p>
+<hr>
+<h2 id="博客部署Github-Pages"><a href="#博客部署Github-Pages" class="headerlink" title="博客部署Github Pages"></a>博客部署Github Pages</h2><h3 id="配置Github"><a href="#配置Github" class="headerlink" title="配置Github"></a>配置Github</h3><ul>
+<li>注册<a href="https://github.com/" target="_blank" rel="external">Github</a>账户（Sign Up）</li>
+<li>创建项目仓库<a href="https://github.com/new" target="_blank" rel="external">New repository</a></li>
+<li>仓库名称必须为 username.github.io</li>
+<li>初始化仓库</li>
+</ul>
+<h3 id="配置SSH密钥"><a href="#配置SSH密钥" class="headerlink" title="配置SSH密钥"></a>配置SSH密钥</h3><ul>
+<li>实现本地代码库通过git操作与远端Github代码库同步</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[ ! -d ~/.ssh  ] &amp;&amp; ssh-keygen -t rsa -C &quot;your_email@example.com&quot; &amp;&amp; clip &lt; ~/.ssh/id_rsa.pub</div></pre></td></tr></table></figure>
+<blockquote>
+<ul>
+<li>存在SSH密钥则将公钥的内容复制到系统粘贴板(clipboard)，否则创建密钥</li>
+<li>创建密钥过程中，提示输密码直接回车</li>
+<li>登录Github → Account Setting → SSH keys and GPG keys → Add SSH key</li>
+</ul>
+</blockquote>
+<ul>
+<li>测试设置成功与否</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ ssh -T git@github.com</div></pre></td></tr></table></figure>
+<ul>
+<li>用户信息设置<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git config --global user.name &quot;XXXX&quot;</div><div class="line">$ git config --global user.email  &quot;XXXX@gmail.com&quot;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="Hexo-更新到Github-仓库"><a href="#Hexo-更新到Github-仓库" class="headerlink" title="Hexo 更新到Github 仓库"></a>Hexo 更新到Github 仓库</h2><ul>
+<li>配置项 <strong>_config.yml</strong> (X:\yourfile\Hexo)</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"># Deployment</div><div class="line">## Docs: https://hexo.io/docs/deployment.html</div><div class="line">deploy:</div><div class="line">  type: git</div><div class="line">  repository: git@github.com:xxxx/xxxx.github.io.git</div><div class="line">  branch: master</div></pre></td></tr></table></figure>
+<ul>
+<li><p>执行命令进行部署</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hexo g -d</div></pre></td></tr></table></figure>
+</li>
+<li><p>xxxx.github.io 进行访问即可</p>
+</li>
+</ul>
+<h1 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h1><h2 id="Hexo-相关"><a href="#Hexo-相关" class="headerlink" title="Hexo 相关"></a>Hexo 相关</h2><h3 id="更换主题"><a href="#更换主题" class="headerlink" title="更换主题"></a>更换主题</h3><ul>
+<li><a href="https://hexo.io/themes/" target="_blank" rel="external">Hexo 官网主题</a></li>
+<li>本博客使用的是 yilia 主题</li>
+</ul>
+<ol>
+<li>安装 （X:\yourfile\Hexo\themes 下）</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git clone https://github.com/litten/hexo-theme-yilia.git themes/yilia</div></pre></td></tr></table></figure>
+<ol>
+<li>配置</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># 修改hexo根目录下的 _config.yml</div><div class="line">_config.yml ： theme: yilia</div></pre></td></tr></table></figure>
+<ol>
+<li>更新<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd themes/yilia</div><div class="line">git pull</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="Hexo-命令"><a href="#Hexo-命令" class="headerlink" title="Hexo 命令"></a>Hexo 命令</h3><h2 id="域名"><a href="#域名" class="headerlink" title="域名"></a>域名</h2><h3 id="关联域名（简单粗暴）"><a href="#关联域名（简单粗暴）" class="headerlink" title="关联域名（简单粗暴）"></a>关联域名（简单粗暴）</h3><ul>
+<li>\hexo\source 文件夹下创建文件 CNAME 并提交</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">echo www.xxxx.xxx &gt; CNAME</div><div class="line">hexo g -d</div></pre></td></tr></table></figure>
+<ul>
+<li>添加记录</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">CNAME WWW xxxx.github.io</div></pre></td></tr></table></figure>
+<p>注意:这个简单粗暴指的是操作简单，但是有些浏览器无法解析。比如谷歌和火狐能顺利打开网页，但是360浏览器表示有点方，一直404</p>
+<h3 id="关联域名-（DNSPOD）"><a href="#关联域名-（DNSPOD）" class="headerlink" title="关联域名 （DNSPOD）"></a>关联域名 （DNSPOD）</h3><ul>
+<li>\hexo\source 文件夹下创建文件 CNAME 并提交</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">echo xxxx.xxx &gt; CNAME</div><div class="line">hexo g -d</div></pre></td></tr></table></figure>
+<ul>
+<li><p>修改域名提供商提供的DNS</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">f1g1ns2.dnspod.net </div><div class="line">f1g1ns1.dnspod.net</div></pre></td></tr></table></figure>
+</li>
+<li><p>使用<a href="https://www.dnspod.cn/" target="_blank" rel="external">DNSPOD</a> 账户添加域名解析</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">www    A    默认    IP Address</div><div class="line">@      A    默认    IP Address</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="Lucia’note"><a href="#Lucia’note" class="headerlink" title="Lucia’note"></a>Lucia’note</h2><ul>
+<li>博客搭建在github与gitcafe上，域名解析哪个快走哪个</li>
+<li>博客备份在git@osc </li>
+</ul>
+<h3 id="博客备份"><a href="#博客备份" class="headerlink" title="博客备份"></a>博客备份</h3><ol>
+<li>删除文件夹内原有的.git缓存文件(以防造成仓库冲突)</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[ -d .git ] &amp;&amp; rm -rf .git</div></pre></td></tr></table></figure>
+<ol>
+<li><p>编辑.gitignore(指定忽略文件）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">/.deploy_git        #hexo默认的.git配置文件夹</div><div class="line">/public             #根据source文件夹内容自动生成</div><div class="line">/_config.yml        #配置文件含重要信息</div></pre></td></tr></table></figure>
+</li>
+<li><p>初始化仓库并添加远程仓库</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git init</div><div class="line">git remote add origin &lt;server&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p>添加本地文件提交说明到仓库并同步到远端仓库</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">git add .  </div><div class="line">git commit -m &quot;first commit&quot; </div><div class="line">git push -u origin master</div></pre></td></tr></table></figure>
+</li>
+<li><p>更新同步操作</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">git add .</div><div class="line">git commit -m &apos;更新信息&apos;</div><div class="line">git push</div></pre></td></tr></table></figure>
+<ol>
+<li>拉取备份文件</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">git init</div><div class="line">git remote add origin &lt;server&gt; </div><div class="line">git fetch --all</div><div class="line">git reset --hard origin/master</div><div class="line"># 更新后拉取</div><div class="line">git pull</div></pre></td></tr></table></figure>
+<p>感想：<br>写这篇文章关于备份一节的前一天，手残将hexo本地目录全部删掉了，没有备份。我望着github上面已经生成的文档，以及空空如也的本地目录，只想扔一个表情包过去。</p>
+<p>[表情包——我还能说什么呢，我也很绝望啊]</p>
+<p><strong>博客搭建成功—致谢以下道友的辛苦探路</strong></p>
+<blockquote>
+<p><a href="https://my.oschina.net/ryaneLee/blog/638440" target="_blank" rel="external">https://my.oschina.net/ryaneLee/blog/638440</a><br><a href="https://segmentfault.com/a/1190000003710980" target="_blank" rel="external">https://segmentfault.com/a/1190000003710980</a><br><a href="https://segmentfault.com/a/1190000003710962" target="_blank" rel="external">https://segmentfault.com/a/1190000003710962</a></p>
+</blockquote>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;[toc]&lt;/p&gt;
+&lt;h1 id=&quot;简要&quot;&gt;&lt;a href=&quot;#简要&quot; class=&quot;headerlink&quot; title=&quot;简要&quot;&gt;&lt;/a&gt;简要&lt;/h1&gt;&lt;p&gt;&lt;strong&gt;相关说明&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Github Pages 实现静态网页部署&lt;
+    
+    </summary>
+    
+    
+      <category term="hexo" scheme="http://yoursite.com/tags/hexo/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>mysql5.6.zip 安装</title>
+    <link href="http://yoursite.com/2016/12/05/mysql/"/>
+    <id>http://yoursite.com/2016/12/05/mysql/</id>
+    <published>2016-12-05T12:52:31.000Z</published>
+    <updated>2017-05-25T16:29:44.772Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h1><hr>
+<p> mysql5.6</p>
+<blockquote>
+<ul>
+<li>下载地址 <a href="http://dev.mysql.com/downloads/mysql/5.6.html" target="_blank" rel="external">http://dev.mysql.com/downloads/mysql/5.6.html</a> </li>
+</ul>
+</blockquote>
+<h1 id="安装过程"><a href="#安装过程" class="headerlink" title="安装过程"></a>安装过程</h1><p>解压缩重命名</p>
+<blockquote>
+<ul>
+<li>解压缩在C盘某个文件夹下并重命名为MySQL SERVER 5.6(便于记忆)</li>
+<li>mysql-5.6.34-winx64 →  MySQL SERVER 5.6(或mysql56) </li>
+</ul>
+</blockquote>
+<p>设置环境变量</p>
+<blockquote>
+<ul>
+<li>此电脑→高级系统设置→高级→环境变量→PATH→编辑→编辑文本<br>追加 ;C:\Program Files (x86)\MySQL\MySQL Server 5.6\bin\;</li>
+</ul>
+</blockquote>
+<p>修改配置文件</p>
+<blockquote>
+<ul>
+<li>配置文件：MySQL Server 5.6\my-default.ini 添加配置如代码框中所示<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"># For advice on how to change settings please see</div><div class="line"># http://dev.mysql.com/doc/refman/5.6/en/server-configuration-defaults.html</div><div class="line"># *** DO NOT EDIT THIS FILE. It&apos;s a template which will be copied to the</div><div class="line"># *** default location during install, and will be replaced if you</div><div class="line"># *** upgrade to a newer version of MySQL.</div><div class="line"></div><div class="line">[mysqld]</div><div class="line"></div><div class="line"># Remove leading # and set to the amount of RAM for the most important data</div><div class="line"># cache in MySQL. Start at 70% of total RAM for dedicated server, else 10%.</div><div class="line"># innodb_buffer_pool_size = 128M</div><div class="line"></div><div class="line"># Remove leading # to turn on a very important data integrity option: logging</div><div class="line"># changes to the binary log between backups.</div><div class="line"># log_bin</div><div class="line"></div><div class="line"># These are commonly set, remove the # and set as required.</div><div class="line"># basedir = .....</div><div class="line"># datadir = .....</div><div class="line"># port = .....</div><div class="line"># server_id = .....</div><div class="line"></div><div class="line">#--- 添加配置如下 ---#</div><div class="line"># mysql所在目录</div><div class="line">basedir = C:\Program Files (x86)\MySQL\MySQL Server 5.6</div><div class="line"># mysql所在目录\data</div><div class="line">datadir = C:\Program Files (x86)\MySQL\MySQL Server 5.6\data</div><div class="line"></div><div class="line"></div><div class="line"># Remove leading # to set options mainly useful for reporting servers.</div><div class="line"># The server defaults are faster for transactions and fast SELECTs.</div><div class="line"># Adjust sizes as needed, experiment to find the optimal values.</div><div class="line"># join_buffer_size = 128M</div><div class="line"># sort_buffer_size = 2M</div><div class="line"># read_rnd_buffer_size = 2M </div><div class="line"></div><div class="line">sql_mode=NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</blockquote>
+<p>以管理员身份运行cmd（否则会因权限不够报错 Install/Remove of the Service Denied!）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">C:\Users\lucia\Desktop&gt;cd C:\Program Files (x86)\MySQL\MySQL Server 5.6\bin\</div><div class="line"></div><div class="line">C:\Program Files (x86)\MySQL\MySQL Server 5.6\bin&gt;mysql -install</div></pre></td></tr></table></figure>
+<blockquote>
+<ul>
+<li>必须进入bin文件夹，否则启动服务会报错 发生系统错误 2</li>
+</ul>
+</blockquote>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;准备工作&quot;&gt;&lt;a href=&quot;#准备工作&quot; class=&quot;headerlink&quot; title=&quot;准备工作&quot;&gt;&lt;/a&gt;准备工作&lt;/h1&gt;&lt;hr&gt;
+&lt;p&gt; mysql5.6&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;下载地址 &lt;a href=&quot;http://
+    
+    </summary>
+    
+    
+      <category term="mysql" scheme="http://yoursite.com/tags/mysql/"/>
+    
+      <category term="windows10" scheme="http://yoursite.com/tags/windows10/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>centos 6.5调整分区大小</title>
+    <link href="http://yoursite.com/2016/12/03/partition/"/>
+    <id>http://yoursite.com/2016/12/03/partition/</id>
+    <published>2016-12-03T07:25:14.000Z</published>
+    <updated>2017-05-25T16:29:44.772Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="实验目的及要求"><a href="#实验目的及要求" class="headerlink" title="实验目的及要求"></a>实验目的及要求</h1><p><strong>实验目的：</strong></p>
+<p>调整硬盘分区大小</p>
+<p><strong>要求：</strong></p>
+<p>增加默认分区时/目录空间，减少/home空间</p>
+<h1 id="查看硬盘使用情况"><a href="#查看硬盘使用情况" class="headerlink" title="查看硬盘使用情况"></a>查看硬盘使用情况</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]# df -h    //查看分区</div><div class="line">Filesystem                      Size  Used Avail Use% Mounted on</div><div class="line">/dev/mapper/vg_vmhost1-lv_root   50G   36G   12G  76% /</div><div class="line">tmpfs                           7.9G   80K  7.9G   1% /dev/shm</div><div class="line">/dev/sda1                       485M   40M  420M   9% /boot</div><div class="line">/dev/mapper/vg_vmhost1-lv_home  859G   64G  752G   8% /home</div></pre></td></tr></table></figure>
+<h1 id="调整-home分区大小"><a href="#调整-home分区大小" class="headerlink" title="调整/home分区大小"></a>调整/home分区大小</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]# umount /home/        //取消挂载</div><div class="line">umount: /home: device is busy.</div><div class="line">        (In some cases useful info about processes that use</div><div class="line">         the device is found by lsof(8) or fuser(1))</div><div class="line"> # umount /home 提示设备正忙，则有进程占用/home</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]# fuser -m /dev/mapper/vg_vmhost1-lv_home        //列出vg_vmhost1_lv_home的进程号</div><div class="line">/dev/mapper/vg_vmhost1-lv_home:  6029c  6387c  6429c  6430c  6432c  6900c  6901c</div><div class="line">[root@localhost ~]# fuser -mv /dev/mapper/vg_vmhost1-lv_home       //列出vg_vmhost1_lv_home的进程号以及用户，权限，命令</div><div class="line">                     用户     进程号 权限   命令</div><div class="line">/dev/mapper/vg_vmhost1-lv_home:</div><div class="line">                     root       6029 F.c.. vmware-vmx</div><div class="line">                     root       6387 ..c.. thnuclnt</div><div class="line">                     root       6429 ..c.. thnuclnt</div><div class="line">                     root       6430 ..c.. thnuclnt</div><div class="line">                     root       6432 ..c.. thnuclnt</div><div class="line">                     root       6900 ..c.. thnuclnt</div><div class="line">                     root       6901 ..c.. thnuclnt</div><div class="line">      </div><div class="line"># fuser命令用于报告进程使用的文件和网络套接字，fuser命令列出本地进程的进程号，那些本地进程使用file，参数指定的本地或远程文件。</div><div class="line">#-----------------</div><div class="line">#对于堵塞特别设备，此命令列出了使用该设备上任何文件的进程（相关详细使用见注1）</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]# fuser -km /dev/mapper/vg_vmhost1-lv_home        //终止vg_vmhost1-lv_home的进程</div><div class="line">/dev/mapper/vg_vmhost1-lv_home:  6029c  6387c  6429c  6430c  6432c  6900c  6901c</div><div class="line">[root@localhost ~]# umount /home/                                   //取消挂载</div></pre></td></tr></table></figure>
+<h1 id="采用resize2fs命令扩容"><a href="#采用resize2fs命令扩容" class="headerlink" title="采用resize2fs命令扩容"></a>采用resize2fs命令扩容</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]# e2fsck -f /dev/mapper/vg_vmhost1-lv_home      //磁盘检测  </div><div class="line">e2fsck 1.41.12 (17-May-2010)</div><div class="line">第一步: 检查inode,块,和大小</div><div class="line">第二步: 检查目录结构</div><div class="line">第3步: 检查目录连接性</div><div class="line">Pass 4: Checking reference counts</div><div class="line">第5步: 检查簇概要信息</div><div class="line">/dev/mapper/vg_vmhost1-lv_home: 383/57196544 files (58.0% non-contiguous), 20285788/228763648 blocks</div></pre></td></tr></table></figure>
+<p><strong>resize2fs命令被用来增大或者收缩未加载的“ext2/ext3”文件系统的大小</strong></p>
+<ul>
+<li>先umount才能e2fsck</li>
+<li>扩容前先进行磁盘检测才可扩容（否则会有提示）</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]#  resize2fs -p /dev/mapper/vg_vmhost1-lv_home 400G   #重定/home大小为400G并打印百分比完成条</div><div class="line">resize2fs 1.41.12 (17-May-2010)</div><div class="line">Resizing the filesystem on /dev/mapper/vg_vmhost1-lv_home to 104857600 (4k) blocks.</div><div class="line">Begin pass 2 (max = 36398)</div><div class="line">正在重定位块            XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</div><div class="line">Begin pass 3 (max = 6982)</div><div class="line">正在扫描inode表          XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</div><div class="line">Begin pass 4 (max = 40)</div><div class="line">正在更新inode引用       XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</div><div class="line">The filesystem on /dev/mapper/vg_vmhost1-lv_home is now 104857600 blocks long.</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]# mount /home                                          //挂载home</div><div class="line">[root@localhost ~]# df -h                                                //查看分区</div><div class="line">Filesystem                      Size  Used Avail Use% Mounted on</div><div class="line">/dev/mapper/vg_vmhost1-lv_root   50G   35G   12G  75% /</div><div class="line">tmpfs                           7.9G   80K  7.9G   1% /dev/shm</div><div class="line">/dev/sda1                       485M   40M  420M   9% /boot</div><div class="line">/dev/mapper/vg_vmhost1-lv_home  394G   64G  311G  18% /home</div><div class="line">[root@localhost ~]# </div><div class="line">[root@localhost ~]# lvreduce -L 400G /dev/mapper/vg_vmhost1-lv_home</div><div class="line">  WARNING: Reducing active and open logical volume to 400.00 GiB</div><div class="line">  THIS MAY DESTROY YOUR DATA (filesystem etc.)</div><div class="line">Do you really want to reduce lv_home? [y/n]: y</div><div class="line">  Reducing logical volume lv_home to 400.00 GiB</div><div class="line">  Logical volume lv_home successfully resized</div><div class="line">[root@localhost ~]# </div><div class="line">[root@localhost ~]# </div><div class="line">[root@localhost ~]# df -h</div><div class="line">Filesystem                      Size  Used Avail Use% Mounted on</div><div class="line">/dev/mapper/vg_vmhost1-lv_root   50G   35G   12G  75% /</div><div class="line">tmpfs                           7.9G   80K  7.9G   1% /dev/shm</div><div class="line">/dev/sda1                       485M   40M  420M   9% /boot</div><div class="line">/dev/mapper/vg_vmhost1-lv_home  394G   64G  311G  18% /home</div><div class="line">[root@localhost ~]# </div><div class="line">[root@localhost ~]# </div><div class="line">[root@localhost ~]# vgdisplay</div><div class="line">  --- Volume group ---</div><div class="line">  VG Name               vg_vmhost1</div><div class="line">  System ID             </div><div class="line">  Format                lvm2</div><div class="line">  Metadata Areas        1</div><div class="line">  Metadata Sequence No  5</div><div class="line">  VG Access             read/write</div><div class="line">  VG Status             resizable</div><div class="line">  MAX LV                0</div><div class="line">  Cur LV                3</div><div class="line">  Open LV               3</div><div class="line">  Max PV                0</div><div class="line">  Cur PV                1</div><div class="line">  Act PV                1</div><div class="line">  VG Size               930.51 GiB</div><div class="line">  PE Size               4.00 MiB</div><div class="line">  Total PE              238210</div><div class="line">  Alloc PE / Size       117208 / 457.84 GiB</div><div class="line">  Free  PE / Size       121002 / 472.66 GiB</div><div class="line">  VG UUID               6zrYe0-arcH-qxSN-Nanq-39dP-IuLN-euhDw3</div><div class="line">   </div><div class="line">[root@localhost ~]# </div><div class="line">[root@localhost ~]# </div><div class="line">[root@localhost ~]#  lvextend -L +472.66G /dev/mapper/vg_vmhost1-lv_root</div><div class="line">  Rounding size to boundary between physical extents: 472.66 GiB</div><div class="line">  Extending logical volume lv_home to 872.66 GiB</div><div class="line">  Logical volume lv_home successfully resized</div><div class="line">[root@localhost ~]#</div></pre></td></tr></table></figure>
+<h1 id="相关注释"><a href="#相关注释" class="headerlink" title="相关注释"></a>相关注释</h1><p>注1:</p>
+<p>命令：fuser命令<br>每个进程号后面都跟随一个字母，该字母指示进程如何使用文件。</p>
+<ul>
+<li>c：指示进程的工作目录。</li>
+<li>e：指示该文件为进程的可执行文件(即进程由该文件拉起)</li>
+<li>f：指示该文件被进程打开，默认情况下f字符不显示</li>
+<li>F：指示该文件被进程打开进行写入，默认情况下F字符不显示</li>
+<li>r：指示该目录为进程的根目录</li>
+<li>m：指示进程使用该文件进行内存映射，抑或该文件为共享库文件，被进程映射进内存。<br>语法</li>
+</ul>
+<p>fuser (选项) (参数)</p>
+<ul>
+<li>-a：显示命令行中指定的所有文件；</li>
+<li>-k：杀死访问指定文件的所有进程；</li>
+<li>-i：杀死进程前需要用户进行确认；</li>
+<li>-l：列出所有已知信号名；</li>
+<li>-m：指定一个被加载的文件系统或一个被加载的块设备；</li>
+<li>-n：选择不同的名称空间；</li>
+<li>-u：在每个进程后显示所属的用户名</li>
+<li>-v：显示目前使用的目录的进程号，用户，用户ID，命令<br>文件：可以是文件名或者TCP、UDP端口号。</li>
+</ul>
+<hr>
+<p>实例 要列出使用/etc/passwd文件的本地进程的进程号</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fuser /etc/passwd</div></pre></td></tr></table></figure>
+<p>要列出使用/etc/filesystems文件的进程的进程号和用户登录名</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fuser -u /etc/filesystems</div></pre></td></tr></table></figure>
+<p>要终止使用给定文件系统的所有进程</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fuser -k -x -u -c /dev/hd1 或者 fuser -kxuc /home</div></pre></td></tr></table></figure>
+<ul>
+<li>任一命令都列出了进程号和用户名，然后终止每个正在使用/dev/hd1 (/home)文件系统的进程。仅有root用户能终止属于另一用户的进程。</li>
+<li>如果您正在试图卸下/dev/hd1文件系统，而一个正在访问/dev/hd1文件系统的进程不允许这样，您可能希望使用此命令。</li>
+<li>要列出正在使用已从给定文件系统删除的文件的全部进程，请输入： fuser -d /usr文件 /dev/kmem 用于系统映像。 /dev/mem 也用于系统映像。<blockquote>
+<ul>
+<li>参考文档及资料如下：<br><a href="http://my.oschina.net/shanhe/blog/296735" target="_blank" rel="external">http://my.oschina.net/shanhe/blog/296735</a><br><a href="http://man.linuxde.net/resize2fs" target="_blank" rel="external">http://man.linuxde.net/resize2fs</a><br><a href="http://blog.51yip.com/linux/1699.html" target="_blank" rel="external">http://blog.51yip.com/linux/1699.html</a><br><a href="http://www.iisuser.com/adujust-the-size-of-home-and-root-space/" target="_blank" rel="external">http://www.iisuser.com/adujust-the-size-of-home-and-root-space/</a></li>
+</ul>
+</blockquote>
+</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;实验目的及要求&quot;&gt;&lt;a href=&quot;#实验目的及要求&quot; class=&quot;headerlink&quot; title=&quot;实验目的及要求&quot;&gt;&lt;/a&gt;实验目的及要求&lt;/h1&gt;&lt;p&gt;&lt;strong&gt;实验目的：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;调整硬盘分区大小&lt;/p&gt;
+&lt;p&gt;&lt;str
+    
+    </summary>
+    
+    
+      <category term="CentOS  分区" scheme="http://yoursite.com/tags/CentOS-%E5%88%86%E5%8C%BA/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Linux源代码安装Git及其他附录</title>
+    <link href="http://yoursite.com/2016/11/24/sourcecodeGIT/"/>
+    <id>http://yoursite.com/2016/11/24/sourcecodeGIT/</id>
+    <published>2016-11-24T02:01:08.000Z</published>
+    <updated>2017-05-25T16:29:44.773Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="环境说明："><a href="#环境说明：" class="headerlink" title="环境说明："></a>环境说明：</h1><blockquote>
+<ul>
+<li>OS：CentOS-6.5.mininal  (NULL)</li>
+<li>GIT：git version 2.8.2 <figure class="highlight plain"><figcaption><span>NULL特指什么软件都未安装（纯净版）</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[2] OS 新建了一个用户 xiaolu</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</blockquote>
+<h1 id="准备工作："><a href="#准备工作：" class="headerlink" title="准备工作："></a>准备工作：</h1><h2 id="安装-EPEL源"><a href="#安装-EPEL源" class="headerlink" title="安装 EPEL源"></a>安装 EPEL源</h2><p>根据CentOS的版本下载不同的镜像   (  使用的是国内的EPEL源-科大源）<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[root@lucia ~]# su xiaolu</div><div class="line">[xiaolu@lucia root]$ cd /etc/yum.repos.d/</div><div class="line">[xiaolu@lucia yum.repos.d]$ sudo yum -y install wget</div><div class="line">[xiaolu@lucia yum.repos.d]$ sudo mv CentOS-Base.repo CentOS-Base.repo.bak</div><div class="line">[xiaolu@lucia yum.repos.d]$ sudo wget -O CentOS-Base.repo https://lug.ustc.edu.cn/wiki/_export/code/mirrors/help/centos?codeblock=2  </div><div class="line">                            # wget -O  --output-document=FILE  指定下载目录和文件名</div><div class="line">[xiaolu@lucia yum.repos.d]$ yum makecache</div><div class="line"><span class="meta">#</span>附-科大源：https://lug.ustc.edu.cn/wiki/mirrors/help/centos</div></pre></td></tr></table></figure></p>
+<h2 id="时间校准"><a href="#时间校准" class="headerlink" title="时间校准"></a>时间校准</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">[xiaolu@lucia yum.repos.d]$ cd /tmp</div><div class="line">[xiaolu@lucia tmp]$ sudo yum -y install ntpdate.x86_64</div><div class="line">[xiaolu@lucia tmp]$ sudo ntpdate 0.pool.ntp.org</div><div class="line"> 1 Apr 16:40:49 ntpdate[7329]: no server suitable for synchronization found</div><div class="line">---------------------------------------------------------------------------------</div><div class="line">[xiaolu@lucia tmp]$ sudo yum -y install rdate.x86_64</div><div class="line">[xiaolu@lucia tmp]$ sudo rdate -s time.nist.gov</div><div class="line">[xiaolu@lucia tmp]$ date</div><div class="line">Sun May  1 23:17:19 CST 2016</div></pre></td></tr></table></figure>
+<p> 注：ntpdate校准报错选择rdate（很可能是防火墙封锁了udp的123端口, 如果关闭的防火墙问题依旧, 很可能是上层路由的设置有问题, 如果这种情况, 我们就只能通过tcp来更新时间）</p>
+<h1 id="安装Git（-源代码安装）"><a href="#安装Git（-源代码安装）" class="headerlink" title="安装Git（ 源代码安装）"></a>安装Git（ 源代码安装）</h1><h2 id="Step-1-安装所需的依赖包"><a href="#Step-1-安装所需的依赖包" class="headerlink" title="Step 1: 安装所需的依赖包"></a>Step 1: 安装所需的依赖包</h2><p>源代码编译GIT之前，确保系统安装了所需的包或者通过以下命令来安装它<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[xiaolu@lucia tmp]$ sudo yum install curl-devel expat-devel gettext-devel openssl-devel zlib-devel perl-ExtUtils-MakeMaker package -y</div><div class="line">[xiaolu@lucia tmp]$ sudo yum -y install gcc  (下载 编译器 )</div></pre></td></tr></table></figure></p>
+<h2 id="Step-2：下载并编译GIT源代码-‍‍"><a href="#Step-2：下载并编译GIT源代码-‍‍" class="headerlink" title="Step 2：下载并编译GIT源代码 ‍‍"></a>Step 2：下载并编译GIT源代码 ‍‍</h2><p>从 git-scm 下载最新Git源代码或者简单的使用以下载命令下载Git 2.8.2<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[xiaolu@lucia tmp]$ sudo wget -c https://www.kernel.org/pub/software/scm/git/git-2.8.2.tar.gz</div><div class="line">[xiaolu@lucia tmp]$ tar -zxvf git-2.8.2.tar.gz </div><div class="line">[xiaolu@lucia tmp]$ cd git-2.8.2</div><div class="line">[xiaolu@lucia git-2.8.2]$ make prefix=/usr/local/git all</div><div class="line">[xiaolu@lucia git-2.8.2]$ sudo make prefix=/usr/local/git install</div><div class="line">[xiaolu@lucia git-2.8.2]$ su root</div><div class="line">[root@lucia git-2.8.2]# echo "export PATH=$PATH:/usr/local/git/bin" &gt;&gt; /etc/bashrc   # 设置环境变量</div><div class="line">[root@lucia git-2.8.2]# source /etc/bashrc</div></pre></td></tr></table></figure></p>
+<h2 id="Step-3：核实GIT-版本"><a href="#Step-3：核实GIT-版本" class="headerlink" title="Step 3：核实GIT 版本"></a>Step 3：核实GIT 版本</h2><p>完成以上步骤后，使用以下命令检查GIT版本<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[xiaolu@lucia git-2.8.2]$ git --version</div><div class="line">git version 2.8.2</div></pre></td></tr></table></figure></p>
+<h2 id="Step-4：命令补全"><a href="#Step-4：命令补全" class="headerlink" title="Step 4：命令补全"></a>Step 4：命令补全</h2><p>Linux的shell环境通过bash-completion软件包提供命令补齐功能，在录入命令参数时按一次或两次TAB键可实现参数的自动补齐或提示<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">[xiaolu@lucia git-2.8.2]$ sudo cp contrib/completion/git-completion.bash /etc/bash_completion.d/   </div><div class="line">                          #将Git源码包中的命令补全脚本肤质到bash-completion对应的目录中</div><div class="line">                          </div><div class="line">[xiaolu@lucia git-2.8.2]$ . /etc/bash_completion.d/git-completion.bash</div><div class="line">                          #重新加载自动补齐脚本，使之在当前的shell中生效</div><div class="line">```            </div><div class="line">为了能够在终端开启时自动加载脚本，需要修改/etc/profile文件和~/.bashrc文件</div><div class="line">```shell</div><div class="line">[root@lucia git-2.8.2]# sudo cat &gt;&gt; ~/.bashrc  &lt;&lt;EOF</div><div class="line"><span class="meta">&gt;</span> if [ -f /etc/bash_completion.d/git-completion.bash ]; then</div><div class="line"><span class="meta">&gt;</span> . /etc/bash_completion.d/git-completion.bash</div><div class="line"><span class="meta">&gt;</span> fi</div><div class="line"><span class="meta">&gt;</span> EOF</div><div class="line">[xiaolu@lucia git-2.8.2]$ su root</div><div class="line">[root@lucia git-2.8.2]# sudo cat &gt;&gt; /etc/profile &lt;&lt;EOF</div><div class="line"><span class="meta">&gt;</span> if [ -f /etc/bash_completion.d/git-completion.bash ]; then</div><div class="line"><span class="meta">&gt;</span> . /etc/bash_completion.d/git-completion.bash</div><div class="line"><span class="meta">&gt;</span> fi</div><div class="line"><span class="meta">&gt;</span> EOF</div></pre></td></tr></table></figure></p>
+<h1 id="附1：中文支持"><a href="#附1：中文支持" class="headerlink" title="附1：中文支持"></a>附1：中文支持</h1><blockquote>
+<ul>
+<li><p>相关说明：<br>GIT可以在提交说明中使用中文，但是需要对Git进行配置但对于用中文来命名文件、目录和引用，前提是使用UTF-8 字符集的环境下‍</p>
+</li>
+<li><p>UTF8字符集：<br>1、在提交时，可以在提交说明中输入中文<br>2、显示提交历史，能够正常显示提交说明中的中文字符<br>3、可以添加名称为中文的文件，并可以在同样使用UTF-8字符集的Linux环境中克隆和检出<br>4、可以创建带有中文字符的里程碑名称</p>
+</li>
+</ul>
+</blockquote>
+<p>  ❀ 在默认设置下，中文文件名在工作区状态输出、查看历史更改概要，以及在补丁文件中，文件名中的中文不能正确的显示，而是显示为八进制的字符编码，如下</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[xiaolu@lucia rs-project]$ git status -s</div><div class="line">?? "\346\265\213\350\257\225.txt"</div><div class="line">[xiaolu@lucia rs-project]$ printf "\346\265\213\350\257\225.txt\n"</div><div class="line">测试.txt</div></pre></td></tr></table></figure>
+<p> ❀  解决方法：通过将Git配置变量 core.quotepath 设置为 false</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[xiaolu@lucia rs-project]$ git config --global core.quotepath false[xiaolu@lucia rs-project]$ </div><div class="line">[xiaolu@lucia rs-project]$ git status -s</div><div class="line">?? 测试.txt</div></pre></td></tr></table></figure>
+<h1 id="附2：相关问题"><a href="#附2：相关问题" class="headerlink" title="附2：相关问题"></a>附2：相关问题</h1><p>make prefix=/usr/local/git all 报错<br>目前我碰到的报错有两种：</p>
+<blockquote>
+<ul>
+<li><p>时间没有校准（看见 in the future 就是时间没有校准，校准后重新make）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">ake[1]: Warning: File `Makefile' has modification time 2.5e+06 s in the future</div><div class="line">/usr/bin/perl Makefile.PL PREFIX='/usr/local' INSTALL_BASE='' --localedir='/usr/local/share/locale'</div><div class="line">Writing perl.mak for Git</div><div class="line">make[1]: warning:  Clock skew detected.  Your build may be incomplete.</div><div class="line">    GEN git-add--interactive</div><div class="line">make[1]: Warning: File `Makefile' has modification time 2.5e+06 s in the future</div><div class="line">Writing perl.mak for Git</div><div class="line">make[2]: Warning: File `Makefile.PL' has modification time 2.5e+06 s in the future</div><div class="line">Writing perl.mak for Git</div><div class="line">make[2]: *** [perl.mak] Error 1</div><div class="line">make[1]: *** [instlibdir] Error 2</div><div class="line">make: *** [git-add--interactive] Error 2</div></pre></td></tr></table></figure>
+</li>
+<li><ol>
+<li>第二种报依赖包错误，导致make失败<br>本文OS是纯净版，实际上真正OS环境下许多依赖包已经安装，且通过yum仓库安装的版本都较老，换yum源后将提示的相关依赖包卸载（rpm -e），然后重新yum安装一下</li>
+</ol>
+</li>
+</ul>
+</blockquote>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;环境说明：&quot;&gt;&lt;a href=&quot;#环境说明：&quot; class=&quot;headerlink&quot; title=&quot;环境说明：&quot;&gt;&lt;/a&gt;环境说明：&lt;/h1&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;OS：CentOS-6.5.mininal  (NULL)&lt;/li&gt;
+&lt;li&gt;
+    
+    </summary>
+    
+    
+      <category term="Git" scheme="http://yoursite.com/tags/Git/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>高性能集群软件-Keepalived</title>
+    <link href="http://yoursite.com/2016/11/23/Keepalived/"/>
+    <id>http://yoursite.com/2016/11/23/Keepalived/</id>
+    <published>2016-11-23T15:07:33.000Z</published>
+    <updated>2017-05-25T16:29:44.770Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="keepalived-介绍"><a href="#keepalived-介绍" class="headerlink" title="keepalived 介绍"></a>keepalived 介绍</h2><ul>
+<li>keepalived 是 Linux下一个轻量级的高可用解决方案</li>
+<li><p>keepalived 主要通过虚拟路由冗余（VRRP）来实现高可用功能</p>
+<p><em>优点</em></p>
+<ul>
+<li>部署及使用简单，只需一个配置文件即可完成</li>
+</ul>
+<p><em>功能</em></p>
+<ul>
+<li>服务器状态检测和故障隔离功能        </li>
+<li>HA（High Available） cluster &nbsp;  [高可用群集]</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="keepalived-发展"><a href="#keepalived-发展" class="headerlink" title="keepalived 发展"></a>keepalived 发展</h2><ul>
+<li>keepalived起初是为LVS（Linux Virtual System）设计，专门监控集群系统中各个服务节点的状态<br>根据TCP/IP参考模型 第三、第四、第五层交换机制检测每个服务节点的状态（详细见本页<strong>keepalived工作原理</strong>）</li>
+</ul>
+<ul>
+<li><p><em>e.g: keepalived检测WEB服务器的状态</em><br>如果一台WEB服务器死机/工作出现故障，keepalived检测到此状况后会将故障服务器从系统中剔除；直至该服务器工作正常后keepalived自动将该服务器加入到服务器群中；</p>
+<ul>
+<li><p>以上工作keepalived自动完成，无需人工干涉，人工干预仅是修复出现故障的服务节点；<br><br></p>
+</li>
+<li><p>keepalived 后续加入了VRRP功能<br>VRRP（Virtaul Router Redunadancy Protocol，虚拟路由器冗余协议）</p>
+</li>
+<li>目的：解决静态路由出现的单点故障问题，实现网络不间断稳定运行</li>
+</ul>
+</li>
+</ul>
+<h3 id="VRRP-协议与工作原理"><a href="#VRRP-协议与工作原理" class="headerlink" title="VRRP 协议与工作原理"></a>VRRP 协议与工作原理</h3><h4 id="❉-引入VRRP概念"><a href="#❉-引入VRRP概念" class="headerlink" title="❉   引入VRRP概念"></a>❉   引入VRRP概念</h4><p>  <img src="http://oh4uobiuk.bkt.clouddn.com/vrrp.png" alt="vrrp-logo"><br>     <em>说明</em>：图片来源百度百科；左侧图片为局域网组网；右侧图片为VRRP组网</p>
+<blockquote>
+<ul>
+<li><strong>局域网组网 e.g :</strong><ul>
+<li>网络内的所有主机会设置一条默认网关（10.100.10.1），当主机发出的目的地址不在本网段（10.100.10.0/24）的报文；通过默认网关发往路由器A，从而实现主机与外部网络的通信</li>
+<li>该组网缺点：当路由器A坏掉时，本网段内通过以RA为默认网关下一跳的主机将断掉与外界的通信，产生单点故障</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li><p><strong>VRRP组网 e.g :</strong></p>
+<blockquote>
+<p>RA：Master 活动路由器  —&gt;10.100.10.2<br>RB：Backup 备份路由器  —&gt;10.100.10.3<br>VRIP : 虚拟路由器IP   —-&gt;10.100.10.1</p>
+</blockquote>
+<ul>
+<li><p>VRRP将局域网中的一组路由器【 RA和RB】组成一个虚拟路由器——&gt;&gt;&gt;备份组</p>
+<blockquote>
+<p>   虚拟路由器拥有自己的IP地址 10.100.10.1<br>局域网内的主机仅知道虚拟路由器IP地址为10.100.10.1，不知道具体的Master与Backup路由器IP<br>局域网内的主机将默认网关下一跳的地址设置为该虚拟路由器IP地址，通过该地址与其他网络进行通信</p>
+</blockquote>
+</li>
+<li><p>该组网优点：当备份组内的Master路由器DOWN掉，会进行选举策略选出一个新的Master路由器，继续往网络内的主机提供路由服务，从而实现网络内的主机不间断地与外部网络进行通信</p>
+</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<h4 id="❉-VRRP-协议"><a href="#❉-VRRP-协议" class="headerlink" title="❉    VRRP 协议"></a>❉    VRRP 协议</h4><blockquote>
+<ul>
+<li>VRRP：解决局域网中配置静态网关出现单点失效的路由协议</li>
+<li>设计目标：网络发生故障时透明地进行设备切换而不影响主机间的数据通信</li>
+</ul>
+</blockquote>
+<h4 id="❉-VRRP-工作原理"><a href="#❉-VRRP-工作原理" class="headerlink" title="❉    VRRP 工作原理"></a>❉    VRRP 工作原理</h4><blockquote>
+<p> VRRP协议将两台或多台路由器设备虚拟成一个虚拟路由器，对外提供虚拟路由器IP(一个或多个)；<br>   而在路由器组内部，如果实际拥有这个对外IP的路由器如果工作正常的话就是MASTER，或者是通过算法选举产生；MASTER实现针对虚拟路由器IP的各种网络功能，如ARP请求，ICMP，以及数据的转发等；<br>   其他设备不拥有该IP，状态是BACKUP，除了接收MASTER的VRRP状态通告信息外，不执行对外的网络功能。<br>   当主机失效时，BACKUP将接管原先MASTER的网络功能。</p>
+<hr>
+<ul>
+<li><strong>❀  如何判定多个路由器在同一组虚拟路由器中？</strong><ul>
+<li>VRID：每个虚拟路由器都有一个唯一标识（VRID是一个0～255的正整数）;<br>配置VRRP协议时需要配置每个路由器的虚拟路由器ID(VRID)和优先权值;<br>使用VRID将路由器进行分组，具有相同VRID值的路由器为同一个组</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li><strong>❀  BACKUP 为什么没有发生抢占？</strong><ul>
+<li>VRRP通告:它使用IP多播数据包进行封装，组地址为224.0.0.18，发布范围只限于同一局域网内;<br>在一个虚拟路由器中，只有处于MASTER角色的路由器会一直发送VRRP通告信息；<br>处于BACKUP状态的路由器只接收MASTER发过来的报文信息，用来监控MASTER运行状态; 除非它的优先级比MASTER更高</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li><strong>❀  什么时候发生选举？</strong><ul>
+<li>当MASTER不可用时，BACKUP无法收到MASTER发过来的报文信息；<br>认定MASTER出现故障，然后多台BACKUP就开始进行选举；</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li><strong>❀  Master选举</strong><ul>
+<li>虚拟路由器IP=路由器本身配置IP<br>该路由器始终将是MASTER；IP地址所有者自动具有最高优先级：255</li>
+<li>优先级选举主控路由器（优先级范围是0—255）<br>优先级0一般用在IP地址所有者主动放弃主控者角色时使用。可配置的优先级范围为1—254</li>
+<li>优先级相等，则比较路由器的实际IP，IP值较大的优先权高</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<h4 id="❉-VRRP-应用实例"><a href="#❉-VRRP-应用实例" class="headerlink" title="❉    VRRP 应用实例"></a>❉    VRRP 应用实例</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">            +-----------+      +-----------+</div><div class="line">            |   Rtr1    |      |   Rtr2    |</div><div class="line">            |(MR VRID=1)|      |(BR VRID=1)|</div><div class="line">            |(BR VRID=2)|      |(MR VRID=2)|</div><div class="line">    VRID=1  +-----------+      +-----------+  VRID=2</div><div class="line">    IP A ----------&gt;*            *&lt;---------- IP B</div><div class="line">                    |            |</div><div class="line">                    |            |</div><div class="line">  ------------------+------------+-----+--------+--------+--------+--</div><div class="line">                                       ^        ^        ^        ^</div><div class="line">                                       |        |        |        |</div><div class="line">                                     (IP A)   (IP A)   (IP B)   (IP B)</div><div class="line">                                       |        |        |        |</div><div class="line">                                    +--+--+  +--+--+  +--+--+  +--+--+</div><div class="line">                                    |  H1 |  |  H2 |  |  H3 |  |  H4 |</div><div class="line">                                    +-----+  +-----+  +--+--+  +--+--+</div><div class="line">     Legend:</div><div class="line">              ---+---+---+--  =  Ethernet, Token Ring, or FDDI</div><div class="line">                           H  =  Host computer</div><div class="line">                          MR  =  Master Router</div><div class="line">                          BR  =  Backup Router</div><div class="line">                           *  =  IP Address</div><div class="line">                        (IP)  =  default router for hosts</div><div class="line"></div><div class="line"></div><div class="line">-----------------------------------------------------------------</div><div class="line"></div><div class="line">    +   VRID 1       |   Rtr1（Master）     |    Rtr2（Backup） +  正常情况下  H1与H2走R1;反之 走R2</div><div class="line"></div><div class="line">    +   VRID 2       |   Rtr1（Backup）    |    Rtr2 （Master） +  正常情况下  H3与H4走R2;反之 走R1</div></pre></td></tr></table></figure>
+<h2 id="keepalived-安装"><a href="#keepalived-安装" class="headerlink" title="keepalived  安装"></a>keepalived  安装</h2><ul>
+<li>实验需求：<br><em>安装keepalived（仅安装）</em></li>
+<li>实验实现：<br><em>服务器：CentOS 6.5-minimal</em><br><em>软    件：Keepalived ( V_1.2.19 )</em>    </li>
+</ul>
+<hr>
+<ul>
+<li>安装过程：<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"># 下载安装包并解压，查看相关参数</div><div class="line"></div><div class="line">[root@lucia tmp]# wget http://www.keepalived.org/software/keepalived-1.2.19.tar.gz    # 下载Keepalived安装包</div><div class="line">[root@lucia tmp]# tar -zxf keepalived-1.2.19.tar.gz   #解压安装包</div><div class="line">[root@lucia tmp]# cd keepalived-1.2.19</div><div class="line">[root@lucia keepalived-1.2.19]# ./configure --help    #查看confiure编译参数</div><div class="line"> </div><div class="line">#================================================</div><div class="line"># 指定安装在/etc/ &#123;--sysconfdir=/etc&#125;</div><div class="line"># 指定使用内核源码中的头文件 &#123;--with-kernel-dir&#125;</div><div class="line"># 注：使用LVS时，需要用到&quot;--with-kernel-dir&quot;</div><div class="line">#===============================================</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<ul>
+<li>编译安装<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line">[root@lucia keepalived-1.2.19]# [ -z /usr/src/kernels/ ] &amp;&amp; yum -y install kernel-headers kernel-devel || echo &quot;The kernel file already exists&quot;</div><div class="line">The kernel file already exists</div><div class="line"></div><div class="line"></div><div class="line">#===========================</div><div class="line"># 判断kernels目录是否存在文件</div><div class="line">#===========================</div><div class="line"> </div><div class="line">[root@lucia keepalived-1.2.19]# ./configure --sysconfdir=/etc/ --with-kernel-dir=/usr/src/kernels/2.6.32-573.12.1.el6.x86_64</div><div class="line"> </div><div class="line">#============================================================================</div><div class="line"># ./configure 对即将安装的软件进行配置，检查当前的环境是否满足要安装软件的依赖关系</div><div class="line">#============================================================================</div><div class="line"></div><div class="line">configure: error: in `/tmp/keepalived-1.2.19&apos;:</div><div class="line">configure: error: no acceptable C compiler found in $PATH</div><div class="line">See `config.log&apos; for more details</div><div class="line"> </div><div class="line">#============================================================================</div><div class="line"># 报错：gcc编译器没有安装</div><div class="line"># [root@lucia keepalived-1.2.19]# yum -y install gcc</div><div class="line">#=============================================================================</div><div class="line">      </div><div class="line">继续返回上一步预安装./configure</div><div class="line">[root@lucia keepalived-1.2.19]# ./configure --sysconfdir=/etc/ --with-kernel-dir=/usr/src/kernels/2.6.32-573.12.1.el6.x86_64</div><div class="line"> </div><div class="line">configure: error:</div><div class="line">!!! OpenSSL is not properly installed on your system. !!!</div><div class="line">!!! Can not include OpenSSL headers files.            !!!</div><div class="line"> </div><div class="line">#=========================================================================</div><div class="line"># 报错：OpenSSL 没有安装</div><div class="line"># [root@lucia keepalived-1.2.19]# yum -y install openssl*</div><div class="line">#=========================================================================</div><div class="line"></div><div class="line">./configure 成功后，显示是Keepalived 输出的加载模块信息</div><div class="line"></div><div class="line">Keepalived configuration</div><div class="line">------------------------</div><div class="line">Keepalived version       : 1.2.19                         </div><div class="line">Compiler                 : gcc</div><div class="line">Compiler flags           : -g -O2</div><div class="line">Extra Lib                : -lssl -lcrypto -lcrypt </div><div class="line">Use IPVS Framework       : Yes</div><div class="line">IPVS sync daemon support : Yes</div><div class="line">IPVS use libnl           : No</div><div class="line">fwmark socket support    : Yes</div><div class="line">Use VRRP Framework       : Yes</div><div class="line">Use VRRP VMAC            : Yes</div><div class="line">SNMP support             : No</div><div class="line">SHA1 support             : No</div><div class="line">Use Debug flags          : No</div><div class="line"></div><div class="line">[root@lucia keepalived-1.2.19]# make &amp;&amp; make install                     #编译&amp;&amp;安装</div><div class="line">[root@lucia keepalived-1.2.19]# ln -s /usr/local/sbin/keepalived /sbin/  #软链接到系统使用的管理程序目录中</div><div class="line">[root@lucia keepalived-1.2.19]# chkconfig --add keepalived               #添加到系统服务</div><div class="line">[root@lucia keepalived-1.2.19]# chkconfig --level 35 keepalived on       #添加到开机启动</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h3 id="❉-Keepalived-配置详解"><a href="#❉-Keepalived-配置详解" class="headerlink" title="❉   Keepalived 配置详解"></a>❉   Keepalived 配置详解</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div></pre></td><td class="code"><pre><div class="line">[root@lucia keepalived-1.2.19]# cd /etc/keepalived/</div><div class="line">[root@lucia keepalived-1.2.19]# ls</div><div class="line">keepalived.conf  samples</div><div class="line"></div><div class="line"># ================================================================</div><div class="line"># Keepalived 配置文件路径为/etc/keepalived/keepalived.conf</div><div class="line"># samples 目录下存放着keepalived配置的示例</div><div class="line"># ================================================================</div><div class="line">#============================================================</div><div class="line"># keepalived.conf 配置</div><div class="line">#------------------------------------------------------------</div><div class="line"># 1、Keepalived 配置文件以block形式组织，每个块内容都包含在&#123;&#125;</div><div class="line"># 2、“#”   “!” 开头行为注释</div><div class="line"># 3、keepalived 配置为三类：</div><div class="line">#      全局配置:对整个keepalived都生效的配置 </div><div class="line">#    VRRPD 配置:核心配置，主要实现keepalived高可用功能</div><div class="line">#      LVS配置</div><div class="line">#============================================================</div><div class="line"></div><div class="line"></div><div class="line">! Configuration File for keepalived   </div><div class="line"></div><div class="line">    </div><div class="line">########################</div><div class="line">#  全局配置</div><div class="line">########################</div><div class="line"></div><div class="line"> </div><div class="line">global_defs &#123;                               # global_defs 全局配置标识 </div><div class="line">                                            ------------------------------------------</div><div class="line">   notification_email &#123;                     # notification_email用于设置报警邮件地址</div><div class="line">     acassen@firewall.loc                   # 可以设置多个，每行一个</div><div class="line">     failover@firewall.loc                  # 设置邮件报警，需开启本机Sendmail 服务</div><div class="line">     sysadmin@firewall.loc                  # yum -y install mailx sendmail</div><div class="line">   &#125;                                        ----------------------------------------------</div><div class="line"></div><div class="line">   notification_email_from Alexandre.Cassen@firewall.loc  # 设置邮件发送地址</div><div class="line">   smtp_server 192.168.200.1                              # 设置邮件的smtp server地址</div><div class="line">   smtp_connect_timeout 30                                # 设置连接smtp sever超时时间</div><div class="line">   router_id LVS_DEVEL                                    # 表示运行keepalived服务器标识，发邮件时显示在邮件主题中的信息</div><div class="line">&#125;</div><div class="line"></div><div class="line">######################</div><div class="line">#  VRRPD配置</div><div class="line">######################</div><div class="line"></div><div class="line">vrrp_instance VI_1 &#123;         # VRRPD 配置标识 VI_1是实例名称</div><div class="line"></div><div class="line">    state MASTER             # 指定Keepalvied角色 MASTER表示此主机为主服务器 BACKUP则是表示为备用服务器</div><div class="line">    interface eth0           # 指定 HA 监测网络的接口</div><div class="line">    virtual_router_id 51     # 虚拟路由标识，标识为数字，同一个VRRP实例使用唯一的标识，即可表示在同一个vrrp_instance下 MASTER_ID = BACKUP_ID</div><div class="line">    priority 100             # 定义节点优先级，数字越大表示节点的优先级越高，同一个VRRP_instance下，MASTE_PRIORITY &gt; BACKUP_PRIORITY </div><div class="line">    advert_int 1             # 设定MASTER与BACKUP主机质检同步检查的时间间隔，单位为秒</div><div class="line">             </div><div class="line">    authentication &#123;         # 设定节点间通信验证类型和密码，验证类型主要有PASS和AH两种</div><div class="line">        auth_type PASS       # 同一个vrrp_instance，MASTER验证密码和BACKUP保持一致</div><div class="line">        auth_pass 1111</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    virtual_ipaddress &#123;      # 设置虚拟IP地址 (VIP),又叫做漂移IP地址</div><div class="line">        192.168.200.16</div><div class="line">        192.168.200.17</div><div class="line">        192.168.200.18</div><div class="line">    &#125;</div><div class="line"></div><div class="line">#-------------------------------------------------------------------------------</div><div class="line"># 问：为什么叫漂移IP地址？</div><div class="line"># 答：当Keepalived切换到MASTER状态时，IP地址会自动添加到系统中</div><div class="line">#    当Keepalvied切换到BACKUP状态时，IP地址将自动从系统中删除</div><div class="line">#    </div><div class="line">#    keepalived通过“ip address add”命令的形式将VIP添加到系统</div><div class="line">#    通过“ip add”查看系统中添加的VIP地址</div><div class="line">#--------------------------------------------------------------------------------</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">######################</div><div class="line"># LVS配置</div><div class="line">######################</div><div class="line"></div><div class="line"></div><div class="line">virtual_server 192.168.200.100 443 &#123;              # virtual_server LVS配置标识 </div><div class="line">                                                  # 格式：virtual_server VIP port [IP 和 port 之间空格隔开]</div><div class="line"> </div><div class="line">    delay_loop 6                                  # 设置健康检查时间间隔，单位为秒                      </div><div class="line">    lb_algo rr                                    # 设置负载调度算法，可用的调度算法有：rr、wlc、lc、lblc、sh、dh等</div><div class="line">    lb_kind NAT                                   # 设置LVS实现负载均衡的机制，有NAT、TUN和DR三种模式可选</div><div class="line">    nat_mask 255.255.255.0                        # NAT子网掩码</div><div class="line">    persistence_timeout 50                        # 会话保持时间 </div><div class="line">    protocol TCP                                  # 指定转发协议类型</div><div class="line">#----------------------------------------------------------------------------------------------------</div><div class="line"># persistence_timeout 会话保持时间对动态网页非常有用，为集群系统中的seesion共享提供了一个很好的解决方案</div><div class="line"># 用户的请求会一直分发到某个服务节点，直至超过这个会话的保持时间（指最大无响应超时时间）</div><div class="line"># =[用户操作动态页面如果在50s没有执行任何操作则被分发到另外的节点]</div><div class="line">#----------------------------------------------------------------------------------------------------</div><div class="line"></div><div class="line">    real_server 192.168.201.100 443 &#123;                          # 设置real server段开始的标识 [ IP为真实IP地址]</div><div class="line">                                                               # 格式：real_server realIP port [IP 和 port 之间空格隔开]</div><div class="line">                                                               -----------------------------------------------------------------</div><div class="line">        weight 1                                               # 用于配置real server节点的权值，权值大小用数字表示，数字越大，权值越高</div><div class="line">                                                               # 设置权值大小可以为不同性能的服务器分配不同的负载</div><div class="line">                                                               ------------------------------------------------------------------</div><div class="line"></div><div class="line">        SSL_GET &#123;                                              # 健康检查 SSL_GET    </div><div class="line">            url &#123;                                              # 指定SSL检查的URL信息，可以指定多个</div><div class="line">              path /index.html                                 # 后跟详细的URL路径</div><div class="line">              digest ff20ad2481f97b1754ef3e12ecd3a9cc          # SSL检查后的摘要信息，可以通过genhash命令工具获取</div><div class="line">#-----------------------------------------------------------------</div><div class="line"># [root@lucia keepalived]# genhash -s 192.168.201.100 -p 80 -u /index.html</div><div class="line">#-----------------------------------------------------------------</div><div class="line">            &#125;</div><div class="line">            url &#123;</div><div class="line">              path /mrtg/</div><div class="line">              digest 9b3a0c85a887a256d6939da88aabd8cd</div><div class="line">            &#125;</div><div class="line">            connect_timeout 3                                  # 表示无响应超时时间，单位为秒</div><div class="line">            nb_get_retry 3                                     # 表示重试次数</div><div class="line">            delay_before_retry 3                               # 表示充实间隔</div><div class="line">        &#125; </div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"> </div><div class="line">virtual_server 10.10.10.2 1358 &#123;</div><div class="line">    delay_loop 6</div><div class="line">    lb_algo rr </div><div class="line">    lb_kind NAT</div><div class="line">    persistence_timeout 50</div><div class="line">    protocol TCP</div><div class="line"> </div><div class="line">    sorry_server 192.168.200.200 1358                          # 备份节点，在所有real serer失效后，启用备份节点</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<hr>
+<blockquote>
+<ul>
+<li>VRRP原理参考文档如下：<ul>
+<li><a href="http://bbs.nanjimao.com/thread-790-1-1.html" target="_blank" rel="external">http://bbs.nanjimao.com/thread-790-1-1.html</a> （此篇写的很好）</li>
+<li><a href="http://blog.chinaunix.net/uid-26575352-id-3529109.html" target="_blank" rel="external">http://blog.chinaunix.net/uid-26575352-id-3529109.html</a></li>
+<li>keepalived.conf 参考书籍 《高性能Linux服务器构建实战》</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<hr>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;keepalived-介绍&quot;&gt;&lt;a href=&quot;#keepalived-介绍&quot; class=&quot;headerlink&quot; title=&quot;keepalived 介绍&quot;&gt;&lt;/a&gt;keepalived 介绍&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;keepalived 是 Linux下一
+    
+    </summary>
+    
+    
+      <category term="keepalived" scheme="http://yoursite.com/tags/keepalived/"/>
+    
+  </entry>
+  
+</feed>
