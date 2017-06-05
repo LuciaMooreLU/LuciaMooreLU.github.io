@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-06-03T09:44:37.065Z</updated>
+  <updated>2017-06-05T15:43:43.952Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,20 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>javascript</title>
+    <link href="http://yoursite.com/2017/06/05/javascript/"/>
+    <id>http://yoursite.com/2017/06/05/javascript/</id>
+    <published>2017-06-05T15:43:43.000Z</published>
+    <updated>2017-06-05T15:43:43.952Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>安装nginx服务器</title>
@@ -195,15 +209,16 @@
     <link href="http://yoursite.com/2017/01/16/MyLife/"/>
     <id>http://yoursite.com/2017/01/16/MyLife/</id>
     <published>2017-01-16T11:55:18.000Z</published>
-    <updated>2017-06-04T15:53:08.944Z</updated>
+    <updated>2017-06-04T15:55:59.556Z</updated>
     
     <content type="html"><![CDATA[<p><br></p>
+<hr>
 <ul>
 <li>天下事有难易乎?  为之,则难者亦易矣；不为,则易者亦难矣.</li>
 <li>人之为学有难易乎?  学之,则难者亦易矣；不学,则易者亦难矣. ——为学</li>
 </ul>
-<p><br></p>
 <hr>
+<p><br></p>
 <blockquote>
 <ul>
 <li>文章都经过本人测试后才执笔，若出现某些代码块无法执行或者书写错误，望指正。</li>
@@ -216,14 +231,14 @@
     <summary type="html">
     
       &lt;p&gt;&lt;br&gt;&lt;/p&gt;
+&lt;hr&gt;
 &lt;ul&gt;
 &lt;li&gt;天下事有难易乎?  为之,则难者亦易矣；不为,则易者亦难矣.&lt;/li&gt;
 &lt;li&gt;人之为学有难易乎?  学之,则难者亦易矣；不学,则易者亦难矣. ——为学&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;br&gt;&lt;/p&gt;
 &lt;hr&gt;
-&lt;blockquote&gt;
-&lt;
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+&lt;blockquo
     
     </summary>
     
