@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yoursite.com/2017/06/06/setInter/</loc>
+    
+    <lastmod>2017-06-06T13:48:35.744Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/2017/06/05/javascript/</loc>
     
     <lastmod>2017-06-05T15:43:43.952Z</lastmod>
@@ -30,14 +37,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/05/25/pptp/</loc>
+    <loc>http://yoursite.com/2017/05/25/script/</loc>
     
     <lastmod>2017-05-25T16:29:44.773Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/05/25/script/</loc>
+    <loc>http://yoursite.com/2017/05/25/pptp/</loc>
     
     <lastmod>2017-05-25T16:29:44.773Z</lastmod>
     
