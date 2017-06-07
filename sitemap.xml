@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yoursite.com/2017/06/07/javascript-Dom/</loc>
+    
+    <lastmod>2017-06-07T15:55:33.404Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/2017/06/06/setInter/</loc>
     
     <lastmod>2017-06-06T13:48:35.744Z</lastmod>
@@ -37,14 +44,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/05/25/script/</loc>
+    <loc>http://yoursite.com/2017/05/25/pptp/</loc>
     
     <lastmod>2017-05-25T16:29:44.773Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/05/25/pptp/</loc>
+    <loc>http://yoursite.com/2017/05/25/script/</loc>
     
     <lastmod>2017-05-25T16:29:44.773Z</lastmod>
     
@@ -58,14 +65,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/12/05/mysql/</loc>
+    <loc>http://yoursite.com/2016/12/03/partition/</loc>
     
     <lastmod>2017-05-25T16:29:44.772Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/12/03/partition/</loc>
+    <loc>http://yoursite.com/2016/12/05/mysql/</loc>
     
     <lastmod>2017-05-25T16:29:44.772Z</lastmod>
     

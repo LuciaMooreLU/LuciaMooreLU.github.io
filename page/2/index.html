@@ -147,6 +147,130 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-partition" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/12/03/partition/">centos 6.5调整分区大小</a>
+    </h1>
+  
+
+        
+        <a href="/2016/12/03/partition/" class="archive-article-date">
+  	<time datetime="2016-12-03T07:25:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-12-03</time>
+</a>
+        
+      </header>
+    
+
+<!-- 目录内容 -->
+   
+<!-- 目录内容结束 -->
+
+
+
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+
+
+
+
+        <h1 id="实验目的及要求"><a href="#实验目的及要求" class="headerlink" title="实验目的及要求"></a>实验目的及要求</h1><p><strong>实验目的：</strong></p>
+<p>调整硬盘分区大小</p>
+<p><strong>要求：</strong></p>
+<p>增加默认分区时/目录空间，减少/home空间</p>
+<h1 id="查看硬盘使用情况"><a href="#查看硬盘使用情况" class="headerlink" title="查看硬盘使用情况"></a>查看硬盘使用情况</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]# df -h    //查看分区</div><div class="line">Filesystem                      Size  Used Avail Use% Mounted on</div><div class="line">/dev/mapper/vg_vmhost1-lv_root   50G   36G   12G  76% /</div><div class="line">tmpfs                           7.9G   80K  7.9G   1% /dev/shm</div><div class="line">/dev/sda1                       485M   40M  420M   9% /boot</div><div class="line">/dev/mapper/vg_vmhost1-lv_home  859G   64G  752G   8% /home</div></pre></td></tr></table></figure>
+<h1 id="调整-home分区大小"><a href="#调整-home分区大小" class="headerlink" title="调整/home分区大小"></a>调整/home分区大小</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]# umount /home/        //取消挂载</div><div class="line">umount: /home: device is busy.</div><div class="line">        (In some cases useful info about processes that use</div><div class="line">         the device is found by lsof(8) or fuser(1))</div><div class="line"> # umount /home 提示设备正忙，则有进程占用/home</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]# fuser -m /dev/mapper/vg_vmhost1-lv_home        //列出vg_vmhost1_lv_home的进程号</div><div class="line">/dev/mapper/vg_vmhost1-lv_home:  6029c  6387c  6429c  6430c  6432c  6900c  6901c</div><div class="line">[root@localhost ~]# fuser -mv /dev/mapper/vg_vmhost1-lv_home       //列出vg_vmhost1_lv_home的进程号以及用户，权限，命令</div><div class="line">                     用户     进程号 权限   命令</div><div class="line">/dev/mapper/vg_vmhost1-lv_home:</div><div class="line">                     root       6029 F.c.. vmware-vmx</div><div class="line">                     root       6387 ..c.. thnuclnt</div><div class="line">                     root       6429 ..c.. thnuclnt</div><div class="line">                     root       6430 ..c.. thnuclnt</div><div class="line">                     root       6432 ..c.. thnuclnt</div><div class="line">                     root       6900 ..c.. thnuclnt</div><div class="line">                     root       6901 ..c.. thnuclnt</div><div class="line">      </div><div class="line"># fuser命令用于报告进程使用的文件和网络套接字，fuser命令列出本地进程的进程号，那些本地进程使用file，参数指定的本地或远程文件。</div><div class="line">#-----------------</div><div class="line">#对于堵塞特别设备，此命令列出了使用该设备上任何文件的进程（相关详细使用见注1）</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]# fuser -km /dev/mapper/vg_vmhost1-lv_home        //终止vg_vmhost1-lv_home的进程</div><div class="line">/dev/mapper/vg_vmhost1-lv_home:  6029c  6387c  6429c  6430c  6432c  6900c  6901c</div><div class="line">[root@localhost ~]# umount /home/                                   //取消挂载</div></pre></td></tr></table></figure>
+<h1 id="采用resize2fs命令扩容"><a href="#采用resize2fs命令扩容" class="headerlink" title="采用resize2fs命令扩容"></a>采用resize2fs命令扩容</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]# e2fsck -f /dev/mapper/vg_vmhost1-lv_home      //磁盘检测  </div><div class="line">e2fsck 1.41.12 (17-May-2010)</div><div class="line">第一步: 检查inode,块,和大小</div><div class="line">第二步: 检查目录结构</div><div class="line">第3步: 检查目录连接性</div><div class="line">Pass 4: Checking reference counts</div><div class="line">第5步: 检查簇概要信息</div><div class="line">/dev/mapper/vg_vmhost1-lv_home: 383/57196544 files (58.0% non-contiguous), 20285788/228763648 blocks</div></pre></td></tr></table></figure>
+<p><strong>resize2fs命令被用来增大或者收缩未加载的“ext2/ext3”文件系统的大小</strong></p>
+<ul>
+<li>先umount才能e2fsck</li>
+<li>扩容前先进行磁盘检测才可扩容（否则会有提示）</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]#  resize2fs -p /dev/mapper/vg_vmhost1-lv_home 400G   #重定/home大小为400G并打印百分比完成条</div><div class="line">resize2fs 1.41.12 (17-May-2010)</div><div class="line">Resizing the filesystem on /dev/mapper/vg_vmhost1-lv_home to 104857600 (4k) blocks.</div><div class="line">Begin pass 2 (max = 36398)</div><div class="line">正在重定位块            XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</div><div class="line">Begin pass 3 (max = 6982)</div><div class="line">正在扫描inode表          XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</div><div class="line">Begin pass 4 (max = 40)</div><div class="line">正在更新inode引用       XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</div><div class="line">The filesystem on /dev/mapper/vg_vmhost1-lv_home is now 104857600 blocks long.</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]# mount /home                                          //挂载home</div><div class="line">[root@localhost ~]# df -h                                                //查看分区</div><div class="line">Filesystem                      Size  Used Avail Use% Mounted on</div><div class="line">/dev/mapper/vg_vmhost1-lv_root   50G   35G   12G  75% /</div><div class="line">tmpfs                           7.9G   80K  7.9G   1% /dev/shm</div><div class="line">/dev/sda1                       485M   40M  420M   9% /boot</div><div class="line">/dev/mapper/vg_vmhost1-lv_home  394G   64G  311G  18% /home</div><div class="line">[root@localhost ~]# </div><div class="line">[root@localhost ~]# lvreduce -L 400G /dev/mapper/vg_vmhost1-lv_home</div><div class="line">  WARNING: Reducing active and open logical volume to 400.00 GiB</div><div class="line">  THIS MAY DESTROY YOUR DATA (filesystem etc.)</div><div class="line">Do you really want to reduce lv_home? [y/n]: y</div><div class="line">  Reducing logical volume lv_home to 400.00 GiB</div><div class="line">  Logical volume lv_home successfully resized</div><div class="line">[root@localhost ~]# </div><div class="line">[root@localhost ~]# </div><div class="line">[root@localhost ~]# df -h</div><div class="line">Filesystem                      Size  Used Avail Use% Mounted on</div><div class="line">/dev/mapper/vg_vmhost1-lv_root   50G   35G   12G  75% /</div><div class="line">tmpfs                           7.9G   80K  7.9G   1% /dev/shm</div><div class="line">/dev/sda1                       485M   40M  420M   9% /boot</div><div class="line">/dev/mapper/vg_vmhost1-lv_home  394G   64G  311G  18% /home</div><div class="line">[root@localhost ~]# </div><div class="line">[root@localhost ~]# </div><div class="line">[root@localhost ~]# vgdisplay</div><div class="line">  --- Volume group ---</div><div class="line">  VG Name               vg_vmhost1</div><div class="line">  System ID             </div><div class="line">  Format                lvm2</div><div class="line">  Metadata Areas        1</div><div class="line">  Metadata Sequence No  5</div><div class="line">  VG Access             read/write</div><div class="line">  VG Status             resizable</div><div class="line">  MAX LV                0</div><div class="line">  Cur LV                3</div><div class="line">  Open LV               3</div><div class="line">  Max PV                0</div><div class="line">  Cur PV                1</div><div class="line">  Act PV                1</div><div class="line">  VG Size               930.51 GiB</div><div class="line">  PE Size               4.00 MiB</div><div class="line">  Total PE              238210</div><div class="line">  Alloc PE / Size       117208 / 457.84 GiB</div><div class="line">  Free  PE / Size       121002 / 472.66 GiB</div><div class="line">  VG UUID               6zrYe0-arcH-qxSN-Nanq-39dP-IuLN-euhDw3</div><div class="line">   </div><div class="line">[root@localhost ~]# </div><div class="line">[root@localhost ~]# </div><div class="line">[root@localhost ~]#  lvextend -L +472.66G /dev/mapper/vg_vmhost1-lv_root</div><div class="line">  Rounding size to boundary between physical extents: 472.66 GiB</div><div class="line">  Extending logical volume lv_home to 872.66 GiB</div><div class="line">  Logical volume lv_home successfully resized</div><div class="line">[root@localhost ~]#</div></pre></td></tr></table></figure>
+<h1 id="相关注释"><a href="#相关注释" class="headerlink" title="相关注释"></a>相关注释</h1><p>注1:</p>
+<p>命令：fuser命令<br>每个进程号后面都跟随一个字母，该字母指示进程如何使用文件。</p>
+<ul>
+<li>c：指示进程的工作目录。</li>
+<li>e：指示该文件为进程的可执行文件(即进程由该文件拉起)</li>
+<li>f：指示该文件被进程打开，默认情况下f字符不显示</li>
+<li>F：指示该文件被进程打开进行写入，默认情况下F字符不显示</li>
+<li>r：指示该目录为进程的根目录</li>
+<li>m：指示进程使用该文件进行内存映射，抑或该文件为共享库文件，被进程映射进内存。<br>语法</li>
+</ul>
+<p>fuser (选项) (参数)</p>
+<ul>
+<li>-a：显示命令行中指定的所有文件；</li>
+<li>-k：杀死访问指定文件的所有进程；</li>
+<li>-i：杀死进程前需要用户进行确认；</li>
+<li>-l：列出所有已知信号名；</li>
+<li>-m：指定一个被加载的文件系统或一个被加载的块设备；</li>
+<li>-n：选择不同的名称空间；</li>
+<li>-u：在每个进程后显示所属的用户名</li>
+<li>-v：显示目前使用的目录的进程号，用户，用户ID，命令<br>文件：可以是文件名或者TCP、UDP端口号。</li>
+</ul>
+<hr>
+<p>实例 要列出使用/etc/passwd文件的本地进程的进程号</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fuser /etc/passwd</div></pre></td></tr></table></figure>
+<p>要列出使用/etc/filesystems文件的进程的进程号和用户登录名</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fuser -u /etc/filesystems</div></pre></td></tr></table></figure>
+<p>要终止使用给定文件系统的所有进程</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fuser -k -x -u -c /dev/hd1 或者 fuser -kxuc /home</div></pre></td></tr></table></figure>
+<ul>
+<li>任一命令都列出了进程号和用户名，然后终止每个正在使用/dev/hd1 (/home)文件系统的进程。仅有root用户能终止属于另一用户的进程。</li>
+<li>如果您正在试图卸下/dev/hd1文件系统，而一个正在访问/dev/hd1文件系统的进程不允许这样，您可能希望使用此命令。</li>
+<li>要列出正在使用已从给定文件系统删除的文件的全部进程，请输入： fuser -d /usr文件 /dev/kmem 用于系统映像。 /dev/mem 也用于系统映像。<blockquote>
+<ul>
+<li>参考文档及资料如下：<br><a href="http://my.oschina.net/shanhe/blog/296735" target="_blank" rel="external">http://my.oschina.net/shanhe/blog/296735</a><br><a href="http://man.linuxde.net/resize2fs" target="_blank" rel="external">http://man.linuxde.net/resize2fs</a><br><a href="http://blog.51yip.com/linux/1699.html" target="_blank" rel="external">http://blog.51yip.com/linux/1699.html</a><br><a href="http://www.iisuser.com/adujust-the-size-of-home-and-root-space/" target="_blank" rel="external">http://www.iisuser.com/adujust-the-size-of-home-and-root-space/</a></li>
+</ul>
+</blockquote>
+</li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">CentOS  分区</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2016/12/03/partition/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+  
     <article id="post-sourcecodeGIT" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -545,15 +669,7 @@ return o(t,i(n),arguments.length<3?void 0:u(arguments[2]))}})},function(t,n,r){v
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">keepalived</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">SHELL笔记</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -565,11 +681,19 @@ return o(t,i(n),arguments.length<3?void 0:u(arguments[2]))}})},function(t,n,r){v
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">CentOS  分区</a>
+                <a href="javascript:void(0)" class="js-tag color4">vpn</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">SHELL笔记</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -577,7 +701,7 @@ return o(t,i(n),arguments.length<3?void 0:u(arguments[2]))}})},function(t,n,r){v
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">vpn</a>
+                <a href="javascript:void(0)" class="js-tag color1">CentOS  分区</a>
               </li>
              
               <li class="article-tag-list-item">
