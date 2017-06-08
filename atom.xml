@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-06-07T15:55:33.404Z</updated>
+  <updated>2017-06-08T15:49:40.703Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,20 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>js</title>
+    <link href="http://yoursite.com/2017/06/08/js/"/>
+    <id>http://yoursite.com/2017/06/08/js/</id>
+    <published>2017-06-08T15:49:40.000Z</published>
+    <updated>2017-06-08T15:49:40.703Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>javascript-Dom</title>
