@@ -2,9 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yoursite.com/2017/06/07/javascript-Dom/</loc>
+    
+    <lastmod>2017-06-10T05:10:47.752Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/2017/06/05/javascript01/</loc>
     
-    <lastmod>2017-06-09T13:47:20.656Z</lastmod>
+    <lastmod>2017-06-10T04:41:16.106Z</lastmod>
     
   </url>
   
@@ -19,13 +26,6 @@
     <loc>http://yoursite.com/2017/06/08/js/</loc>
     
     <lastmod>2017-06-08T15:49:40.703Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2017/06/07/javascript-Dom/</loc>
-    
-    <lastmod>2017-06-07T15:55:33.404Z</lastmod>
     
   </url>
   
@@ -58,13 +58,6 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/11/24/sourcecodeGIT/</loc>
-    
-    <lastmod>2017-05-25T16:29:44.773Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yoursite.com/2017/05/25/pptp/</loc>
     
     <lastmod>2017-05-25T16:29:44.773Z</lastmod>
@@ -73,6 +66,13 @@
   
   <url>
     <loc>http://yoursite.com/2017/05/25/script/</loc>
+    
+    <lastmod>2017-05-25T16:29:44.773Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2016/11/24/sourcecodeGIT/</loc>
     
     <lastmod>2017-05-25T16:29:44.773Z</lastmod>
     

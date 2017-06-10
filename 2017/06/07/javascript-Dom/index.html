@@ -6,15 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>javascript-Dom | Lucia&#39;s Note</title>
+  <title>JS基础DOM操作 | Lucia&#39;s Note</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="article">
-<meta property="og:title" content="javascript-Dom">
+  <meta name="description" content="基础DOM操作  文档对象模型DOM(Document Object Model)定义访问和处理HTML文档的标准方法 DOM将HTML 文档呈现为带有元素、属性和文本的树结构（节点数）   获取节点document getElementById  通过元素ID获取节点   getElementsByClassName  通过元素的class name 获取节点（H5 DOM 新方法）  文档中">
+<meta name="keywords" content="javascript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JS基础DOM操作">
 <meta property="og:url" content="http://yoursite.com/2017/06/07/javascript-Dom/index.html">
 <meta property="og:site_name" content="Lucia&#39;s Note">
-<meta property="og:updated_time" content="2017-06-07T15:55:33.404Z">
+<meta property="og:description" content="基础DOM操作  文档对象模型DOM(Document Object Model)定义访问和处理HTML文档的标准方法 DOM将HTML 文档呈现为带有元素、属性和文本的树结构（节点数）   获取节点document getElementById  通过元素ID获取节点   getElementsByClassName  通过元素的class name 获取节点（H5 DOM 新方法）  文档中">
+<meta property="og:updated_time" content="2017-06-10T05:10:47.752Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="javascript-Dom">
+<meta name="twitter:title" content="JS基础DOM操作">
+<meta name="twitter:description" content="基础DOM操作  文档对象模型DOM(Document Object Model)定义访问和处理HTML文档的标准方法 DOM将HTML 文档呈现为带有元素、属性和文本的树结构（节点数）   获取节点document getElementById  通过元素ID获取节点   getElementsByClassName  通过元素的class name 获取节点（H5 DOM 新方法）  文档中">
   
     <link rel="alternative" href="/atom.xml" title="Lucia&#39;s Note" type="application/atom+xml">
   
@@ -153,7 +157,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      javascript-Dom
+      JS基础DOM操作
     </h1>
   
 
@@ -166,7 +170,31 @@
     
 
 <!-- 目录内容 -->
-   
+
+    <p class="show-toc-btn" id="show-toc-btn" onclick="showToc();" style="display:none">
+          <span class="btn-bg"></span>
+          <span class="btn-text">文章导航</span>
+          </p>
+  <div id="toc-article" class="toc-article">
+      <span id="toc-close" class="toc-close" title="隐藏导航" onclick="showBtn();">×</span>
+    <strong class="toc-title">文章目录</strong>
+           <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#基础DOM操作"><span class="toc-number">1.</span> <span class="toc-text">基础DOM操作</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#获取节点"><span class="toc-number">1.1.</span> <span class="toc-text">获取节点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#document"><span class="toc-number">1.1.1.</span> <span class="toc-text">document</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#节点指针"><span class="toc-number">1.2.</span> <span class="toc-text">节点指针</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#节点操作"><span class="toc-number">1.3.</span> <span class="toc-text">节点操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#创建节点"><span class="toc-number">1.3.1.</span> <span class="toc-text">创建节点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#插入节点"><span class="toc-number">1.3.2.</span> <span class="toc-text">插入节点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#替换节点"><span class="toc-number">1.3.3.</span> <span class="toc-text">替换节点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#复制节点"><span class="toc-number">1.3.4.</span> <span class="toc-text">复制节点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#删除节点"><span class="toc-number">1.3.5.</span> <span class="toc-text">删除节点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#属性操作"><span class="toc-number">1.4.</span> <span class="toc-text">属性操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#获取属性"><span class="toc-number">1.4.1.</span> <span class="toc-text">获取属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#文本操作"><span class="toc-number">1.4.2.</span> <span class="toc-text">文本操作</span></a></li></ol></li></ol></li></ol>
+         </div>
+   <script type="text/javascript">
+  function showToc(){
+    var toc_article = document.getElementById("toc-article");
+    var show_toc_btn = document.getElementById("show-toc-btn");
+    toc_article.setAttribute("style","display:block");
+    show_toc_btn.setAttribute("style","display:none");
+    };
+  function showBtn(){
+    var toc_article = document.getElementById("toc-article");
+    var show_toc_btn = document.getElementById("show-toc-btn");
+    toc_article.setAttribute("style","display:none");
+    show_toc_btn.setAttribute("style","display:block");
+    };
+   </script>
+         
 <!-- 目录内容结束 -->
 
 
@@ -178,7 +206,167 @@
 
 
 
-        
+        <p><br></p>
+<h1 id="基础DOM操作"><a href="#基础DOM操作" class="headerlink" title="基础DOM操作"></a>基础DOM操作</h1><blockquote>
+<ul>
+<li>文档对象模型DOM(Document Object Model)定义访问和处理HTML文档的标准方法</li>
+<li>DOM将HTML 文档呈现为带有元素、属性和文本的树结构（节点数）</li>
+</ul>
+</blockquote>
+<h2 id="获取节点"><a href="#获取节点" class="headerlink" title="获取节点"></a>获取节点</h2><h3 id="document"><a href="#document" class="headerlink" title="document"></a>document</h3><ul>
+<li><p><strong>getElementById</strong></p>
+<ul>
+<li>通过元素ID获取节点</li>
+</ul>
+</li>
+<li><p><strong>getElementsByClassName</strong></p>
+<ul>
+<li><p>通过元素的class name 获取节点（H5 DOM 新方法）</p>
+</li>
+<li><p>文档中的name属性不唯一，所有的getElementsByClassName()方法返回的是元素的数组</p>
+</li>
+</ul>
+</li>
+<li><p><strong>getElementsByTagName</strong></p>
+<ul>
+<li>通过元素标签获取节点</li>
+<li>返回元素的顺序是在文档中的顺序</li>
+</ul>
+</li>
+</ul>
+<h2 id="节点指针"><a href="#节点指针" class="headerlink" title="节点指针"></a>节点指针</h2><ul>
+<li><strong>firstChild</strong><ul>
+<li>父节点.firstChild</li>
+<li>获取元素的首个子节点</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><strong>lastChild</strong><ul>
+<li>父节点.lastChild</li>
+<li>获取元素的最后一个子节点</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p>访问子节点</p>
+<ul>
+<li><strong>childNodes</strong><ul>
+<li>elementNode.childNodes;</li>
+<li>父节点.childNodes</li>
+<li>获取选定元素的所有子节点列表，返回的值可以看做是一个数组，它具有length属性</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p>访问父节点</p>
+<ul>
+<li><strong>parentNode</strong><ul>
+<li>elementNode.parentNode;</li>
+<li>子节点.parentNode</li>
+<li>获取已知节点的父节点</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p>访问兄弟节点</p>
+<ul>
+<li><p><strong>nextSlibing</strong></p>
+<ul>
+<li>兄弟节点.nextSibling</li>
+<li>获取已知节点的后一个节点(处于同一层树层级中)</li>
+</ul>
+</li>
+<li><p><strong>previousSibling</strong></p>
+<ul>
+<li>兄弟节点.previousSibling</li>
+<li>获取已知节点的前一个节点(处于同一层树层级中) </li>
+</ul>
+</li>
+</ul>
+<h2 id="节点操作"><a href="#节点操作" class="headerlink" title="节点操作"></a>节点操作</h2><h3 id="创建节点"><a href="#创建节点" class="headerlink" title="创建节点"></a>创建节点</h3><ul>
+<li><strong>creatElement</strong><ul>
+<li>document.createElement(元素标签)</li>
+<li>创建元素节点</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p><strong>createAttribute</strong></p>
+<ul>
+<li>document.createAttribute(元素属性)</li>
+<li>创建元素属性</li>
+</ul>
+</li>
+<li><p><strong>createTextNode</strong></p>
+<ul>
+<li>document.createTextNode(文本内容)</li>
+<li>创建文本内容</li>
+</ul>
+</li>
+</ul>
+<h3 id="插入节点"><a href="#插入节点" class="headerlink" title="插入节点"></a>插入节点</h3><ul>
+<li><p><strong>appendChild</strong></p>
+<ul>
+<li>appendChild(添加新的节点)</li>
+<li>向节点的子节点列表的末尾添加新的子节点</li>
+</ul>
+</li>
+<li><p><strong>insertBefore</strong></p>
+<ul>
+<li>insertBefore(所添加新的节点,已知子节点)</li>
+<li>在已知的子节点前插入一个新的子节点</li>
+</ul>
+</li>
+</ul>
+<h3 id="替换节点"><a href="#替换节点" class="headerlink" title="替换节点"></a>替换节点</h3><ul>
+<li>replaceChild<ul>
+<li>replaceChid(要插入的新元素,将被替换的老元素)</li>
+<li>将某个子节点替换成另一个节点</li>
+</ul>
+</li>
+</ul>
+<h3 id="复制节点"><a href="#复制节点" class="headerlink" title="复制节点"></a>复制节点</h3><ul>
+<li>cloneNode<ul>
+<li>需要被复制的节点.cloneNode(true,false)</li>
+<li>创建指定节点的副本</li>
+<li>true 复制当前字节及其所有子节点</li>
+<li>false 仅复制当前节点</li>
+</ul>
+</li>
+</ul>
+<h3 id="删除节点"><a href="#删除节点" class="headerlink" title="删除节点"></a>删除节点</h3><ul>
+<li>removeChild<ul>
+<li>removeChild(要删除的节点)</li>
+<li>删除指定的节点</li>
+</ul>
+</li>
+</ul>
+<h2 id="属性操作"><a href="#属性操作" class="headerlink" title="属性操作"></a>属性操作</h2><h3 id="获取属性"><a href="#获取属性" class="headerlink" title="获取属性"></a>获取属性</h3><ul>
+<li><strong>getAttribute</strong><ul>
+<li>ElementNode.getAttribute(name);</li>
+<li>元素节点.getAttribute(元素属性名)</li>
+<li>获取元素节点中指定属性的属性值</li>
+</ul>
+</li>
+<li><p><strong>setAttribute</strong></p>
+<ul>
+<li>ElementNode.setAttribute(name,value);</li>
+<li>元素节点.setAttribute(属性名,属性值)</li>
+<li>创建或改变元素节点的属性</li>
+</ul>
+</li>
+<li><p><strong>removeAttribute</strong></p>
+<ul>
+<li>元素节点.removeAttribute(属性名)</li>
+<li>删除元素中的指定属性</li>
+</ul>
+</li>
+</ul>
+<h3 id="文本操作"><a href="#文本操作" class="headerlink" title="文本操作"></a>文本操作</h3><p>########################</p>
+<p>暂时留空</p>
+<p>#######################</p>
+
       
 
       
@@ -186,6 +374,17 @@
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">javascript</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
@@ -369,15 +568,15 @@ return o(t,i(n),arguments.length<3?void 0:u(arguments[2]))}})},function(t,n,r){v
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">keepalived</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">SHELL笔记</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">keepalived</a>
               </li>
              
               <li class="article-tag-list-item">
