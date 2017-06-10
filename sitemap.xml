@@ -2,16 +2,30 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://yoursite.com/2017/06/07/javascript-Dom/</loc>
+    <loc>http://yoursite.com/2017/06/08/javascript03/</loc>
     
-    <lastmod>2017-06-10T05:10:47.752Z</lastmod>
+    <lastmod>2017-06-10T06:21:56.110Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2017/01/16/MyLife/</loc>
+    
+    <lastmod>2017-06-10T05:21:37.040Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2017/06/07/javascript02/</loc>
+    
+    <lastmod>2017-06-10T05:19:09.929Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://yoursite.com/2017/06/05/javascript01/</loc>
     
-    <lastmod>2017-06-10T04:41:16.106Z</lastmod>
+    <lastmod>2017-06-10T05:18:10.601Z</lastmod>
     
   </url>
   
@@ -23,23 +37,9 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/06/08/js/</loc>
-    
-    <lastmod>2017-06-08T15:49:40.703Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yoursite.com/2017/06/06/setInter/</loc>
     
     <lastmod>2017-06-06T13:48:35.744Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2017/01/16/MyLife/</loc>
-    
-    <lastmod>2017-06-04T15:55:59.556Z</lastmod>
     
   </url>
   
@@ -79,14 +79,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/12/03/partition/</loc>
+    <loc>http://yoursite.com/2016/12/05/mysql/</loc>
     
     <lastmod>2017-05-25T16:29:44.772Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/12/05/mysql/</loc>
+    <loc>http://yoursite.com/2016/12/03/partition/</loc>
     
     <lastmod>2017-05-25T16:29:44.772Z</lastmod>
     
