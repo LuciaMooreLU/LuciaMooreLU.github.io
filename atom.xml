@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-06-09T11:24:17.897Z</updated>
+  <updated>2017-06-11T15:54:59.437Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -16,11 +16,11 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>lucia</title>
-    <link href="http://yoursite.com/2017/06/09/lucia/"/>
-    <id>http://yoursite.com/2017/06/09/lucia/</id>
-    <published>2017-06-09T11:24:17.000Z</published>
-    <updated>2017-06-09T11:24:17.897Z</updated>
+    <title>jqury</title>
+    <link href="http://yoursite.com/2017/06/11/jqury/"/>
+    <id>http://yoursite.com/2017/06/11/jqury/</id>
+    <published>2017-06-11T15:54:59.000Z</published>
+    <updated>2017-06-11T15:54:59.437Z</updated>
     
     <summary type="html">
     
@@ -30,11 +30,45 @@
   </entry>
   
   <entry>
+    <title>封装classaname 函数</title>
+    <link href="http://yoursite.com/2017/06/09/function/"/>
+    <id>http://yoursite.com/2017/06/09/function/</id>
+    <published>2017-06-09T11:24:17.000Z</published>
+    <updated>2017-06-10T07:50:48.389Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="封装classname-函数"><a href="#封装classname-函数" class="headerlink" title="封装classname 函数"></a>封装classname 函数</h1><blockquote>
+<ul>
+<li>getClassName 是 H5 DOM 新增的方法，只有较新的浏览器才能支持它,故而需要使用已有的DOM方法来实现自己的getElementByClassName(IE 6,7,8不支持)</li>
+</ul>
+</blockquote>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ul>
+<li><p>判断浏览器是否支持getElementByClassName这个函数对象</p>
+<p>1.1 支持 返回这个函数</p>
+<p>1.2 不支持 遍历所有的盒子，通过盒子className 来判断，相等就存放到一个数组。</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">function getClass(classname) &#123;</div><div class="line">     // 如果浏览器支持这个函数，则直接返回这个值</div><div class="line">     if(document.getElementsByClassName)</div><div class="line">     &#123;</div><div class="line">         return document.getElementsByClassName(classname);</div><div class="line">     &#125;</div><div class="line">     //浏览器不支持</div><div class="line">     var arr = []; // 存放满足classname条件的数组</div><div class="line">     var dom = document.getElementsByTagName(&quot;*&quot;);</div><div class="line">     // 遍历文档中所有的节点</div><div class="line">     for(var i = 0; i&lt;dom.length;i++)</div><div class="line">     &#123;</div><div class="line">         //如果节点的classname值与形参相等，存放到arr数组里</div><div class="line">         if(dom[i].className == classname)</div><div class="line">         &#123;</div><div class="line">             arr.push(dom[i]);</div><div class="line">         &#125;</div><div class="line">     &#125;</div><div class="line">     return arr;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;封装classname-函数&quot;&gt;&lt;a href=&quot;#封装classname-函数&quot; class=&quot;headerlink&quot; title=&quot;封装classname 函数&quot;&gt;&lt;/a&gt;封装classname 函数&lt;/h1&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;get
+    
+    </summary>
+    
+    
+      <category term="javascript" scheme="http://yoursite.com/tags/javascript/"/>
+    
+  </entry>
+  
+  <entry>
     <title>03-JS 流程控制语句</title>
     <link href="http://yoursite.com/2017/06/08/javascript03/"/>
     <id>http://yoursite.com/2017/06/08/javascript03/</id>
     <published>2017-06-08T15:49:40.000Z</published>
-    <updated>2017-06-10T06:21:56.110Z</updated>
+    <updated>2017-06-10T06:22:52.652Z</updated>
     
     <content type="html"><![CDATA[<h1 id="循环语句"><a href="#循环语句" class="headerlink" title="循环语句"></a>循环语句</h1><h2 id="while"><a href="#while" class="headerlink" title="while"></a>while</h2><ul>
 <li>语法</li>
@@ -167,7 +201,7 @@
 </ul>
 </li>
 </ul>
-<h2 id="跳转语句"><a href="#跳转语句" class="headerlink" title="跳转语句"></a>跳转语句</h2><ul>
+<h1 id="跳转语句"><a href="#跳转语句" class="headerlink" title="跳转语句"></a>跳转语句</h1><ul>
 <li><p>return</p>
 <p>终止函数体的运行，并返回一个值</p>
 </li>
