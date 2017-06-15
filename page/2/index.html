@@ -147,6 +147,108 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-pptp" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/05/25/pptp/">PPTP_VPN Client 安装</a>
+    </h1>
+  
+
+        
+        <a href="/2017/05/25/pptp/" class="archive-article-date">
+  	<time datetime="2017-05-25T15:19:54.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-05-25</time>
+</a>
+        
+      </header>
+    
+
+<!-- 目录内容 -->
+   
+<!-- 目录内容结束 -->
+
+
+
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+
+
+
+
+        <h1 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h1><h2 id="实验需求"><a href="#实验需求" class="headerlink" title="实验需求"></a>实验需求</h2><p>客户内网服务器vpn拨号，根据获取PPP账号进行SSH连接</p>
+<h2 id="实验实现"><a href="#实验实现" class="headerlink" title="实验实现"></a>实验实现</h2><p>服务器：CentOS 6.5-minimal<br>软 件：PPTP_VPN Client</p>
+<h1 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h1><h2 id="安装软件PPTP-VPN-Client"><a href="#安装软件PPTP-VPN-Client" class="headerlink" title="安装软件PPTP_VPN_Client"></a>安装软件PPTP_VPN_Client</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum -y install pptp pptp-setup</div></pre></td></tr></table></figure>
+<h2 id="使用pptpsetup命令创建VPN节点"><a href="#使用pptpsetup命令创建VPN节点" class="headerlink" title="使用pptpsetup命令创建VPN节点"></a>使用pptpsetup命令创建VPN节点</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">pptpsetup  --create myvpn --server XX.XXX.XX.XX --username aaa --password 123456 --encrypt --start</div><div class="line">#------pptpsetup命令及说明--------#</div><div class="line"># pptpsetup  --create &lt;TUNNEL&gt; --server &lt;ip address/hostname&gt; [--domain &lt;DOMAIN NAME&gt;] --u sername &lt;USERNAME&gt; [--password &lt;PASSWORD&gt;] [--encrypt] [--start]</div><div class="line"># pptpsetup –delete &lt;TUNNEL&gt; 删除一个节点</div></pre></td></tr></table></figure>
+<p><strong>Options:</strong></p>
+<ul>
+<li>TUNNEL 创建的连接名称，自指定。</li>
+<li>SERVER PPTP SERVER的IP或域名。</li>
+<li>DOMAIN 所在的域，很多Windows的服务器都是使- 用“域”来管理认证的。</li>
+<li>USERNAME VPN 用户名（域用户名）</li>
+<li>PASSWORD VPN上用户密码，也可以没这个参数，命令稍后会自动询问，这样保证账号安全</li>
+<li>–encrypt 表示启用加密，不必指定加密方式，命令会读取配置文件中的加密方式<br>当没使用–encrypt 连接时出现下面的错误时，表示使用了加密，这点也可以和VPN的管理员联系确认一下，遇到下面的情况可以加上该参数。</li>
+<li>CHAP authentication succeeded</li>
+<li>LCP terminated by peer (ZM-76-^@&lt;M-Mt^@^@^BM-f ) 类似乱码</li>
+<li>–start 创建连接完后马上连接</li>
+</ul>
+<h3 id="使用该命令后实际上创建了两个配置文件"><a href="#使用该命令后实际上创建了两个配置文件" class="headerlink" title="使用该命令后实际上创建了两个配置文件"></a>使用该命令后实际上创建了两个配置文件</h3><ul>
+<li>/etc/ppp/chap-secrets</li>
+<li>/etc/ppp/peers/连接名</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"># written by pptpsetup</div><div class="line">pty &quot;pptp 58.247.83.58 --nolaunchpppd&quot;</div><div class="line">lock</div><div class="line">noauth</div><div class="line">nobsdcomp</div><div class="line">nodeflate</div><div class="line">name vpn</div><div class="line">remotename myvpn</div><div class="line">ipparam myvpn</div><div class="line">require-mppe-128</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">#defaultroute  #使用本连接作为默认路由,本文单网卡没意义，可以不添加，说明见附录</div><div class="line">persist #当连接丢失时让pppd再次拨号，已验证</div><div class="line">require-mppe-128</div><div class="line">refuse-pap</div><div class="line">refuse-chap</div><div class="line">refuse-eap</div><div class="line">refuse-mschap</div></pre></td></tr></table></figure>
+<h2 id="设置拨号脚本"><a href="#设置拨号脚本" class="headerlink" title="设置拨号脚本"></a>设置拨号脚本</h2><p>拨号脚本pon 和poff在下面的目录 /usr/share/doc/ppp-*/scripts/ 里:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">cp /usr/share/doc/ppp-2.4.5/scripts/pon /usr/sbin</div><div class="line">cp /usr/share/doc/ppp-2.4.5/scripts/poff /usr/sbin</div><div class="line">chmod +x /usr/sbin/pon /usr/sbin/poff</div><div class="line">#使pon和poff脚本拥有执行权限</div></pre></td></tr></table></figure></p>
+<p>这样就可以通过pon/poff 来启停VPN连接。也可以使用 pppd call / killall pppd来启动/停止。</p>
+<h2 id="设置开机自动拨号，并在拨号后改变路由"><a href="#设置开机自动拨号，并在拨号后改变路由" class="headerlink" title="设置开机自动拨号，并在拨号后改变路由"></a>设置开机自动拨号，并在拨号后改变路由</h2><p>把启动拨号的命令添加到/etc/rc.d/local文件中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">pppd call myvpn</div><div class="line">sleep 10s</div><div class="line">ip route delete default</div><div class="line">ip route add default dev ppp0</div></pre></td></tr></table></figure>
+<blockquote>
+<ul>
+<li>注明：查看VPN Log；相应的LOG可以在/var/log/message 中查看</li>
+<li>相关文档参考：<a href="http://netside.blog.51cto.com/766556/870961" target="_blank" rel="external">http://netside.blog.51cto.com/766556/870961</a></li>
+</ul>
+</blockquote>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">vpn</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/05/25/pptp/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+  
     <article id="post-MyLife" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -179,21 +281,28 @@
 
 
 
-        <p><br></p>
-<hr>
-<ul>
-<li>天下事有难易乎?  为之,则难者亦易矣；不为,则易者亦难矣.</li>
-<li>人之为学有难易乎?  学之,则难者亦易矣；不学,则易者亦难矣. ——为学</li>
-</ul>
-<hr>
-<p><br></p>
-<blockquote>
-<ul>
-<li>文章涉及到代码区域块都经过本人测试后才执笔，若出现某些代码块无法执行或者书写错误，望指正。</li>
-<li>本人属野生酱油路人甲，文章若出现专业词语表达错误，望指正。</li>
-<li>求批评求指正：Emial @ Me</li>
-</ul>
-</blockquote>
+        <script>
+    if("luxiansen"==prompt("请输入密码"))
+    {
+        // alert("正确");
+
+
+        document.write("天下事有难易乎?");
+
+
+    }
+    else
+    {
+        alert("错误");
+        location="http://luciamoorelu.github.io"; 
+    }
+</script>
+
+
+
+
+
+
 
       
 
@@ -1426,11 +1535,11 @@ return o(t,i(n),arguments.length<3?void 0:u(arguments[2]))}})},function(t,n,r){v
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">keepalived</a>
+                <a href="javascript:void(0)" class="js-tag color1">javascript</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">javascript</a>
+                <a href="javascript:void(0)" class="js-tag color1">keepalived</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1446,19 +1555,11 @@ return o(t,i(n),arguments.length<3?void 0:u(arguments[2]))}})},function(t,n,r){v
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">CentOS  分区</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">shell</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">hexo</a>
+                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1466,7 +1567,15 @@ return o(t,i(n),arguments.length<3?void 0:u(arguments[2]))}})},function(t,n,r){v
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">shell</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">hexo</a>
               </li>
             
             <div class="clearfix"></div>

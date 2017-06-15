@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-06-12T15:37:11.372Z</updated>
+  <updated>2017-06-15T09:27:54.690Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,20 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>one</title>
+    <link href="http://yoursite.com/2017/06/15/one/"/>
+    <id>http://yoursite.com/2017/06/15/one/</id>
+    <published>2017-06-15T09:27:54.000Z</published>
+    <updated>2017-06-15T09:27:54.690Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>jquery-01</title>
@@ -762,36 +776,47 @@
     <link href="http://yoursite.com/2017/01/16/MyLife/"/>
     <id>http://yoursite.com/2017/01/16/MyLife/</id>
     <published>2017-01-16T11:55:18.000Z</published>
-    <updated>2017-06-10T05:21:37.040Z</updated>
+    <updated>2017-06-15T10:11:12.359Z</updated>
     
-    <content type="html"><![CDATA[<p><br></p>
-<hr>
-<ul>
-<li>天下事有难易乎?  为之,则难者亦易矣；不为,则易者亦难矣.</li>
-<li>人之为学有难易乎?  学之,则难者亦易矣；不学,则易者亦难矣. ——为学</li>
-</ul>
-<hr>
-<p><br></p>
-<blockquote>
-<ul>
-<li>文章涉及到代码区域块都经过本人测试后才执笔，若出现某些代码块无法执行或者书写错误，望指正。</li>
-<li>本人属野生酱油路人甲，文章若出现专业词语表达错误，望指正。</li>
-<li>求批评求指正：Emial @ Me</li>
-</ul>
-</blockquote>
+    <content type="html"><![CDATA[<script>
+    if("luxiansen"==prompt("请输入密码"))
+    {
+        // alert("正确");
+
+
+        document.write("天下事有难易乎?");
+
+
+    }
+    else
+    {
+        alert("错误");
+        location="http://luciamoorelu.github.io"; 
+    }
+</script>
+
+
+
+
+
+
 ]]></content>
     
     <summary type="html">
     
-      &lt;p&gt;&lt;br&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;ul&gt;
-&lt;li&gt;天下事有难易乎?  为之,则难者亦易矣；不为,则易者亦难矣.&lt;/li&gt;
-&lt;li&gt;人之为学有难易乎?  学之,则难者亦易矣；不学,则易者亦难矣. ——为学&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;br&gt;&lt;/p&gt;
-&lt;blockquo
+      &lt;script&gt;
+    if(&quot;luxiansen&quot;==prompt(&quot;请输入密码&quot;))
+    {
+        // alert(&quot;正确&quot;);
+
+
+        document.write(&quot;天下事有难易乎?&quot;);
+
+
+    }
+    else
+    {
+   
     
     </summary>
     
