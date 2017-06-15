@@ -776,7 +776,7 @@
     <link href="http://yoursite.com/2017/01/16/MyLife/"/>
     <id>http://yoursite.com/2017/01/16/MyLife/</id>
     <published>2017-01-16T11:55:18.000Z</published>
-    <updated>2017-06-15T10:11:12.359Z</updated>
+    <updated>2017-06-15T11:28:12.843Z</updated>
     
     <content type="html"><![CDATA[<script>
     if("luxiansen"==prompt("请输入密码"))
@@ -784,7 +784,14 @@
         // alert("正确");
 
 
-        document.write("天下事有难易乎?");
+        document.write("你看过凌晨四点的洛杉矶吗？"
+            +"<br />"
+            +"得不到是因为没有想要到发疯"
+            +"<br />"
+            +"你以为的极限弄不好只是别人的起点"
+            +"<br />"
+            +"所有被千夫所指的困难，都是为了淘汰掉懦夫"
+);
 
 
     }
@@ -794,6 +801,9 @@
         location="http://luciamoorelu.github.io"; 
     }
 </script>
+
+
+
 
 
 
@@ -810,13 +820,9 @@
         // alert(&quot;正确&quot;);
 
 
-        document.write(&quot;天下事有难易乎?&quot;);
-
-
-    }
-    else
-    {
-   
+        document.write(&quot;你看过凌晨四点的洛杉矶吗？&quot;
+            +&quot;&lt;br /&gt;&quot;
+ 
     
     </summary>
     
