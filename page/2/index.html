@@ -147,6 +147,127 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-script" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/05/25/script/">GIT/MAVEN 打包生成软件安装脚本</a>
+    </h1>
+  
+
+        
+        <a href="/2017/05/25/script/" class="archive-article-date">
+  	<time datetime="2017-05-25T15:22:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-05-25</time>
+</a>
+        
+      </header>
+    
+
+<!-- 目录内容 -->
+   
+<!-- 目录内容结束 -->
+
+
+
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+
+
+
+
+        <h1 id="场景需求"><a href="#场景需求" class="headerlink" title="场景需求"></a>场景需求</h1><p>测试人员通过TAG迁出相应的代码，使用MAVEN打成war包后，再与相应的依赖包打成TAR包，做成一键安装软件</p>
+<p> <img src="http://oh4uobiuk.bkt.clouddn.com/autoinstall.png" alt="autoinstall"></p>
+<h2 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h2><p>├── backup # 生成的软件安装包备份目录</p>
+<p>├── git_mvn # 从git迁出的源代码目录</p>
+<p>│ └──XXXX</p>
+<p>├── package # 软件安装包</p>
+<p>│ ├── conf # 软件配置目录</p>
+<p>│ ├── rpm # 软件依赖所需的rpm包目录</p>
+<p>│ ├── XXXX_setup.sh 软件安装执行脚本（MASTER）</p>
+<p>│ ├── script # 软件所需的其他脚本</p>
+<p>│ ├── software</p>
+<p>│ ├── sql # 软件所需的初始化语句</p>
+<p>│ └── war # 软件war包</p>
+<p>└──package.sh # 打包脚本</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>从OSC@GIT上根据 TAG 迁出的源代码打成 war 包，将其放置在 package/war 目录下，将 package 下 的所有文件及目录打成软件安装包（softeware_version.tar.gz）</p>
+<p>= package.sh</p>
+<h1 id="场景分析"><a href="#场景分析" class="headerlink" title="场景分析"></a>场景分析</h1><ul>
+<li>搭建 GIT / MAVEN 环境</li>
+<li>编写 package.sh<h2 id="搭建GIT环境"><a href="#搭建GIT环境" class="headerlink" title="搭建GIT环境"></a>搭建GIT环境</h2></li>
+</ul>
+<h3 id="Step-1-安装所需的包"><a href="#Step-1-安装所需的包" class="headerlink" title="Step 1: 安装所需的包"></a>Step 1: 安装所需的包</h3><p>源代码编译GIT之前，确保系统安装了所需的包或者通过以下命令来安装它</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@lucia ~]# yum install curl-devel expat-devel gettext-devel openssl-devel zlib-devel perl-ExtUtils-MakeMaker package -y</div><div class="line">[root@lucia ~]# yum install gcc  -y (下载 编译器 )</div><div class="line">[root@lucia ~]# yum install wget (使用wget 下载软件包)</div></pre></td></tr></table></figure>
+<h3 id="Step-2：下载并编译GIT源代码"><a href="#Step-2：下载并编译GIT源代码" class="headerlink" title="Step 2：下载并编译GIT源代码"></a>Step 2：下载并编译GIT源代码</h3><p>从 git-scm 下载最新Git源代码或者简单的使用以下载命令下载Git 1.8.5.6<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@lucia ~]# cd /usr/src</div><div class="line">[root@lucia src]# wget https://www.kernel.org/pub/software/scm/git/git-1.8.5.6.tar.gz</div><div class="line">[root@lucia src]# tar -zxvf git-1.8.5.6.tar.gz</div></pre></td></tr></table></figure></p>
+<p>在下载提取源代码后，使用以下命令来编译源代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[root@lucia src]# cd git-1.8.5.6</div><div class="line">[root@lucia git-1.8.5.6]# make prefix=/usr/local/git all</div><div class="line">[root@lucia git-1.8.5.6]# make prefix=/usr/local/git install</div><div class="line">[root@lucia git-1.8.5.6]# echo &quot;export PATH=$PATH:/usr/local/git/bin&quot; &gt;&gt; /etc/bashrc # 设置环境变量</div><div class="line">[root@lucia git-1.8.5.6]# source /etc/bashrc</div></pre></td></tr></table></figure>
+<h3 id="Step-4：下载apache-maven"><a href="#Step-4：下载apache-maven" class="headerlink" title="Step 4：下载apache-maven"></a>Step 4：下载apache-maven</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">[root@lucia git-1.8.5.6]# cd /usr/src/</div><div class="line">[root@lucia src]# wget -c --no-check-certificate --no-cookies --header &quot;Cookie: oraclelicense=accept-securebackup-cookie&quot; http://download.oracle.com/otn-pub/java/jdk/7u60-b19/jdk-7u60-linux-x64.rpm    # JDK 下载地址 http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html</div><div class="line">[root@lucia src]# wget http://mirrors.cnnic.cn/apache/maven/maven-3/3.3.3/binaries/apache-maven-3.3.3-bin.tar.gz</div><div class="line">[root@lucia src]# tar -zxvf apache-maven-3.3.3-bin.tar.gz</div><div class="line">[root@lucia src]# mv apache-maven-3.3.3 /usr/local/maven3</div><div class="line"> </div><div class="line">[root@lucia src]# cat &gt;&gt; /etc/profile &lt;&lt; EOF  # 设置环境变量</div><div class="line">&gt; MAVEN_HOME=/usr/local/maven3</div><div class="line">&gt; export MAVEN_HOME</div><div class="line">&gt; export PATH=$&#123;PATH&#125;:$&#123;MAVEN_HOME&#125;/bin</div><div class="line">&gt; EOF</div><div class="line">[root@lucia src]# source /etc/profile</div></pre></td></tr></table></figure>
+<h3 id="Step-5：-告诉GIT你的名字和email"><a href="#Step-5：-告诉GIT你的名字和email" class="headerlink" title="Step 5： 告诉GIT你的名字和email"></a>Step 5： 告诉GIT你的名字和email</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@lucia src]# git config --global user.name &quot;lucia&quot;</div><div class="line">[root@lucia src]# git config --global user.email &quot;luciaxxxxx@XXX.com</div></pre></td></tr></table></figure>
+<h3 id="Step-6-拉取GIT源代码进行MAVEN打包"><a href="#Step-6-拉取GIT源代码进行MAVEN打包" class="headerlink" title="Step 6 : 拉取GIT源代码进行MAVEN打包"></a>Step 6 : 拉取GIT源代码进行MAVEN打包</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[root@lucia src]# mkdir -p /lucia/git_maven</div><div class="line">[root@lucia src]# cd /lucia/git_maven</div><div class="line">[root@lucia git_maven]# git clone git@git.oschina.net:XXXXX/XXXXX.git （需要验证用户名及密码，跳过验证一步，需要主机信任）</div><div class="line">[root@lucia git_maven]# cd XXXX</div><div class="line">[root@lucia git_maven]# mvn package</div></pre></td></tr></table></figure>
+<h2 id="编写package-sh"><a href="#编写package-sh" class="headerlink" title="编写package.sh"></a>编写package.sh</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line">#!/bin/bash</div><div class="line"># defined Dirctory</div><div class="line">GIT_REPO=https://git.oschina.net/XXXXX/XXXXX.git   #software 仓库URL地址</div><div class="line">SCRIPTS_DIR=/lucia                        # 定义脚本所在位置 SCRIPTS_DIR=`pwd` 或者指定安装路径 /Lucia</div><div class="line">PACKAGE_DIR=$&#123;SCRIPTS_DIR&#125;/package        # 定义软件安装脚本所在的目录</div><div class="line">BACKUP_DIR=$&#123;SCRIPTS_DIR&#125;/backup          # 定义生成软件安装包备份目录</div><div class="line">GIT_PAG=$&#123;SCRIPTS_DIR&#125;/git_mvn            # 定义源代码所放目录</div><div class="line">SW_GIT=$&#123;GIT_PAG&#125;/XXXX                    # 定义软件源代码名字</div><div class="line">TIMESTAMP=$(date +&apos;%Y%m%d%H%M%S&apos;)         # 定义时间戳生成格式</div><div class="line">#define TarName</div><div class="line">PRODUCT_NAME=XXXX                                        # 定义项目名称</div><div class="line">PRODUCT_VERSION=1.0.10                                   # 定义项目版本</div><div class="line">PACKAGE_NAME=$&#123;PRODUCT_NAME&#125;_$&#123;PRODUCT_VERSION&#125;.tar.gz   # 定义软件安装包名称格式</div><div class="line">TAG_NAME=TAG_XXXX1000_1.0.10_build20160115               # TAG</div><div class="line"> </div><div class="line">function add_gitPage()&#123;</div><div class="line">	[ -d $&#123;SW_GIT&#125; ] &amp;&amp; rm -rf $&#123;SW_GIT&#125;                     </div><div class="line">	mkdir -p $&#123;GIT_PAG&#125; </div><div class="line">    cd $&#123;GIT_PAG&#125;  </div><div class="line">	git clone $&#123;GIT_REPO&#125;                             # 拉取全局代码                        </div><div class="line">	cd $&#123;SW_GIT&#125;</div><div class="line">	git checkout -b new_branch_name $&#123;TAG_NAME&#125;       #新建且切换分支，根据TAG迁出代码</div><div class="line">	source /etc/profile</div><div class="line">	mvn package                                       #打包</div><div class="line">	cd $&#123;SW_GIT&#125;/target</div><div class="line">	mv *.war $&#123;TAG_NAME&#125;.war </div><div class="line">&#125;</div><div class="line">function add_tarPage()&#123;</div><div class="line">	cd $&#123;PACKAGE_DIR&#125;/war</div><div class="line">	rm -rf TAG_XXXX*                                  #删除之前war目录中的项目war包</div><div class="line">	\cp $&#123;SW_GIT&#125;/target/$&#123;TAG_NAME&#125;.war ./   </div><div class="line">	[ -d $&#123;BACKUP_DIR&#125; ] || mkdir -p $&#123;BACKUP_DIR&#125;</div><div class="line">	</div><div class="line">	cd $&#123;SCRIPTS_DIR&#125;</div><div class="line">	[ -f $&#123;PACKAGE_NAME&#125; ] &amp;&amp; mv $&#123;PACKAGE_NAME&#125; $&#123;BACKUP_DIR&#125;/$&#123;PACKAGE_NAME&#125;_$&#123;TIMESTAMP&#125;</div><div class="line">	</div><div class="line">	cd $&#123;PACKAGE_DIR&#125;</div><div class="line">		tar -zcvf $&#123;PRODUCT_NAME&#125;_$&#123;PRODUCT_VERSION&#125;.tar.gz *</div><div class="line">		mv $&#123;PRODUCT_NAME&#125;_$&#123;PRODUCT_VERSION&#125;.tar.gz $&#123;SCRIPTS_DIR&#125;</div><div class="line">	</div><div class="line">&#125;</div><div class="line">add_gitPage</div><div class="line">add_tarPage</div></pre></td></tr></table></figure>
+<p>通过执行sh package.sh 生成XXXX_Version.tar.gz；即可完成一键安装包的制作</p>
+<h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><ul>
+<li>附1：如何主机信任？（OSC）</li>
+</ul>
+<p>代码库→点击管理→点击部署公钥管理→点击添加公钥<br>点击查看怎样生成公钥，将公钥添加到此处（此处不多解释）</p>
+<ul>
+<li>附2：GIT环境安装脚本<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">#!/bin/bash</div><div class="line"># this script is order to install git</div><div class="line">yum install curl-devel expat-devel gettext-devel openssl-devel zlib-devel perl-ExtUtils-MakeMaker package wget gcc -y</div><div class="line">if [ $? = 0 ];then</div><div class="line">    cd /usr/src</div><div class="line">    wget https://www.kernel.org/pub/software/scm/git/git-1.8.5.6.tar.gz</div><div class="line">    if  [ $? = 0 ];then</div><div class="line">    tar -zxvf git-1.8.5.6.tar.gz</div><div class="line">    cd git-1.8.5.6    </div><div class="line">    make prefix=/usr/local/git all</div><div class="line">    make prefix=/usr/local/git install</div><div class="line">    echo &quot;export PATH=$PATH:/usr/local/git/bin&quot; &gt;&gt; /etc/bashrc </div><div class="line">    source /etc/bashrc</div><div class="line">    else    </div><div class="line">    echo wget git_tar failed</div><div class="line">else</div><div class="line">echo yum install failed</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="题外话"><a href="#题外话" class="headerlink" title="题外话"></a>题外话</h3><p>若需要执行tar包中的xxxx_setup.sh，需要写install.sh去调用它</p>
+<ul>
+<li>install.sh 的思路如下：<ul>
+<li>定义软件名称、版本、等（与package中的版本保持一致）</li>
+<li>判断最大盘符</li>
+<li>定义安装目录 (define XXXX)</li>
+<li>设置环境变量 (source /etc/profile)</li>
+<li>解压缩一键安装包 (tar -zxf XXX -C XXX)</li>
+<li>执行一键安装包中的XXXX_setup.sh脚本<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">#判断最大盘符</div><div class="line">maxPath=&quot;$(df -k | grep `df -k | grep -v Filesystem | awk &apos;&#123;print $4&#125;&apos; | awk &apos;&#123;max=max&gt;$1?max:$1&#125;END&#123;print max&#125;&apos;` | awk &apos;&#123;print $6&#125;&apos;)&quot;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">shell</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/05/25/script/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+  
     <article id="post-pptp" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -286,15 +407,13 @@
     {
         // alert("正确");
 
-
-        document.write("你看过凌晨四点的洛杉矶吗？"
+      document.write("你看过凌晨四点的洛杉矶吗？"
             +"<br />"
             +"得不到是因为没有想要到发疯"
             +"<br />"
             +"你以为的极限弄不好只是别人的起点"
             +"<br />"
-            +"所有被千夫所指的困难，都是为了淘汰掉懦夫"
-);
+            +"所有被千夫所指的困难，都是为了淘汰掉懦夫");
 
 
     }
@@ -1549,15 +1668,11 @@ return o(t,i(n),arguments.length<3?void 0:u(arguments[2]))}})},function(t,n,r){v
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">SHELL笔记</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">javascript</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
+                <a href="javascript:void(0)" class="js-tag color3">SHELL笔记</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1569,11 +1684,15 @@ return o(t,i(n),arguments.length<3?void 0:u(arguments[2]))}})},function(t,n,r){v
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">CentOS  分区</a>
+                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">vpn</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">CentOS  分区</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1654,6 +1773,10 @@ return o(t,i(n),arguments.length<3?void 0:u(arguments[2]))}})},function(t,n,r){v
           
             <li class="search-li">
               <a href="http://www.zhangxinxu.com" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>Zhangxinxu</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="http://www.cnblogs.com/TomXu/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>TomXu</a>
             </li>
           
         </ul>
