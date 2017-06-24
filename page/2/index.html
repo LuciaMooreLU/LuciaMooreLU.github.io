@@ -147,6 +147,293 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-javascript01" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/06/05/javascript01/">01-JS 基本概念</a>
+    </h1>
+  
+
+        
+        <a href="/2017/06/05/javascript01/" class="archive-article-date">
+  	<time datetime="2017-06-05T15:43:43.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-05</time>
+</a>
+        
+      </header>
+    
+
+<!-- 目录内容 -->
+   
+<!-- 目录内容结束 -->
+
+
+
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+
+
+
+
+        <p><br></p>
+<h1 id="基本要点"><a href="#基本要点" class="headerlink" title="基本要点"></a>基本要点</h1><ul>
+<li>注释<ul>
+<li>// 单行注释</li>
+<li>/* 多行注释 */</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>JS 书写位置</p>
+<ul>
+<li><p>行内式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;button onclick=&quot;alert(&apos;你好吗&apos;)&quot;&gt;点击我&lt;/button&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p>内嵌式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;script type=”text/javascript”&gt;  &lt;/script&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p>外链式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;script type=”text/javascript” src=”xxx.js”&gt;&lt;/script&gt;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>入口函数</p>
+<ul>
+<li>页面(结构、样式、节点)加载完毕后，才会执行函数体内的js部分<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">window.onload = function()&#123; </div><div class="line">    内部放js</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h1><h2 id="命名方法和规则"><a href="#命名方法和规则" class="headerlink" title="命名方法和规则"></a>命名方法和规则</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var my_value = &quot;true&quot;;</div><div class="line">var myValue = &quot;true&quot;;</div></pre></td></tr></table></figure>
+<ul>
+<li><p>驼峰命名法</p>
+<ul>
+<li><p>全部小写</p>
+<p>单词与单词间用下划线分割</p>
+</li>
+<li><p>大小写混写</p>
+<p>第一个单词首字母小写，其他首字母大写</p>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>规则<blockquote>
+<ul>
+<li>变量命名必须以字母或是下标符号”_”或者”$”为开头。</li>
+<li>变量名长度不能超过255个字符。</li>
+<li>变量名中不允许使用空格。</li>
+<li>不用使用脚本语言中保留的关键字及保留符号作为变量名。</li>
+<li>变量名区分大小写。(javascript是区分大小写的语言)</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<h2 id="作用域"><a href="#作用域" class="headerlink" title="作用域"></a>作用域</h2><h3 id="全局变量和局部变量"><a href="#全局变量和局部变量" class="headerlink" title="全局变量和局部变量"></a>全局变量和局部变量</h3><table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:center">全局变量</th>
+<th style="text-align:center">局部变量</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">包含</td>
+<td style="text-align:center">在函数体外定义的变量；在函数体内部定义的无var的变量</td>
+<td style="text-align:center">在函数内部使用var 声明的变量</td>
+</tr>
+<tr>
+<td style="text-align:center">调用</td>
+<td style="text-align:center">任何位置</td>
+<td style="text-align:center">当前函数体内部</td>
+</tr>
+</tbody>
+</table>
+<p>e.g.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">function square(num)&#123;</div><div class="line">    total = num * num;</div><div class="line">    return num;</div><div class="line">&#125;</div><div class="line">var num = 10;</div><div class="line">var number = square(20);</div><div class="line">alert(total);</div><div class="line"></div><div class="line">==&gt; 400</div></pre></td></tr></table></figure></p>
+<h3 id="优先级"><a href="#优先级" class="headerlink" title="优先级"></a>优先级</h3><ol>
+<li>局部变量高于同名 全局变量</li>
+<li>参数变量高于同名全局变量</li>
+<li>局部变量高于同名参数变量</li>
+</ol>
+<p>==》 全局变量 &lt;  参数变量 &lt; 局部变量</p>
+<h3 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h3><ul>
+<li>全部变量是全局对象的属性</li>
+<li><p>局部变量是调用对象的属性</p>
+</li>
+<li><p>作用域链</p>
+<ul>
+<li>内层函数可访问外层函数局部变量</li>
+<li>外层函数不能访问内层函数局部变量</li>
+</ul>
+</li>
+<li><p>生命周期</p>
+<ul>
+<li>局部变量： 除非被显示删除，否则一直存在</li>
+<li>局部变量： 自声明起至函数运行完毕或被显示删除</li>
+<li>回收机制： 标记清除 引用计数</li>
+</ul>
+</li>
+</ul>
+<p><br></p>
+<h1 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h1><h2 id="字符型"><a href="#字符型" class="headerlink" title="字符型"></a>字符型</h2><ul>
+<li>字符型(String)</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">转换字符型</div><div class="line">1.String();</div><div class="line">2.利用 &quot; &quot;</div></pre></td></tr></table></figure>
+<h2 id="数值型"><a href="#数值型" class="headerlink" title="数值型"></a>数值型</h2><ul>
+<li>数值型<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">1. 进制  0 八进制 0x 十六进制 </div><div class="line">2. 转换数值型</div><div class="line">   - * /</div><div class="line">   Number();</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="布尔型"><a href="#布尔型" class="headerlink" title="布尔型"></a>布尔型</h2><ul>
+<li>布尔型(boolean)<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">转换成布尔型</div><div class="line">&gt; 利用 !! ||  Boolean()</div><div class="line">e.g. </div><div class="line">var num = 0;</div><div class="line">console.log(typeof !!num); || console.log(typeof (Boolean(num)));</div><div class="line"></div><div class="line">boolean</div><div class="line"></div><div class="line"></div><div class="line">parseInt(值，进制)   //没有进制时取整</div><div class="line">parseFloat();</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="null"><a href="#null" class="headerlink" title="null"></a>null</h2><ul>
+<li>null 空的，没有值</li>
+</ul>
+<h2 id="undefined"><a href="#undefined" class="headerlink" title="undefined"></a>undefined</h2><ul>
+<li>undefined 未定义，有值未赋值 </li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">javascript</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/06/05/javascript01/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+  
+    <article id="post-nginx" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/06/03/nginx/">安装nginx服务器</a>
+    </h1>
+  
+
+        
+        <a href="/2017/06/03/nginx/" class="archive-article-date">
+  	<time datetime="2017-06-03T09:30:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-03</time>
+</a>
+        
+      </header>
+    
+
+<!-- 目录内容 -->
+   
+<!-- 目录内容结束 -->
+
+
+
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+
+
+
+
+        <h1 id="相关说明"><a href="#相关说明" class="headerlink" title="相关说明"></a>相关说明</h1><ul>
+<li>操作系统：Ubuntu</li>
+<li>源码目录：/usr/local/src</li>
+<li>编译环境开发库已安装<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">apt-get install build-essential</div><div class="line">apt-get install libtool</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="安装Nginx"><a href="#安装Nginx" class="headerlink" title="安装Nginx"></a>安装Nginx</h1><h2 id="安装PCRE库"><a href="#安装PCRE库" class="headerlink" title="安装PCRE库"></a>安装PCRE库</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">cd /usr/local/src</div><div class="line">sudo wget ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.40.tar.gz</div><div class="line">sudo tar -zxvf pcre-8.40.tar.gz</div><div class="line">cd pcre-8.40</div><div class="line">sudo ./configure</div><div class="line">sudo make &amp;&amp; make install</div></pre></td></tr></table></figure>
+<h2 id="安装zlib库"><a href="#安装zlib库" class="headerlink" title="安装zlib库"></a>安装zlib库</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">cd /usr/local/src</div><div class="line">sudo wget http://zlib.net/zlib-1.2.11.tar.gz</div><div class="line">sudo tar -zxvf zlib-1.2.11.tar.gz</div><div class="line">cd zlib-1.2.11</div><div class="line">sudo ./configure</div><div class="line">sudo make &amp;&amp; make install</div></pre></td></tr></table></figure>
+<h2 id="安装SSL"><a href="#安装SSL" class="headerlink" title="安装SSL"></a>安装SSL</h2> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">cd /usr/local/src</div><div class="line">sudo wget https://www.openssl.org/source/openssl-1.0.1t.tar.gz</div><div class="line">sudo tar -zxvf openssl-1.0.1t.tar.gz</div><div class="line">cd openssl-1.0.1t</div><div class="line">sudo ./config</div><div class="line">sudo make &amp;&amp; make install</div></pre></td></tr></table></figure>
+<h2 id="安装nginx"><a href="#安装nginx" class="headerlink" title="安装nginx"></a>安装nginx</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">cd /usr/local/src</div><div class="line">sudo wget http://nginx.org/download/nginx-1.4.2.tar.gz</div><div class="line">sudo tar -zxvf nginx-1.4.2.tar.gz</div><div class="line">cd nginx-1.4.2</div><div class="line">sudo ./configure --sbin-path=/usr/local/nginx/nginx \</div><div class="line"> --conf-path=/usr/local/nginx/nginx.conf \</div><div class="line"> --pid-path=/usr/local/nginx/nginx.pid \</div><div class="line"> --with-http_ssl_module \</div><div class="line"> --with-pcre=/usr/local/src/pcre-8.40 \</div><div class="line"> --with-zlib=/usr/local/src/zlib-1.2.11 \</div><div class="line"> --with-openssl=/usr/local/src/openssl-1.0.1t</div><div class="line"> </div><div class="line"> sudo make &amp;&amp; make install</div></pre></td></tr></table></figure>
+<h1 id="Nginx"><a href="#Nginx" class="headerlink" title="Nginx"></a>Nginx</h1><ul>
+<li>启动<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo /usr/local/nginx/nginx</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>重新加载</p>
+   <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo /usr/local/nginx/nginx -s reload</div></pre></td></tr></table></figure>
+</li>
+<li><p>更改主目录</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">server &#123;</div><div class="line">        listen       80;</div><div class="line">         server_name  localhost;</div><div class="line"></div><div class="line">          #charset koi8-r;</div><div class="line"></div><div class="line">           #access_log  logs/host.access.log  main;</div><div class="line"></div><div class="line">	           location / &#123;</div><div class="line">		               root   /home/lucia/Flat-Design;</div><div class="line">			                   index  index.html index.htm;</div><div class="line">					           &#125;</div><div class="line"></div><div class="line">						           #error_page  404              /404.html;</div></pre></td></tr></table></figure>
+<ul>
+<li>cd /usr/local/nginx/nginx.conf</li>
+<li><p>vim搜索/root  然后修改为自己所需的主目录</p>
+<h1 id="附录-Make编译选项"><a href="#附录-Make编译选项" class="headerlink" title="附录 Make编译选项"></a>附录 Make编译选项</h1><pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">--prefix=path    定义一个目录，存放服务器上的文件 ，也就是nginx的安装目录。默认使用 /usr/local/nginx。</div><div class="line">--sbin-path=path 设置nginx的可执行文件的路径，默认为  prefix/sbin/nginx.</div><div class="line">--conf-path=path  设置在nginx.conf配置文件的路径。nginx允许使用不同的配置文件启动，通过命令行中的-c选项。默认为prefix/conf/nginx.conf.</div><div class="line">--pid-path=path  设置nginx.pid文件，将存储的主进程的进程号。安装完成后，可以随时改变的文件名 ， 在nginx.conf配置文件中使用 PID指令。默认情况下，文件名 为prefix/logs/nginx.pid.</div><div class="line">--error-log-path=path 设置主错误，警告，和诊断文件的名称。安装完成后，可以随时改变的文件名 ，在nginx.conf配置文件中 使用 的error_log指令。默认情况下，文件名 为prefix/logs/error.log.</div><div class="line">--http-log-path=path  设置主请求的HTTP服务器的日志文件的名称。安装完成后，可以随时改变的文件名 ，在nginx.conf配置文件中 使用 的access_log指令。默认情况下，文件名 为prefix/logs/access.log.</div><div class="line">--user=name  设置nginx工作进程的用户。安装完成后，可以随时更改的名称在nginx.conf配置文件中 使用的 user指令。默认的用户名是nobody。</div><div class="line">--group=name  设置nginx工作进程的用户组。安装完成后，可以随时更改的名称在nginx.conf配置文件中 使用的 user指令。默认的为非特权用户。</div><div class="line">--with-select_module --without-select_module 启用或禁用构建一个模块来允许服务器使用select()方法。该模块将自动建立，如果平台不支持的kqueue，epoll，rtsig或/dev/poll。</div><div class="line">--with-poll_module --without-poll_module 启用或禁用构建一个模块来允许服务器使用poll()方法。该模块将自动建立，如果平台不支持的kqueue，epoll，rtsig或/dev/poll。</div><div class="line">--without-http_gzip_module — 不编译压缩的HTTP服务器的响应模块。编译并运行此模块需要zlib库。</div><div class="line">--without-http_rewrite_module  不编译重写模块。编译并运行此模块需要PCRE库支持。</div><div class="line">--without-http_proxy_module — 不编译http_proxy模块。</div><div class="line">--with-http_ssl_module — 使用https协议模块。默认情况下，该模块没有被构建。建立并运行此模块的OpenSSL库是必需的。</div><div class="line">--with-pcre=path — 设置PCRE库的源码路径。PCRE库的源码（版本4.4 - 8.30）需要从PCRE网站下载并解压。其余的工作是Nginx的./ configure和make来完成。正则表达式使用在location指令和 ngx_http_rewrite_module 模块中。</div><div class="line">--with-pcre-jit —编译PCRE包含“just-in-time compilation”（1.1.12中， pcre_jit指令）。</div><div class="line">--with-zlib=path —设置的zlib库的源码路径。要下载从 zlib（版本1.1.3 - 1.2.5）的并解压。其余的工作是Nginx的./ configure和make完成。ngx_http_gzip_module模块需要使用zlib 。</div><div class="line">--with-cc-opt=parameters — 设置额外的参数将被添加到CFLAGS变量。例如,当你在FreeBSD上使用PCRE库时需要使用:--with-cc-opt=&quot;-I /usr/local/include。.如需要需要增加 select()支持的文件数量:--with-cc-opt=&quot;-D FD_SETSIZE=2048&quot;.</div><div class="line">--with-ld-opt=parameters —设置附加的参数，将用于在链接期间。例如，当在FreeBSD下使用该系统的PCRE库,应指定:--with-ld-opt=&quot;-L /usr/local/lib&quot;</div></pre></td></tr></table></figure>
+</code></pre></li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">nginx</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/06/03/nginx/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+  
     <article id="post-script" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1370,203 +1657,9 @@
 
 
   
-    <article id="post-Keepalived" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/11/23/Keepalived/">高性能集群软件-Keepalived</a>
-    </h1>
-  
-
-        
-        <a href="/2016/11/23/Keepalived/" class="archive-article-date">
-  	<time datetime="2016-11-23T15:07:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-11-23</time>
-</a>
-        
-      </header>
-    
-
-<!-- 目录内容 -->
-   
-<!-- 目录内容结束 -->
-
-
-
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-
-
-
-
-        <h2 id="keepalived-介绍"><a href="#keepalived-介绍" class="headerlink" title="keepalived 介绍"></a>keepalived 介绍</h2><ul>
-<li>keepalived 是 Linux下一个轻量级的高可用解决方案</li>
-<li><p>keepalived 主要通过虚拟路由冗余（VRRP）来实现高可用功能</p>
-<p><em>优点</em></p>
-<ul>
-<li>部署及使用简单，只需一个配置文件即可完成</li>
-</ul>
-<p><em>功能</em></p>
-<ul>
-<li>服务器状态检测和故障隔离功能        </li>
-<li>HA（High Available） cluster &nbsp;  [高可用群集]</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h2 id="keepalived-发展"><a href="#keepalived-发展" class="headerlink" title="keepalived 发展"></a>keepalived 发展</h2><ul>
-<li>keepalived起初是为LVS（Linux Virtual System）设计，专门监控集群系统中各个服务节点的状态<br>根据TCP/IP参考模型 第三、第四、第五层交换机制检测每个服务节点的状态（详细见本页<strong>keepalived工作原理</strong>）</li>
-</ul>
-<ul>
-<li><p><em>e.g: keepalived检测WEB服务器的状态</em><br>如果一台WEB服务器死机/工作出现故障，keepalived检测到此状况后会将故障服务器从系统中剔除；直至该服务器工作正常后keepalived自动将该服务器加入到服务器群中；</p>
-<ul>
-<li><p>以上工作keepalived自动完成，无需人工干涉，人工干预仅是修复出现故障的服务节点；<br><br></p>
-</li>
-<li><p>keepalived 后续加入了VRRP功能<br>VRRP（Virtaul Router Redunadancy Protocol，虚拟路由器冗余协议）</p>
-</li>
-<li>目的：解决静态路由出现的单点故障问题，实现网络不间断稳定运行</li>
-</ul>
-</li>
-</ul>
-<h3 id="VRRP-协议与工作原理"><a href="#VRRP-协议与工作原理" class="headerlink" title="VRRP 协议与工作原理"></a>VRRP 协议与工作原理</h3><h4 id="❉-引入VRRP概念"><a href="#❉-引入VRRP概念" class="headerlink" title="❉   引入VRRP概念"></a>❉   引入VRRP概念</h4><p>  <img src="http://oh4uobiuk.bkt.clouddn.com/vrrp.png" alt="vrrp-logo"><br>     <em>说明</em>：图片来源百度百科；左侧图片为局域网组网；右侧图片为VRRP组网</p>
-<blockquote>
-<ul>
-<li><strong>局域网组网 e.g :</strong><ul>
-<li>网络内的所有主机会设置一条默认网关（10.100.10.1），当主机发出的目的地址不在本网段（10.100.10.0/24）的报文；通过默认网关发往路由器A，从而实现主机与外部网络的通信</li>
-<li>该组网缺点：当路由器A坏掉时，本网段内通过以RA为默认网关下一跳的主机将断掉与外界的通信，产生单点故障</li>
-</ul>
-</li>
-</ul>
-<hr>
-<ul>
-<li><p><strong>VRRP组网 e.g :</strong></p>
-<blockquote>
-<p>RA：Master 活动路由器  —&gt;10.100.10.2<br>RB：Backup 备份路由器  —&gt;10.100.10.3<br>VRIP : 虚拟路由器IP   —-&gt;10.100.10.1</p>
-</blockquote>
-<ul>
-<li><p>VRRP将局域网中的一组路由器【 RA和RB】组成一个虚拟路由器——&gt;&gt;&gt;备份组</p>
-<blockquote>
-<p>   虚拟路由器拥有自己的IP地址 10.100.10.1<br>局域网内的主机仅知道虚拟路由器IP地址为10.100.10.1，不知道具体的Master与Backup路由器IP<br>局域网内的主机将默认网关下一跳的地址设置为该虚拟路由器IP地址，通过该地址与其他网络进行通信</p>
-</blockquote>
-</li>
-<li><p>该组网优点：当备份组内的Master路由器DOWN掉，会进行选举策略选出一个新的Master路由器，继续往网络内的主机提供路由服务，从而实现网络内的主机不间断地与外部网络进行通信</p>
-</li>
-</ul>
-</li>
-</ul>
-</blockquote>
-<h4 id="❉-VRRP-协议"><a href="#❉-VRRP-协议" class="headerlink" title="❉    VRRP 协议"></a>❉    VRRP 协议</h4><blockquote>
-<ul>
-<li>VRRP：解决局域网中配置静态网关出现单点失效的路由协议</li>
-<li>设计目标：网络发生故障时透明地进行设备切换而不影响主机间的数据通信</li>
-</ul>
-</blockquote>
-<h4 id="❉-VRRP-工作原理"><a href="#❉-VRRP-工作原理" class="headerlink" title="❉    VRRP 工作原理"></a>❉    VRRP 工作原理</h4><blockquote>
-<p> VRRP协议将两台或多台路由器设备虚拟成一个虚拟路由器，对外提供虚拟路由器IP(一个或多个)；<br>   而在路由器组内部，如果实际拥有这个对外IP的路由器如果工作正常的话就是MASTER，或者是通过算法选举产生；MASTER实现针对虚拟路由器IP的各种网络功能，如ARP请求，ICMP，以及数据的转发等；<br>   其他设备不拥有该IP，状态是BACKUP，除了接收MASTER的VRRP状态通告信息外，不执行对外的网络功能。<br>   当主机失效时，BACKUP将接管原先MASTER的网络功能。</p>
-<hr>
-<ul>
-<li><strong>❀  如何判定多个路由器在同一组虚拟路由器中？</strong><ul>
-<li>VRID：每个虚拟路由器都有一个唯一标识（VRID是一个0～255的正整数）;<br>配置VRRP协议时需要配置每个路由器的虚拟路由器ID(VRID)和优先权值;<br>使用VRID将路由器进行分组，具有相同VRID值的路由器为同一个组</li>
-</ul>
-</li>
-</ul>
-<hr>
-<ul>
-<li><strong>❀  BACKUP 为什么没有发生抢占？</strong><ul>
-<li>VRRP通告:它使用IP多播数据包进行封装，组地址为224.0.0.18，发布范围只限于同一局域网内;<br>在一个虚拟路由器中，只有处于MASTER角色的路由器会一直发送VRRP通告信息；<br>处于BACKUP状态的路由器只接收MASTER发过来的报文信息，用来监控MASTER运行状态; 除非它的优先级比MASTER更高</li>
-</ul>
-</li>
-</ul>
-<hr>
-<ul>
-<li><strong>❀  什么时候发生选举？</strong><ul>
-<li>当MASTER不可用时，BACKUP无法收到MASTER发过来的报文信息；<br>认定MASTER出现故障，然后多台BACKUP就开始进行选举；</li>
-</ul>
-</li>
-</ul>
-<hr>
-<ul>
-<li><strong>❀  Master选举</strong><ul>
-<li>虚拟路由器IP=路由器本身配置IP<br>该路由器始终将是MASTER；IP地址所有者自动具有最高优先级：255</li>
-<li>优先级选举主控路由器（优先级范围是0—255）<br>优先级0一般用在IP地址所有者主动放弃主控者角色时使用。可配置的优先级范围为1—254</li>
-<li>优先级相等，则比较路由器的实际IP，IP值较大的优先权高</li>
-</ul>
-</li>
-</ul>
-</blockquote>
-<h4 id="❉-VRRP-应用实例"><a href="#❉-VRRP-应用实例" class="headerlink" title="❉    VRRP 应用实例"></a>❉    VRRP 应用实例</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">            +-----------+      +-----------+</div><div class="line">            |   Rtr1    |      |   Rtr2    |</div><div class="line">            |(MR VRID=1)|      |(BR VRID=1)|</div><div class="line">            |(BR VRID=2)|      |(MR VRID=2)|</div><div class="line">    VRID=1  +-----------+      +-----------+  VRID=2</div><div class="line">    IP A ----------&gt;*            *&lt;---------- IP B</div><div class="line">                    |            |</div><div class="line">                    |            |</div><div class="line">  ------------------+------------+-----+--------+--------+--------+--</div><div class="line">                                       ^        ^        ^        ^</div><div class="line">                                       |        |        |        |</div><div class="line">                                     (IP A)   (IP A)   (IP B)   (IP B)</div><div class="line">                                       |        |        |        |</div><div class="line">                                    +--+--+  +--+--+  +--+--+  +--+--+</div><div class="line">                                    |  H1 |  |  H2 |  |  H3 |  |  H4 |</div><div class="line">                                    +-----+  +-----+  +--+--+  +--+--+</div><div class="line">     Legend:</div><div class="line">              ---+---+---+--  =  Ethernet, Token Ring, or FDDI</div><div class="line">                           H  =  Host computer</div><div class="line">                          MR  =  Master Router</div><div class="line">                          BR  =  Backup Router</div><div class="line">                           *  =  IP Address</div><div class="line">                        (IP)  =  default router for hosts</div><div class="line"></div><div class="line"></div><div class="line">-----------------------------------------------------------------</div><div class="line"></div><div class="line">    +   VRID 1       |   Rtr1（Master）     |    Rtr2（Backup） +  正常情况下  H1与H2走R1;反之 走R2</div><div class="line"></div><div class="line">    +   VRID 2       |   Rtr1（Backup）    |    Rtr2 （Master） +  正常情况下  H3与H4走R2;反之 走R1</div></pre></td></tr></table></figure>
-<h2 id="keepalived-安装"><a href="#keepalived-安装" class="headerlink" title="keepalived  安装"></a>keepalived  安装</h2><ul>
-<li>实验需求：<br><em>安装keepalived（仅安装）</em></li>
-<li>实验实现：<br><em>服务器：CentOS 6.5-minimal</em><br><em>软    件：Keepalived ( V_1.2.19 )</em>    </li>
-</ul>
-<hr>
-<ul>
-<li>安装过程：<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"># 下载安装包并解压，查看相关参数</div><div class="line"></div><div class="line">[root@lucia tmp]# wget http://www.keepalived.org/software/keepalived-1.2.19.tar.gz    # 下载Keepalived安装包</div><div class="line">[root@lucia tmp]# tar -zxf keepalived-1.2.19.tar.gz   #解压安装包</div><div class="line">[root@lucia tmp]# cd keepalived-1.2.19</div><div class="line">[root@lucia keepalived-1.2.19]# ./configure --help    #查看confiure编译参数</div><div class="line"> </div><div class="line">#================================================</div><div class="line"># 指定安装在/etc/ &#123;--sysconfdir=/etc&#125;</div><div class="line"># 指定使用内核源码中的头文件 &#123;--with-kernel-dir&#125;</div><div class="line"># 注：使用LVS时，需要用到&quot;--with-kernel-dir&quot;</div><div class="line">#===============================================</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<hr>
-<ul>
-<li>编译安装<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line">[root@lucia keepalived-1.2.19]# [ -z /usr/src/kernels/ ] &amp;&amp; yum -y install kernel-headers kernel-devel || echo &quot;The kernel file already exists&quot;</div><div class="line">The kernel file already exists</div><div class="line"></div><div class="line"></div><div class="line">#===========================</div><div class="line"># 判断kernels目录是否存在文件</div><div class="line">#===========================</div><div class="line"> </div><div class="line">[root@lucia keepalived-1.2.19]# ./configure --sysconfdir=/etc/ --with-kernel-dir=/usr/src/kernels/2.6.32-573.12.1.el6.x86_64</div><div class="line"> </div><div class="line">#============================================================================</div><div class="line"># ./configure 对即将安装的软件进行配置，检查当前的环境是否满足要安装软件的依赖关系</div><div class="line">#============================================================================</div><div class="line"></div><div class="line">configure: error: in `/tmp/keepalived-1.2.19&apos;:</div><div class="line">configure: error: no acceptable C compiler found in $PATH</div><div class="line">See `config.log&apos; for more details</div><div class="line"> </div><div class="line">#============================================================================</div><div class="line"># 报错：gcc编译器没有安装</div><div class="line"># [root@lucia keepalived-1.2.19]# yum -y install gcc</div><div class="line">#=============================================================================</div><div class="line">      </div><div class="line">继续返回上一步预安装./configure</div><div class="line">[root@lucia keepalived-1.2.19]# ./configure --sysconfdir=/etc/ --with-kernel-dir=/usr/src/kernels/2.6.32-573.12.1.el6.x86_64</div><div class="line"> </div><div class="line">configure: error:</div><div class="line">!!! OpenSSL is not properly installed on your system. !!!</div><div class="line">!!! Can not include OpenSSL headers files.            !!!</div><div class="line"> </div><div class="line">#=========================================================================</div><div class="line"># 报错：OpenSSL 没有安装</div><div class="line"># [root@lucia keepalived-1.2.19]# yum -y install openssl*</div><div class="line">#=========================================================================</div><div class="line"></div><div class="line">./configure 成功后，显示是Keepalived 输出的加载模块信息</div><div class="line"></div><div class="line">Keepalived configuration</div><div class="line">------------------------</div><div class="line">Keepalived version       : 1.2.19                         </div><div class="line">Compiler                 : gcc</div><div class="line">Compiler flags           : -g -O2</div><div class="line">Extra Lib                : -lssl -lcrypto -lcrypt </div><div class="line">Use IPVS Framework       : Yes</div><div class="line">IPVS sync daemon support : Yes</div><div class="line">IPVS use libnl           : No</div><div class="line">fwmark socket support    : Yes</div><div class="line">Use VRRP Framework       : Yes</div><div class="line">Use VRRP VMAC            : Yes</div><div class="line">SNMP support             : No</div><div class="line">SHA1 support             : No</div><div class="line">Use Debug flags          : No</div><div class="line"></div><div class="line">[root@lucia keepalived-1.2.19]# make &amp;&amp; make install                     #编译&amp;&amp;安装</div><div class="line">[root@lucia keepalived-1.2.19]# ln -s /usr/local/sbin/keepalived /sbin/  #软链接到系统使用的管理程序目录中</div><div class="line">[root@lucia keepalived-1.2.19]# chkconfig --add keepalived               #添加到系统服务</div><div class="line">[root@lucia keepalived-1.2.19]# chkconfig --level 35 keepalived on       #添加到开机启动</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<hr>
-<h3 id="❉-Keepalived-配置详解"><a href="#❉-Keepalived-配置详解" class="headerlink" title="❉   Keepalived 配置详解"></a>❉   Keepalived 配置详解</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div></pre></td><td class="code"><pre><div class="line">[root@lucia keepalived-1.2.19]# cd /etc/keepalived/</div><div class="line">[root@lucia keepalived-1.2.19]# ls</div><div class="line">keepalived.conf  samples</div><div class="line"></div><div class="line"># ================================================================</div><div class="line"># Keepalived 配置文件路径为/etc/keepalived/keepalived.conf</div><div class="line"># samples 目录下存放着keepalived配置的示例</div><div class="line"># ================================================================</div><div class="line">#============================================================</div><div class="line"># keepalived.conf 配置</div><div class="line">#------------------------------------------------------------</div><div class="line"># 1、Keepalived 配置文件以block形式组织，每个块内容都包含在&#123;&#125;</div><div class="line"># 2、“#”   “!” 开头行为注释</div><div class="line"># 3、keepalived 配置为三类：</div><div class="line">#      全局配置:对整个keepalived都生效的配置 </div><div class="line">#    VRRPD 配置:核心配置，主要实现keepalived高可用功能</div><div class="line">#      LVS配置</div><div class="line">#============================================================</div><div class="line"></div><div class="line"></div><div class="line">! Configuration File for keepalived   </div><div class="line"></div><div class="line">    </div><div class="line">########################</div><div class="line">#  全局配置</div><div class="line">########################</div><div class="line"></div><div class="line"> </div><div class="line">global_defs &#123;                               # global_defs 全局配置标识 </div><div class="line">                                            ------------------------------------------</div><div class="line">   notification_email &#123;                     # notification_email用于设置报警邮件地址</div><div class="line">     acassen@firewall.loc                   # 可以设置多个，每行一个</div><div class="line">     failover@firewall.loc                  # 设置邮件报警，需开启本机Sendmail 服务</div><div class="line">     sysadmin@firewall.loc                  # yum -y install mailx sendmail</div><div class="line">   &#125;                                        ----------------------------------------------</div><div class="line"></div><div class="line">   notification_email_from Alexandre.Cassen@firewall.loc  # 设置邮件发送地址</div><div class="line">   smtp_server 192.168.200.1                              # 设置邮件的smtp server地址</div><div class="line">   smtp_connect_timeout 30                                # 设置连接smtp sever超时时间</div><div class="line">   router_id LVS_DEVEL                                    # 表示运行keepalived服务器标识，发邮件时显示在邮件主题中的信息</div><div class="line">&#125;</div><div class="line"></div><div class="line">######################</div><div class="line">#  VRRPD配置</div><div class="line">######################</div><div class="line"></div><div class="line">vrrp_instance VI_1 &#123;         # VRRPD 配置标识 VI_1是实例名称</div><div class="line"></div><div class="line">    state MASTER             # 指定Keepalvied角色 MASTER表示此主机为主服务器 BACKUP则是表示为备用服务器</div><div class="line">    interface eth0           # 指定 HA 监测网络的接口</div><div class="line">    virtual_router_id 51     # 虚拟路由标识，标识为数字，同一个VRRP实例使用唯一的标识，即可表示在同一个vrrp_instance下 MASTER_ID = BACKUP_ID</div><div class="line">    priority 100             # 定义节点优先级，数字越大表示节点的优先级越高，同一个VRRP_instance下，MASTE_PRIORITY &gt; BACKUP_PRIORITY </div><div class="line">    advert_int 1             # 设定MASTER与BACKUP主机质检同步检查的时间间隔，单位为秒</div><div class="line">             </div><div class="line">    authentication &#123;         # 设定节点间通信验证类型和密码，验证类型主要有PASS和AH两种</div><div class="line">        auth_type PASS       # 同一个vrrp_instance，MASTER验证密码和BACKUP保持一致</div><div class="line">        auth_pass 1111</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    virtual_ipaddress &#123;      # 设置虚拟IP地址 (VIP),又叫做漂移IP地址</div><div class="line">        192.168.200.16</div><div class="line">        192.168.200.17</div><div class="line">        192.168.200.18</div><div class="line">    &#125;</div><div class="line"></div><div class="line">#-------------------------------------------------------------------------------</div><div class="line"># 问：为什么叫漂移IP地址？</div><div class="line"># 答：当Keepalived切换到MASTER状态时，IP地址会自动添加到系统中</div><div class="line">#    当Keepalvied切换到BACKUP状态时，IP地址将自动从系统中删除</div><div class="line">#    </div><div class="line">#    keepalived通过“ip address add”命令的形式将VIP添加到系统</div><div class="line">#    通过“ip add”查看系统中添加的VIP地址</div><div class="line">#--------------------------------------------------------------------------------</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">######################</div><div class="line"># LVS配置</div><div class="line">######################</div><div class="line"></div><div class="line"></div><div class="line">virtual_server 192.168.200.100 443 &#123;              # virtual_server LVS配置标识 </div><div class="line">                                                  # 格式：virtual_server VIP port [IP 和 port 之间空格隔开]</div><div class="line"> </div><div class="line">    delay_loop 6                                  # 设置健康检查时间间隔，单位为秒                      </div><div class="line">    lb_algo rr                                    # 设置负载调度算法，可用的调度算法有：rr、wlc、lc、lblc、sh、dh等</div><div class="line">    lb_kind NAT                                   # 设置LVS实现负载均衡的机制，有NAT、TUN和DR三种模式可选</div><div class="line">    nat_mask 255.255.255.0                        # NAT子网掩码</div><div class="line">    persistence_timeout 50                        # 会话保持时间 </div><div class="line">    protocol TCP                                  # 指定转发协议类型</div><div class="line">#----------------------------------------------------------------------------------------------------</div><div class="line"># persistence_timeout 会话保持时间对动态网页非常有用，为集群系统中的seesion共享提供了一个很好的解决方案</div><div class="line"># 用户的请求会一直分发到某个服务节点，直至超过这个会话的保持时间（指最大无响应超时时间）</div><div class="line"># =[用户操作动态页面如果在50s没有执行任何操作则被分发到另外的节点]</div><div class="line">#----------------------------------------------------------------------------------------------------</div><div class="line"></div><div class="line">    real_server 192.168.201.100 443 &#123;                          # 设置real server段开始的标识 [ IP为真实IP地址]</div><div class="line">                                                               # 格式：real_server realIP port [IP 和 port 之间空格隔开]</div><div class="line">                                                               -----------------------------------------------------------------</div><div class="line">        weight 1                                               # 用于配置real server节点的权值，权值大小用数字表示，数字越大，权值越高</div><div class="line">                                                               # 设置权值大小可以为不同性能的服务器分配不同的负载</div><div class="line">                                                               ------------------------------------------------------------------</div><div class="line"></div><div class="line">        SSL_GET &#123;                                              # 健康检查 SSL_GET    </div><div class="line">            url &#123;                                              # 指定SSL检查的URL信息，可以指定多个</div><div class="line">              path /index.html                                 # 后跟详细的URL路径</div><div class="line">              digest ff20ad2481f97b1754ef3e12ecd3a9cc          # SSL检查后的摘要信息，可以通过genhash命令工具获取</div><div class="line">#-----------------------------------------------------------------</div><div class="line"># [root@lucia keepalived]# genhash -s 192.168.201.100 -p 80 -u /index.html</div><div class="line">#-----------------------------------------------------------------</div><div class="line">            &#125;</div><div class="line">            url &#123;</div><div class="line">              path /mrtg/</div><div class="line">              digest 9b3a0c85a887a256d6939da88aabd8cd</div><div class="line">            &#125;</div><div class="line">            connect_timeout 3                                  # 表示无响应超时时间，单位为秒</div><div class="line">            nb_get_retry 3                                     # 表示重试次数</div><div class="line">            delay_before_retry 3                               # 表示充实间隔</div><div class="line">        &#125; </div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"> </div><div class="line">virtual_server 10.10.10.2 1358 &#123;</div><div class="line">    delay_loop 6</div><div class="line">    lb_algo rr </div><div class="line">    lb_kind NAT</div><div class="line">    persistence_timeout 50</div><div class="line">    protocol TCP</div><div class="line"> </div><div class="line">    sorry_server 192.168.200.200 1358                          # 备份节点，在所有real serer失效后，启用备份节点</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<hr>
-<blockquote>
-<ul>
-<li>VRRP原理参考文档如下：<ul>
-<li><a href="http://bbs.nanjimao.com/thread-790-1-1.html" target="_blank" rel="external">http://bbs.nanjimao.com/thread-790-1-1.html</a> （此篇写的很好）</li>
-<li><a href="http://blog.chinaunix.net/uid-26575352-id-3529109.html" target="_blank" rel="external">http://blog.chinaunix.net/uid-26575352-id-3529109.html</a></li>
-<li>keepalived.conf 参考书籍 《高性能Linux服务器构建实战》</li>
-</ul>
-</li>
-</ul>
-</blockquote>
-<hr>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">keepalived</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2016/11/23/Keepalived/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
     </nav>
   
 
@@ -1660,11 +1753,11 @@ return o(t,i(n),arguments.length<3?void 0:u(arguments[2]))}})},function(t,n,r){v
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">keepalived</a>
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color1">keepalived</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1684,10 +1777,6 @@ return o(t,i(n),arguments.length<3?void 0:u(arguments[2]))}})},function(t,n,r){v
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">vpn</a>
               </li>
              
@@ -1696,7 +1785,11 @@ return o(t,i(n),arguments.length<3?void 0:u(arguments[2]))}})},function(t,n,r){v
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">shell</a>
+                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">hexo</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1704,7 +1797,7 @@ return o(t,i(n),arguments.length<3?void 0:u(arguments[2]))}})},function(t,n,r){v
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">hexo</a>
+                <a href="javascript:void(0)" class="js-tag color1">shell</a>
               </li>
             
             <div class="clearfix"></div>

@@ -147,6 +147,65 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-scroll" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/06/24/scroll/">scroll</a>
+    </h1>
+  
+
+        
+        <a href="/2017/06/24/scroll/" class="archive-article-date">
+  	<time datetime="2017-06-24T13:26:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-24</time>
+</a>
+        
+      </header>
+    
+
+<!-- 目录内容 -->
+   
+<!-- 目录内容结束 -->
+
+
+
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+
+
+
+
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/06/24/scroll/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+  
     <article id="post-js05" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -909,6 +968,236 @@
 
 
   
+    <article id="post-javascript-Dom" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/06/07/javascript-Dom/">JS基础DOM操作</a>
+    </h1>
+  
+
+        
+        <a href="/2017/06/07/javascript-Dom/" class="archive-article-date">
+  	<time datetime="2017-06-07T15:55:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-07</time>
+</a>
+        
+      </header>
+    
+
+<!-- 目录内容 -->
+   
+<!-- 目录内容结束 -->
+
+
+
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+
+
+
+
+        <p><br></p>
+<h1 id="基础DOM操作"><a href="#基础DOM操作" class="headerlink" title="基础DOM操作"></a>基础DOM操作</h1><blockquote>
+<ul>
+<li>文档对象模型DOM(Document Object Model)定义访问和处理HTML文档的标准方法</li>
+<li>DOM将HTML 文档呈现为带有元素、属性和文本的树结构（节点数）</li>
+</ul>
+</blockquote>
+<h2 id="获取节点"><a href="#获取节点" class="headerlink" title="获取节点"></a>获取节点</h2><h3 id="document"><a href="#document" class="headerlink" title="document"></a>document</h3><ul>
+<li><p><strong>getElementById</strong></p>
+<ul>
+<li>通过元素ID获取节点</li>
+</ul>
+</li>
+<li><p><strong>getElementsByClassName</strong></p>
+<ul>
+<li><p>通过元素的class name 获取节点（H5 DOM 新方法）</p>
+</li>
+<li><p>文档中的name属性不唯一，所有的getElementsByClassName()方法返回的是元素的数组</p>
+</li>
+</ul>
+</li>
+<li><p><strong>getElementsByTagName</strong></p>
+<ul>
+<li>通过元素标签获取节点</li>
+<li>返回元素的顺序是在文档中的顺序</li>
+</ul>
+</li>
+</ul>
+<h2 id="节点指针"><a href="#节点指针" class="headerlink" title="节点指针"></a>节点指针</h2><ul>
+<li><strong>firstChild</strong><ul>
+<li>父节点.firstChild</li>
+<li>获取元素的首个子节点</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><strong>lastChild</strong><ul>
+<li>父节点.lastChild</li>
+<li>获取元素的最后一个子节点</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p>访问子节点</p>
+<ul>
+<li><strong>childNodes</strong><ul>
+<li>elementNode.childNodes;</li>
+<li>父节点.childNodes</li>
+<li>获取选定元素的所有子节点列表，返回的值可以看做是一个数组，它具有length属性</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p>访问父节点</p>
+<ul>
+<li><strong>parentNode</strong><ul>
+<li>elementNode.parentNode;</li>
+<li>子节点.parentNode</li>
+<li>获取已知节点的父节点</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p>访问兄弟节点</p>
+<ul>
+<li><p><strong>nextSlibing</strong></p>
+<ul>
+<li>兄弟节点.nextSibling</li>
+<li>获取已知节点的后一个节点(处于同一层树层级中)</li>
+</ul>
+</li>
+<li><p><strong>previousSibling</strong></p>
+<ul>
+<li>兄弟节点.previousSibling</li>
+<li>获取已知节点的前一个节点(处于同一层树层级中) </li>
+</ul>
+</li>
+</ul>
+<h2 id="节点操作"><a href="#节点操作" class="headerlink" title="节点操作"></a>节点操作</h2><h3 id="创建节点"><a href="#创建节点" class="headerlink" title="创建节点"></a>创建节点</h3><ul>
+<li><strong>creatElement</strong><ul>
+<li>document.createElement(元素标签)</li>
+<li>创建元素节点</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p><strong>createAttribute</strong></p>
+<ul>
+<li>document.createAttribute(元素属性)</li>
+<li>创建元素属性</li>
+</ul>
+</li>
+<li><p><strong>createTextNode</strong></p>
+<ul>
+<li>document.createTextNode(文本内容)</li>
+<li>创建文本内容</li>
+</ul>
+</li>
+</ul>
+<h3 id="插入节点"><a href="#插入节点" class="headerlink" title="插入节点"></a>插入节点</h3><ul>
+<li><p><strong>appendChild</strong></p>
+<ul>
+<li>appendChild(添加新的节点)</li>
+<li>向节点的子节点列表的末尾添加新的子节点</li>
+</ul>
+</li>
+<li><p><strong>insertBefore</strong></p>
+<ul>
+<li>insertBefore(所添加新的节点,已知子节点)</li>
+<li>在已知的子节点前插入一个新的子节点</li>
+</ul>
+</li>
+</ul>
+<h3 id="替换节点"><a href="#替换节点" class="headerlink" title="替换节点"></a>替换节点</h3><ul>
+<li>replaceChild<ul>
+<li>replaceChid(要插入的新元素,将被替换的老元素)</li>
+<li>将某个子节点替换成另一个节点</li>
+</ul>
+</li>
+</ul>
+<h3 id="复制节点"><a href="#复制节点" class="headerlink" title="复制节点"></a>复制节点</h3><ul>
+<li>cloneNode<ul>
+<li>需要被复制的节点.cloneNode(true,false)</li>
+<li>创建指定节点的副本</li>
+<li>true 复制当前字节及其所有子节点</li>
+<li>false 仅复制当前节点</li>
+</ul>
+</li>
+</ul>
+<h3 id="删除节点"><a href="#删除节点" class="headerlink" title="删除节点"></a>删除节点</h3><ul>
+<li>removeChild<ul>
+<li>removeChild(要删除的节点)</li>
+<li>删除指定的节点</li>
+</ul>
+</li>
+</ul>
+<h2 id="属性操作"><a href="#属性操作" class="headerlink" title="属性操作"></a>属性操作</h2><h3 id="获取属性"><a href="#获取属性" class="headerlink" title="获取属性"></a>获取属性</h3><ul>
+<li><strong>getAttribute</strong><ul>
+<li>ElementNode.getAttribute(name);</li>
+<li>元素节点.getAttribute(元素属性名)</li>
+<li>获取元素节点中指定属性的属性值</li>
+</ul>
+</li>
+<li><p><strong>setAttribute</strong></p>
+<ul>
+<li>ElementNode.setAttribute(name,value);</li>
+<li>元素节点.setAttribute(属性名,属性值)</li>
+<li>创建或改变元素节点的属性</li>
+</ul>
+</li>
+<li><p><strong>removeAttribute</strong></p>
+<ul>
+<li>元素节点.removeAttribute(属性名)</li>
+<li>删除元素中的指定属性</li>
+</ul>
+</li>
+</ul>
+<h3 id="文本操作"><a href="#文本操作" class="headerlink" title="文本操作"></a>文本操作</h3><p>########################</p>
+<p>暂时留空</p>
+<p>#######################</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">javascript</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/06/07/javascript-Dom/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+  
     <article id="post-setInter" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -968,296 +1257,9 @@
 
 
   
-    <article id="post-javascript01" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/06/05/javascript01/">01-JS 基本概念</a>
-    </h1>
-  
-
-        
-        <a href="/2017/06/05/javascript01/" class="archive-article-date">
-  	<time datetime="2017-06-05T15:43:43.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-05</time>
-</a>
-        
-      </header>
-    
-
-<!-- 目录内容 -->
-   
-<!-- 目录内容结束 -->
-
-
-
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-
-
-
-
-        <p><br></p>
-<h1 id="基本要点"><a href="#基本要点" class="headerlink" title="基本要点"></a>基本要点</h1><ul>
-<li>注释<ul>
-<li>// 单行注释</li>
-<li>/* 多行注释 */</li>
-</ul>
-</li>
-</ul>
-<ul>
-<li><p>JS 书写位置</p>
-<ul>
-<li><p>行内式</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;button onclick=&quot;alert(&apos;你好吗&apos;)&quot;&gt;点击我&lt;/button&gt;</div></pre></td></tr></table></figure>
-</li>
-<li><p>内嵌式</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;script type=”text/javascript”&gt;  &lt;/script&gt;</div></pre></td></tr></table></figure>
-</li>
-<li><p>外链式</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;script type=”text/javascript” src=”xxx.js”&gt;&lt;/script&gt;</div></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>入口函数</p>
-<ul>
-<li>页面(结构、样式、节点)加载完毕后，才会执行函数体内的js部分<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">window.onload = function()&#123; </div><div class="line">    内部放js</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-</ul>
-<h1 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h1><h2 id="命名方法和规则"><a href="#命名方法和规则" class="headerlink" title="命名方法和规则"></a>命名方法和规则</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var my_value = &quot;true&quot;;</div><div class="line">var myValue = &quot;true&quot;;</div></pre></td></tr></table></figure>
-<ul>
-<li><p>驼峰命名法</p>
-<ul>
-<li><p>全部小写</p>
-<p>单词与单词间用下划线分割</p>
-</li>
-<li><p>大小写混写</p>
-<p>第一个单词首字母小写，其他首字母大写</p>
-</li>
-</ul>
-</li>
-</ul>
-<ul>
-<li>规则<blockquote>
-<ul>
-<li>变量命名必须以字母或是下标符号”_”或者”$”为开头。</li>
-<li>变量名长度不能超过255个字符。</li>
-<li>变量名中不允许使用空格。</li>
-<li>不用使用脚本语言中保留的关键字及保留符号作为变量名。</li>
-<li>变量名区分大小写。(javascript是区分大小写的语言)</li>
-</ul>
-</blockquote>
-</li>
-</ul>
-<h2 id="作用域"><a href="#作用域" class="headerlink" title="作用域"></a>作用域</h2><h3 id="全局变量和局部变量"><a href="#全局变量和局部变量" class="headerlink" title="全局变量和局部变量"></a>全局变量和局部变量</h3><table>
-<thead>
-<tr>
-<th style="text-align:center"></th>
-<th style="text-align:center">全局变量</th>
-<th style="text-align:center">局部变量</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">包含</td>
-<td style="text-align:center">在函数体外定义的变量；在函数体内部定义的无var的变量</td>
-<td style="text-align:center">在函数内部使用var 声明的变量</td>
-</tr>
-<tr>
-<td style="text-align:center">调用</td>
-<td style="text-align:center">任何位置</td>
-<td style="text-align:center">当前函数体内部</td>
-</tr>
-</tbody>
-</table>
-<p>e.g.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">function square(num)&#123;</div><div class="line">    total = num * num;</div><div class="line">    return num;</div><div class="line">&#125;</div><div class="line">var num = 10;</div><div class="line">var number = square(20);</div><div class="line">alert(total);</div><div class="line"></div><div class="line">==&gt; 400</div></pre></td></tr></table></figure></p>
-<h3 id="优先级"><a href="#优先级" class="headerlink" title="优先级"></a>优先级</h3><ol>
-<li>局部变量高于同名 全局变量</li>
-<li>参数变量高于同名全局变量</li>
-<li>局部变量高于同名参数变量</li>
-</ol>
-<p>==》 全局变量 &lt;  参数变量 &lt; 局部变量</p>
-<h3 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h3><ul>
-<li>全部变量是全局对象的属性</li>
-<li><p>局部变量是调用对象的属性</p>
-</li>
-<li><p>作用域链</p>
-<ul>
-<li>内层函数可访问外层函数局部变量</li>
-<li>外层函数不能访问内层函数局部变量</li>
-</ul>
-</li>
-<li><p>生命周期</p>
-<ul>
-<li>局部变量： 除非被显示删除，否则一直存在</li>
-<li>局部变量： 自声明起至函数运行完毕或被显示删除</li>
-<li>回收机制： 标记清除 引用计数</li>
-</ul>
-</li>
-</ul>
-<p><br></p>
-<h1 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h1><h2 id="字符型"><a href="#字符型" class="headerlink" title="字符型"></a>字符型</h2><ul>
-<li>字符型(String)</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">转换字符型</div><div class="line">1.String();</div><div class="line">2.利用 &quot; &quot;</div></pre></td></tr></table></figure>
-<h2 id="数值型"><a href="#数值型" class="headerlink" title="数值型"></a>数值型</h2><ul>
-<li>数值型<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">1. 进制  0 八进制 0x 十六进制 </div><div class="line">2. 转换数值型</div><div class="line">   - * /</div><div class="line">   Number();</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="布尔型"><a href="#布尔型" class="headerlink" title="布尔型"></a>布尔型</h2><ul>
-<li>布尔型(boolean)<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">转换成布尔型</div><div class="line">&gt; 利用 !! ||  Boolean()</div><div class="line">e.g. </div><div class="line">var num = 0;</div><div class="line">console.log(typeof !!num); || console.log(typeof (Boolean(num)));</div><div class="line"></div><div class="line">boolean</div><div class="line"></div><div class="line"></div><div class="line">parseInt(值，进制)   //没有进制时取整</div><div class="line">parseFloat();</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="null"><a href="#null" class="headerlink" title="null"></a>null</h2><ul>
-<li>null 空的，没有值</li>
-</ul>
-<h2 id="undefined"><a href="#undefined" class="headerlink" title="undefined"></a>undefined</h2><ul>
-<li>undefined 未定义，有值未赋值 </li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">javascript</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/06/05/javascript01/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-  
-    <article id="post-nginx" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/06/03/nginx/">安装nginx服务器</a>
-    </h1>
-  
-
-        
-        <a href="/2017/06/03/nginx/" class="archive-article-date">
-  	<time datetime="2017-06-03T09:30:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-03</time>
-</a>
-        
-      </header>
-    
-
-<!-- 目录内容 -->
-   
-<!-- 目录内容结束 -->
-
-
-
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-
-
-
-
-        <h1 id="相关说明"><a href="#相关说明" class="headerlink" title="相关说明"></a>相关说明</h1><ul>
-<li>操作系统：Ubuntu</li>
-<li>源码目录：/usr/local/src</li>
-<li>编译环境开发库已安装<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">apt-get install build-essential</div><div class="line">apt-get install libtool</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<h1 id="安装Nginx"><a href="#安装Nginx" class="headerlink" title="安装Nginx"></a>安装Nginx</h1><h2 id="安装PCRE库"><a href="#安装PCRE库" class="headerlink" title="安装PCRE库"></a>安装PCRE库</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">cd /usr/local/src</div><div class="line">sudo wget ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.40.tar.gz</div><div class="line">sudo tar -zxvf pcre-8.40.tar.gz</div><div class="line">cd pcre-8.40</div><div class="line">sudo ./configure</div><div class="line">sudo make &amp;&amp; make install</div></pre></td></tr></table></figure>
-<h2 id="安装zlib库"><a href="#安装zlib库" class="headerlink" title="安装zlib库"></a>安装zlib库</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">cd /usr/local/src</div><div class="line">sudo wget http://zlib.net/zlib-1.2.11.tar.gz</div><div class="line">sudo tar -zxvf zlib-1.2.11.tar.gz</div><div class="line">cd zlib-1.2.11</div><div class="line">sudo ./configure</div><div class="line">sudo make &amp;&amp; make install</div></pre></td></tr></table></figure>
-<h2 id="安装SSL"><a href="#安装SSL" class="headerlink" title="安装SSL"></a>安装SSL</h2> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">cd /usr/local/src</div><div class="line">sudo wget https://www.openssl.org/source/openssl-1.0.1t.tar.gz</div><div class="line">sudo tar -zxvf openssl-1.0.1t.tar.gz</div><div class="line">cd openssl-1.0.1t</div><div class="line">sudo ./config</div><div class="line">sudo make &amp;&amp; make install</div></pre></td></tr></table></figure>
-<h2 id="安装nginx"><a href="#安装nginx" class="headerlink" title="安装nginx"></a>安装nginx</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">cd /usr/local/src</div><div class="line">sudo wget http://nginx.org/download/nginx-1.4.2.tar.gz</div><div class="line">sudo tar -zxvf nginx-1.4.2.tar.gz</div><div class="line">cd nginx-1.4.2</div><div class="line">sudo ./configure --sbin-path=/usr/local/nginx/nginx \</div><div class="line"> --conf-path=/usr/local/nginx/nginx.conf \</div><div class="line"> --pid-path=/usr/local/nginx/nginx.pid \</div><div class="line"> --with-http_ssl_module \</div><div class="line"> --with-pcre=/usr/local/src/pcre-8.40 \</div><div class="line"> --with-zlib=/usr/local/src/zlib-1.2.11 \</div><div class="line"> --with-openssl=/usr/local/src/openssl-1.0.1t</div><div class="line"> </div><div class="line"> sudo make &amp;&amp; make install</div></pre></td></tr></table></figure>
-<h1 id="Nginx"><a href="#Nginx" class="headerlink" title="Nginx"></a>Nginx</h1><ul>
-<li>启动<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo /usr/local/nginx/nginx</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li><p>重新加载</p>
-   <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo /usr/local/nginx/nginx -s reload</div></pre></td></tr></table></figure>
-</li>
-<li><p>更改主目录</p>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">server &#123;</div><div class="line">        listen       80;</div><div class="line">         server_name  localhost;</div><div class="line"></div><div class="line">          #charset koi8-r;</div><div class="line"></div><div class="line">           #access_log  logs/host.access.log  main;</div><div class="line"></div><div class="line">	           location / &#123;</div><div class="line">		               root   /home/lucia/Flat-Design;</div><div class="line">			                   index  index.html index.htm;</div><div class="line">					           &#125;</div><div class="line"></div><div class="line">						           #error_page  404              /404.html;</div></pre></td></tr></table></figure>
-<ul>
-<li>cd /usr/local/nginx/nginx.conf</li>
-<li><p>vim搜索/root  然后修改为自己所需的主目录</p>
-<h1 id="附录-Make编译选项"><a href="#附录-Make编译选项" class="headerlink" title="附录 Make编译选项"></a>附录 Make编译选项</h1><pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">--prefix=path    定义一个目录，存放服务器上的文件 ，也就是nginx的安装目录。默认使用 /usr/local/nginx。</div><div class="line">--sbin-path=path 设置nginx的可执行文件的路径，默认为  prefix/sbin/nginx.</div><div class="line">--conf-path=path  设置在nginx.conf配置文件的路径。nginx允许使用不同的配置文件启动，通过命令行中的-c选项。默认为prefix/conf/nginx.conf.</div><div class="line">--pid-path=path  设置nginx.pid文件，将存储的主进程的进程号。安装完成后，可以随时改变的文件名 ， 在nginx.conf配置文件中使用 PID指令。默认情况下，文件名 为prefix/logs/nginx.pid.</div><div class="line">--error-log-path=path 设置主错误，警告，和诊断文件的名称。安装完成后，可以随时改变的文件名 ，在nginx.conf配置文件中 使用 的error_log指令。默认情况下，文件名 为prefix/logs/error.log.</div><div class="line">--http-log-path=path  设置主请求的HTTP服务器的日志文件的名称。安装完成后，可以随时改变的文件名 ，在nginx.conf配置文件中 使用 的access_log指令。默认情况下，文件名 为prefix/logs/access.log.</div><div class="line">--user=name  设置nginx工作进程的用户。安装完成后，可以随时更改的名称在nginx.conf配置文件中 使用的 user指令。默认的用户名是nobody。</div><div class="line">--group=name  设置nginx工作进程的用户组。安装完成后，可以随时更改的名称在nginx.conf配置文件中 使用的 user指令。默认的为非特权用户。</div><div class="line">--with-select_module --without-select_module 启用或禁用构建一个模块来允许服务器使用select()方法。该模块将自动建立，如果平台不支持的kqueue，epoll，rtsig或/dev/poll。</div><div class="line">--with-poll_module --without-poll_module 启用或禁用构建一个模块来允许服务器使用poll()方法。该模块将自动建立，如果平台不支持的kqueue，epoll，rtsig或/dev/poll。</div><div class="line">--without-http_gzip_module — 不编译压缩的HTTP服务器的响应模块。编译并运行此模块需要zlib库。</div><div class="line">--without-http_rewrite_module  不编译重写模块。编译并运行此模块需要PCRE库支持。</div><div class="line">--without-http_proxy_module — 不编译http_proxy模块。</div><div class="line">--with-http_ssl_module — 使用https协议模块。默认情况下，该模块没有被构建。建立并运行此模块的OpenSSL库是必需的。</div><div class="line">--with-pcre=path — 设置PCRE库的源码路径。PCRE库的源码（版本4.4 - 8.30）需要从PCRE网站下载并解压。其余的工作是Nginx的./ configure和make来完成。正则表达式使用在location指令和 ngx_http_rewrite_module 模块中。</div><div class="line">--with-pcre-jit —编译PCRE包含“just-in-time compilation”（1.1.12中， pcre_jit指令）。</div><div class="line">--with-zlib=path —设置的zlib库的源码路径。要下载从 zlib（版本1.1.3 - 1.2.5）的并解压。其余的工作是Nginx的./ configure和make完成。ngx_http_gzip_module模块需要使用zlib 。</div><div class="line">--with-cc-opt=parameters — 设置额外的参数将被添加到CFLAGS变量。例如,当你在FreeBSD上使用PCRE库时需要使用:--with-cc-opt=&quot;-I /usr/local/include。.如需要需要增加 select()支持的文件数量:--with-cc-opt=&quot;-D FD_SETSIZE=2048&quot;.</div><div class="line">--with-ld-opt=parameters —设置附加的参数，将用于在链接期间。例如，当在FreeBSD下使用该系统的PCRE库,应指定:--with-ld-opt=&quot;-L /usr/local/lib&quot;</div></pre></td></tr></table></figure>
-</code></pre></li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">nginx</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/06/03/nginx/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-  
   
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
     </nav>
   
 
@@ -1351,11 +1353,11 @@ return o(t,i(n),arguments.length<3?void 0:u(arguments[2]))}})},function(t,n,r){v
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">keepalived</a>
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color1">keepalived</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1375,10 +1377,6 @@ return o(t,i(n),arguments.length<3?void 0:u(arguments[2]))}})},function(t,n,r){v
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">vpn</a>
               </li>
              
@@ -1387,7 +1385,11 @@ return o(t,i(n),arguments.length<3?void 0:u(arguments[2]))}})},function(t,n,r){v
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">shell</a>
+                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">hexo</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1395,7 +1397,7 @@ return o(t,i(n),arguments.length<3?void 0:u(arguments[2]))}})},function(t,n,r){v
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">hexo</a>
+                <a href="javascript:void(0)" class="js-tag color1">shell</a>
               </li>
             
             <div class="clearfix"></div>

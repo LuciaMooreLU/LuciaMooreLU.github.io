@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-06-21T11:17:27.629Z</updated>
+  <updated>2017-06-24T13:26:23.850Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,20 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>scroll</title>
+    <link href="http://yoursite.com/2017/06/24/scroll/"/>
+    <id>http://yoursite.com/2017/06/24/scroll/</id>
+    <published>2017-06-24T13:26:23.000Z</published>
+    <updated>2017-06-24T13:26:23.850Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>js05</title>
@@ -275,6 +289,189 @@
     <id>http://yoursite.com/2017/06/07/javascript02/</id>
     <published>2017-06-07T15:55:33.000Z</published>
     <updated>2017-06-10T05:19:09.929Z</updated>
+    
+    <content type="html"><![CDATA[<p><br></p>
+<h1 id="基础DOM操作"><a href="#基础DOM操作" class="headerlink" title="基础DOM操作"></a>基础DOM操作</h1><blockquote>
+<ul>
+<li>文档对象模型DOM(Document Object Model)定义访问和处理HTML文档的标准方法</li>
+<li>DOM将HTML 文档呈现为带有元素、属性和文本的树结构（节点数）</li>
+</ul>
+</blockquote>
+<h2 id="获取节点"><a href="#获取节点" class="headerlink" title="获取节点"></a>获取节点</h2><h3 id="document"><a href="#document" class="headerlink" title="document"></a>document</h3><ul>
+<li><p><strong>getElementById</strong></p>
+<ul>
+<li>通过元素ID获取节点</li>
+</ul>
+</li>
+<li><p><strong>getElementsByClassName</strong></p>
+<ul>
+<li><p>通过元素的class name 获取节点（H5 DOM 新方法）</p>
+</li>
+<li><p>文档中的name属性不唯一，所有的getElementsByClassName()方法返回的是元素的数组</p>
+</li>
+</ul>
+</li>
+<li><p><strong>getElementsByTagName</strong></p>
+<ul>
+<li>通过元素标签获取节点</li>
+<li>返回元素的顺序是在文档中的顺序</li>
+</ul>
+</li>
+</ul>
+<h2 id="节点指针"><a href="#节点指针" class="headerlink" title="节点指针"></a>节点指针</h2><ul>
+<li><strong>firstChild</strong><ul>
+<li>父节点.firstChild</li>
+<li>获取元素的首个子节点</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><strong>lastChild</strong><ul>
+<li>父节点.lastChild</li>
+<li>获取元素的最后一个子节点</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p>访问子节点</p>
+<ul>
+<li><strong>childNodes</strong><ul>
+<li>elementNode.childNodes;</li>
+<li>父节点.childNodes</li>
+<li>获取选定元素的所有子节点列表，返回的值可以看做是一个数组，它具有length属性</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p>访问父节点</p>
+<ul>
+<li><strong>parentNode</strong><ul>
+<li>elementNode.parentNode;</li>
+<li>子节点.parentNode</li>
+<li>获取已知节点的父节点</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p>访问兄弟节点</p>
+<ul>
+<li><p><strong>nextSlibing</strong></p>
+<ul>
+<li>兄弟节点.nextSibling</li>
+<li>获取已知节点的后一个节点(处于同一层树层级中)</li>
+</ul>
+</li>
+<li><p><strong>previousSibling</strong></p>
+<ul>
+<li>兄弟节点.previousSibling</li>
+<li>获取已知节点的前一个节点(处于同一层树层级中) </li>
+</ul>
+</li>
+</ul>
+<h2 id="节点操作"><a href="#节点操作" class="headerlink" title="节点操作"></a>节点操作</h2><h3 id="创建节点"><a href="#创建节点" class="headerlink" title="创建节点"></a>创建节点</h3><ul>
+<li><strong>creatElement</strong><ul>
+<li>document.createElement(元素标签)</li>
+<li>创建元素节点</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p><strong>createAttribute</strong></p>
+<ul>
+<li>document.createAttribute(元素属性)</li>
+<li>创建元素属性</li>
+</ul>
+</li>
+<li><p><strong>createTextNode</strong></p>
+<ul>
+<li>document.createTextNode(文本内容)</li>
+<li>创建文本内容</li>
+</ul>
+</li>
+</ul>
+<h3 id="插入节点"><a href="#插入节点" class="headerlink" title="插入节点"></a>插入节点</h3><ul>
+<li><p><strong>appendChild</strong></p>
+<ul>
+<li>appendChild(添加新的节点)</li>
+<li>向节点的子节点列表的末尾添加新的子节点</li>
+</ul>
+</li>
+<li><p><strong>insertBefore</strong></p>
+<ul>
+<li>insertBefore(所添加新的节点,已知子节点)</li>
+<li>在已知的子节点前插入一个新的子节点</li>
+</ul>
+</li>
+</ul>
+<h3 id="替换节点"><a href="#替换节点" class="headerlink" title="替换节点"></a>替换节点</h3><ul>
+<li>replaceChild<ul>
+<li>replaceChid(要插入的新元素,将被替换的老元素)</li>
+<li>将某个子节点替换成另一个节点</li>
+</ul>
+</li>
+</ul>
+<h3 id="复制节点"><a href="#复制节点" class="headerlink" title="复制节点"></a>复制节点</h3><ul>
+<li>cloneNode<ul>
+<li>需要被复制的节点.cloneNode(true,false)</li>
+<li>创建指定节点的副本</li>
+<li>true 复制当前字节及其所有子节点</li>
+<li>false 仅复制当前节点</li>
+</ul>
+</li>
+</ul>
+<h3 id="删除节点"><a href="#删除节点" class="headerlink" title="删除节点"></a>删除节点</h3><ul>
+<li>removeChild<ul>
+<li>removeChild(要删除的节点)</li>
+<li>删除指定的节点</li>
+</ul>
+</li>
+</ul>
+<h2 id="属性操作"><a href="#属性操作" class="headerlink" title="属性操作"></a>属性操作</h2><h3 id="获取属性"><a href="#获取属性" class="headerlink" title="获取属性"></a>获取属性</h3><ul>
+<li><strong>getAttribute</strong><ul>
+<li>ElementNode.getAttribute(name);</li>
+<li>元素节点.getAttribute(元素属性名)</li>
+<li>获取元素节点中指定属性的属性值</li>
+</ul>
+</li>
+<li><p><strong>setAttribute</strong></p>
+<ul>
+<li>ElementNode.setAttribute(name,value);</li>
+<li>元素节点.setAttribute(属性名,属性值)</li>
+<li>创建或改变元素节点的属性</li>
+</ul>
+</li>
+<li><p><strong>removeAttribute</strong></p>
+<ul>
+<li>元素节点.removeAttribute(属性名)</li>
+<li>删除元素中的指定属性</li>
+</ul>
+</li>
+</ul>
+<h3 id="文本操作"><a href="#文本操作" class="headerlink" title="文本操作"></a>文本操作</h3><p>########################</p>
+<p>暂时留空</p>
+<p>#######################</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;br&gt;&lt;/p&gt;
+&lt;h1 id=&quot;基础DOM操作&quot;&gt;&lt;a href=&quot;#基础DOM操作&quot; class=&quot;headerlink&quot; title=&quot;基础DOM操作&quot;&gt;&lt;/a&gt;基础DOM操作&lt;/h1&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;文档对象模型DOM(Document 
+    
+    </summary>
+    
+    
+      <category term="javascript" scheme="http://yoursite.com/tags/javascript/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>JS基础DOM操作</title>
+    <link href="http://yoursite.com/2017/06/07/javascript-Dom/"/>
+    <id>http://yoursite.com/2017/06/07/javascript-Dom/</id>
+    <published>2017-06-07T15:55:33.000Z</published>
+    <updated>2017-06-23T02:18:54.723Z</updated>
     
     <content type="html"><![CDATA[<p><br></p>
 <h1 id="基础DOM操作"><a href="#基础DOM操作" class="headerlink" title="基础DOM操作"></a>基础DOM操作</h1><blockquote>
@@ -1502,151 +1699,6 @@
     
     
       <category term="Git" scheme="http://yoursite.com/tags/Git/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>高性能集群软件-Keepalived</title>
-    <link href="http://yoursite.com/2016/11/23/Keepalived/"/>
-    <id>http://yoursite.com/2016/11/23/Keepalived/</id>
-    <published>2016-11-23T15:07:33.000Z</published>
-    <updated>2017-05-25T16:29:44.770Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="keepalived-介绍"><a href="#keepalived-介绍" class="headerlink" title="keepalived 介绍"></a>keepalived 介绍</h2><ul>
-<li>keepalived 是 Linux下一个轻量级的高可用解决方案</li>
-<li><p>keepalived 主要通过虚拟路由冗余（VRRP）来实现高可用功能</p>
-<p><em>优点</em></p>
-<ul>
-<li>部署及使用简单，只需一个配置文件即可完成</li>
-</ul>
-<p><em>功能</em></p>
-<ul>
-<li>服务器状态检测和故障隔离功能        </li>
-<li>HA（High Available） cluster &nbsp;  [高可用群集]</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h2 id="keepalived-发展"><a href="#keepalived-发展" class="headerlink" title="keepalived 发展"></a>keepalived 发展</h2><ul>
-<li>keepalived起初是为LVS（Linux Virtual System）设计，专门监控集群系统中各个服务节点的状态<br>根据TCP/IP参考模型 第三、第四、第五层交换机制检测每个服务节点的状态（详细见本页<strong>keepalived工作原理</strong>）</li>
-</ul>
-<ul>
-<li><p><em>e.g: keepalived检测WEB服务器的状态</em><br>如果一台WEB服务器死机/工作出现故障，keepalived检测到此状况后会将故障服务器从系统中剔除；直至该服务器工作正常后keepalived自动将该服务器加入到服务器群中；</p>
-<ul>
-<li><p>以上工作keepalived自动完成，无需人工干涉，人工干预仅是修复出现故障的服务节点；<br><br></p>
-</li>
-<li><p>keepalived 后续加入了VRRP功能<br>VRRP（Virtaul Router Redunadancy Protocol，虚拟路由器冗余协议）</p>
-</li>
-<li>目的：解决静态路由出现的单点故障问题，实现网络不间断稳定运行</li>
-</ul>
-</li>
-</ul>
-<h3 id="VRRP-协议与工作原理"><a href="#VRRP-协议与工作原理" class="headerlink" title="VRRP 协议与工作原理"></a>VRRP 协议与工作原理</h3><h4 id="❉-引入VRRP概念"><a href="#❉-引入VRRP概念" class="headerlink" title="❉   引入VRRP概念"></a>❉   引入VRRP概念</h4><p>  <img src="http://oh4uobiuk.bkt.clouddn.com/vrrp.png" alt="vrrp-logo"><br>     <em>说明</em>：图片来源百度百科；左侧图片为局域网组网；右侧图片为VRRP组网</p>
-<blockquote>
-<ul>
-<li><strong>局域网组网 e.g :</strong><ul>
-<li>网络内的所有主机会设置一条默认网关（10.100.10.1），当主机发出的目的地址不在本网段（10.100.10.0/24）的报文；通过默认网关发往路由器A，从而实现主机与外部网络的通信</li>
-<li>该组网缺点：当路由器A坏掉时，本网段内通过以RA为默认网关下一跳的主机将断掉与外界的通信，产生单点故障</li>
-</ul>
-</li>
-</ul>
-<hr>
-<ul>
-<li><p><strong>VRRP组网 e.g :</strong></p>
-<blockquote>
-<p>RA：Master 活动路由器  —&gt;10.100.10.2<br>RB：Backup 备份路由器  —&gt;10.100.10.3<br>VRIP : 虚拟路由器IP   —-&gt;10.100.10.1</p>
-</blockquote>
-<ul>
-<li><p>VRRP将局域网中的一组路由器【 RA和RB】组成一个虚拟路由器——&gt;&gt;&gt;备份组</p>
-<blockquote>
-<p>   虚拟路由器拥有自己的IP地址 10.100.10.1<br>局域网内的主机仅知道虚拟路由器IP地址为10.100.10.1，不知道具体的Master与Backup路由器IP<br>局域网内的主机将默认网关下一跳的地址设置为该虚拟路由器IP地址，通过该地址与其他网络进行通信</p>
-</blockquote>
-</li>
-<li><p>该组网优点：当备份组内的Master路由器DOWN掉，会进行选举策略选出一个新的Master路由器，继续往网络内的主机提供路由服务，从而实现网络内的主机不间断地与外部网络进行通信</p>
-</li>
-</ul>
-</li>
-</ul>
-</blockquote>
-<h4 id="❉-VRRP-协议"><a href="#❉-VRRP-协议" class="headerlink" title="❉    VRRP 协议"></a>❉    VRRP 协议</h4><blockquote>
-<ul>
-<li>VRRP：解决局域网中配置静态网关出现单点失效的路由协议</li>
-<li>设计目标：网络发生故障时透明地进行设备切换而不影响主机间的数据通信</li>
-</ul>
-</blockquote>
-<h4 id="❉-VRRP-工作原理"><a href="#❉-VRRP-工作原理" class="headerlink" title="❉    VRRP 工作原理"></a>❉    VRRP 工作原理</h4><blockquote>
-<p> VRRP协议将两台或多台路由器设备虚拟成一个虚拟路由器，对外提供虚拟路由器IP(一个或多个)；<br>   而在路由器组内部，如果实际拥有这个对外IP的路由器如果工作正常的话就是MASTER，或者是通过算法选举产生；MASTER实现针对虚拟路由器IP的各种网络功能，如ARP请求，ICMP，以及数据的转发等；<br>   其他设备不拥有该IP，状态是BACKUP，除了接收MASTER的VRRP状态通告信息外，不执行对外的网络功能。<br>   当主机失效时，BACKUP将接管原先MASTER的网络功能。</p>
-<hr>
-<ul>
-<li><strong>❀  如何判定多个路由器在同一组虚拟路由器中？</strong><ul>
-<li>VRID：每个虚拟路由器都有一个唯一标识（VRID是一个0～255的正整数）;<br>配置VRRP协议时需要配置每个路由器的虚拟路由器ID(VRID)和优先权值;<br>使用VRID将路由器进行分组，具有相同VRID值的路由器为同一个组</li>
-</ul>
-</li>
-</ul>
-<hr>
-<ul>
-<li><strong>❀  BACKUP 为什么没有发生抢占？</strong><ul>
-<li>VRRP通告:它使用IP多播数据包进行封装，组地址为224.0.0.18，发布范围只限于同一局域网内;<br>在一个虚拟路由器中，只有处于MASTER角色的路由器会一直发送VRRP通告信息；<br>处于BACKUP状态的路由器只接收MASTER发过来的报文信息，用来监控MASTER运行状态; 除非它的优先级比MASTER更高</li>
-</ul>
-</li>
-</ul>
-<hr>
-<ul>
-<li><strong>❀  什么时候发生选举？</strong><ul>
-<li>当MASTER不可用时，BACKUP无法收到MASTER发过来的报文信息；<br>认定MASTER出现故障，然后多台BACKUP就开始进行选举；</li>
-</ul>
-</li>
-</ul>
-<hr>
-<ul>
-<li><strong>❀  Master选举</strong><ul>
-<li>虚拟路由器IP=路由器本身配置IP<br>该路由器始终将是MASTER；IP地址所有者自动具有最高优先级：255</li>
-<li>优先级选举主控路由器（优先级范围是0—255）<br>优先级0一般用在IP地址所有者主动放弃主控者角色时使用。可配置的优先级范围为1—254</li>
-<li>优先级相等，则比较路由器的实际IP，IP值较大的优先权高</li>
-</ul>
-</li>
-</ul>
-</blockquote>
-<h4 id="❉-VRRP-应用实例"><a href="#❉-VRRP-应用实例" class="headerlink" title="❉    VRRP 应用实例"></a>❉    VRRP 应用实例</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">            +-----------+      +-----------+</div><div class="line">            |   Rtr1    |      |   Rtr2    |</div><div class="line">            |(MR VRID=1)|      |(BR VRID=1)|</div><div class="line">            |(BR VRID=2)|      |(MR VRID=2)|</div><div class="line">    VRID=1  +-----------+      +-----------+  VRID=2</div><div class="line">    IP A ----------&gt;*            *&lt;---------- IP B</div><div class="line">                    |            |</div><div class="line">                    |            |</div><div class="line">  ------------------+------------+-----+--------+--------+--------+--</div><div class="line">                                       ^        ^        ^        ^</div><div class="line">                                       |        |        |        |</div><div class="line">                                     (IP A)   (IP A)   (IP B)   (IP B)</div><div class="line">                                       |        |        |        |</div><div class="line">                                    +--+--+  +--+--+  +--+--+  +--+--+</div><div class="line">                                    |  H1 |  |  H2 |  |  H3 |  |  H4 |</div><div class="line">                                    +-----+  +-----+  +--+--+  +--+--+</div><div class="line">     Legend:</div><div class="line">              ---+---+---+--  =  Ethernet, Token Ring, or FDDI</div><div class="line">                           H  =  Host computer</div><div class="line">                          MR  =  Master Router</div><div class="line">                          BR  =  Backup Router</div><div class="line">                           *  =  IP Address</div><div class="line">                        (IP)  =  default router for hosts</div><div class="line"></div><div class="line"></div><div class="line">-----------------------------------------------------------------</div><div class="line"></div><div class="line">    +   VRID 1       |   Rtr1（Master）     |    Rtr2（Backup） +  正常情况下  H1与H2走R1;反之 走R2</div><div class="line"></div><div class="line">    +   VRID 2       |   Rtr1（Backup）    |    Rtr2 （Master） +  正常情况下  H3与H4走R2;反之 走R1</div></pre></td></tr></table></figure>
-<h2 id="keepalived-安装"><a href="#keepalived-安装" class="headerlink" title="keepalived  安装"></a>keepalived  安装</h2><ul>
-<li>实验需求：<br><em>安装keepalived（仅安装）</em></li>
-<li>实验实现：<br><em>服务器：CentOS 6.5-minimal</em><br><em>软    件：Keepalived ( V_1.2.19 )</em>    </li>
-</ul>
-<hr>
-<ul>
-<li>安装过程：<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"># 下载安装包并解压，查看相关参数</div><div class="line"></div><div class="line">[root@lucia tmp]# wget http://www.keepalived.org/software/keepalived-1.2.19.tar.gz    # 下载Keepalived安装包</div><div class="line">[root@lucia tmp]# tar -zxf keepalived-1.2.19.tar.gz   #解压安装包</div><div class="line">[root@lucia tmp]# cd keepalived-1.2.19</div><div class="line">[root@lucia keepalived-1.2.19]# ./configure --help    #查看confiure编译参数</div><div class="line"> </div><div class="line">#================================================</div><div class="line"># 指定安装在/etc/ &#123;--sysconfdir=/etc&#125;</div><div class="line"># 指定使用内核源码中的头文件 &#123;--with-kernel-dir&#125;</div><div class="line"># 注：使用LVS时，需要用到&quot;--with-kernel-dir&quot;</div><div class="line">#===============================================</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<hr>
-<ul>
-<li>编译安装<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line">[root@lucia keepalived-1.2.19]# [ -z /usr/src/kernels/ ] &amp;&amp; yum -y install kernel-headers kernel-devel || echo &quot;The kernel file already exists&quot;</div><div class="line">The kernel file already exists</div><div class="line"></div><div class="line"></div><div class="line">#===========================</div><div class="line"># 判断kernels目录是否存在文件</div><div class="line">#===========================</div><div class="line"> </div><div class="line">[root@lucia keepalived-1.2.19]# ./configure --sysconfdir=/etc/ --with-kernel-dir=/usr/src/kernels/2.6.32-573.12.1.el6.x86_64</div><div class="line"> </div><div class="line">#============================================================================</div><div class="line"># ./configure 对即将安装的软件进行配置，检查当前的环境是否满足要安装软件的依赖关系</div><div class="line">#============================================================================</div><div class="line"></div><div class="line">configure: error: in `/tmp/keepalived-1.2.19&apos;:</div><div class="line">configure: error: no acceptable C compiler found in $PATH</div><div class="line">See `config.log&apos; for more details</div><div class="line"> </div><div class="line">#============================================================================</div><div class="line"># 报错：gcc编译器没有安装</div><div class="line"># [root@lucia keepalived-1.2.19]# yum -y install gcc</div><div class="line">#=============================================================================</div><div class="line">      </div><div class="line">继续返回上一步预安装./configure</div><div class="line">[root@lucia keepalived-1.2.19]# ./configure --sysconfdir=/etc/ --with-kernel-dir=/usr/src/kernels/2.6.32-573.12.1.el6.x86_64</div><div class="line"> </div><div class="line">configure: error:</div><div class="line">!!! OpenSSL is not properly installed on your system. !!!</div><div class="line">!!! Can not include OpenSSL headers files.            !!!</div><div class="line"> </div><div class="line">#=========================================================================</div><div class="line"># 报错：OpenSSL 没有安装</div><div class="line"># [root@lucia keepalived-1.2.19]# yum -y install openssl*</div><div class="line">#=========================================================================</div><div class="line"></div><div class="line">./configure 成功后，显示是Keepalived 输出的加载模块信息</div><div class="line"></div><div class="line">Keepalived configuration</div><div class="line">------------------------</div><div class="line">Keepalived version       : 1.2.19                         </div><div class="line">Compiler                 : gcc</div><div class="line">Compiler flags           : -g -O2</div><div class="line">Extra Lib                : -lssl -lcrypto -lcrypt </div><div class="line">Use IPVS Framework       : Yes</div><div class="line">IPVS sync daemon support : Yes</div><div class="line">IPVS use libnl           : No</div><div class="line">fwmark socket support    : Yes</div><div class="line">Use VRRP Framework       : Yes</div><div class="line">Use VRRP VMAC            : Yes</div><div class="line">SNMP support             : No</div><div class="line">SHA1 support             : No</div><div class="line">Use Debug flags          : No</div><div class="line"></div><div class="line">[root@lucia keepalived-1.2.19]# make &amp;&amp; make install                     #编译&amp;&amp;安装</div><div class="line">[root@lucia keepalived-1.2.19]# ln -s /usr/local/sbin/keepalived /sbin/  #软链接到系统使用的管理程序目录中</div><div class="line">[root@lucia keepalived-1.2.19]# chkconfig --add keepalived               #添加到系统服务</div><div class="line">[root@lucia keepalived-1.2.19]# chkconfig --level 35 keepalived on       #添加到开机启动</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<hr>
-<h3 id="❉-Keepalived-配置详解"><a href="#❉-Keepalived-配置详解" class="headerlink" title="❉   Keepalived 配置详解"></a>❉   Keepalived 配置详解</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div></pre></td><td class="code"><pre><div class="line">[root@lucia keepalived-1.2.19]# cd /etc/keepalived/</div><div class="line">[root@lucia keepalived-1.2.19]# ls</div><div class="line">keepalived.conf  samples</div><div class="line"></div><div class="line"># ================================================================</div><div class="line"># Keepalived 配置文件路径为/etc/keepalived/keepalived.conf</div><div class="line"># samples 目录下存放着keepalived配置的示例</div><div class="line"># ================================================================</div><div class="line">#============================================================</div><div class="line"># keepalived.conf 配置</div><div class="line">#------------------------------------------------------------</div><div class="line"># 1、Keepalived 配置文件以block形式组织，每个块内容都包含在&#123;&#125;</div><div class="line"># 2、“#”   “!” 开头行为注释</div><div class="line"># 3、keepalived 配置为三类：</div><div class="line">#      全局配置:对整个keepalived都生效的配置 </div><div class="line">#    VRRPD 配置:核心配置，主要实现keepalived高可用功能</div><div class="line">#      LVS配置</div><div class="line">#============================================================</div><div class="line"></div><div class="line"></div><div class="line">! Configuration File for keepalived   </div><div class="line"></div><div class="line">    </div><div class="line">########################</div><div class="line">#  全局配置</div><div class="line">########################</div><div class="line"></div><div class="line"> </div><div class="line">global_defs &#123;                               # global_defs 全局配置标识 </div><div class="line">                                            ------------------------------------------</div><div class="line">   notification_email &#123;                     # notification_email用于设置报警邮件地址</div><div class="line">     acassen@firewall.loc                   # 可以设置多个，每行一个</div><div class="line">     failover@firewall.loc                  # 设置邮件报警，需开启本机Sendmail 服务</div><div class="line">     sysadmin@firewall.loc                  # yum -y install mailx sendmail</div><div class="line">   &#125;                                        ----------------------------------------------</div><div class="line"></div><div class="line">   notification_email_from Alexandre.Cassen@firewall.loc  # 设置邮件发送地址</div><div class="line">   smtp_server 192.168.200.1                              # 设置邮件的smtp server地址</div><div class="line">   smtp_connect_timeout 30                                # 设置连接smtp sever超时时间</div><div class="line">   router_id LVS_DEVEL                                    # 表示运行keepalived服务器标识，发邮件时显示在邮件主题中的信息</div><div class="line">&#125;</div><div class="line"></div><div class="line">######################</div><div class="line">#  VRRPD配置</div><div class="line">######################</div><div class="line"></div><div class="line">vrrp_instance VI_1 &#123;         # VRRPD 配置标识 VI_1是实例名称</div><div class="line"></div><div class="line">    state MASTER             # 指定Keepalvied角色 MASTER表示此主机为主服务器 BACKUP则是表示为备用服务器</div><div class="line">    interface eth0           # 指定 HA 监测网络的接口</div><div class="line">    virtual_router_id 51     # 虚拟路由标识，标识为数字，同一个VRRP实例使用唯一的标识，即可表示在同一个vrrp_instance下 MASTER_ID = BACKUP_ID</div><div class="line">    priority 100             # 定义节点优先级，数字越大表示节点的优先级越高，同一个VRRP_instance下，MASTE_PRIORITY &gt; BACKUP_PRIORITY </div><div class="line">    advert_int 1             # 设定MASTER与BACKUP主机质检同步检查的时间间隔，单位为秒</div><div class="line">             </div><div class="line">    authentication &#123;         # 设定节点间通信验证类型和密码，验证类型主要有PASS和AH两种</div><div class="line">        auth_type PASS       # 同一个vrrp_instance，MASTER验证密码和BACKUP保持一致</div><div class="line">        auth_pass 1111</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    virtual_ipaddress &#123;      # 设置虚拟IP地址 (VIP),又叫做漂移IP地址</div><div class="line">        192.168.200.16</div><div class="line">        192.168.200.17</div><div class="line">        192.168.200.18</div><div class="line">    &#125;</div><div class="line"></div><div class="line">#-------------------------------------------------------------------------------</div><div class="line"># 问：为什么叫漂移IP地址？</div><div class="line"># 答：当Keepalived切换到MASTER状态时，IP地址会自动添加到系统中</div><div class="line">#    当Keepalvied切换到BACKUP状态时，IP地址将自动从系统中删除</div><div class="line">#    </div><div class="line">#    keepalived通过“ip address add”命令的形式将VIP添加到系统</div><div class="line">#    通过“ip add”查看系统中添加的VIP地址</div><div class="line">#--------------------------------------------------------------------------------</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">######################</div><div class="line"># LVS配置</div><div class="line">######################</div><div class="line"></div><div class="line"></div><div class="line">virtual_server 192.168.200.100 443 &#123;              # virtual_server LVS配置标识 </div><div class="line">                                                  # 格式：virtual_server VIP port [IP 和 port 之间空格隔开]</div><div class="line"> </div><div class="line">    delay_loop 6                                  # 设置健康检查时间间隔，单位为秒                      </div><div class="line">    lb_algo rr                                    # 设置负载调度算法，可用的调度算法有：rr、wlc、lc、lblc、sh、dh等</div><div class="line">    lb_kind NAT                                   # 设置LVS实现负载均衡的机制，有NAT、TUN和DR三种模式可选</div><div class="line">    nat_mask 255.255.255.0                        # NAT子网掩码</div><div class="line">    persistence_timeout 50                        # 会话保持时间 </div><div class="line">    protocol TCP                                  # 指定转发协议类型</div><div class="line">#----------------------------------------------------------------------------------------------------</div><div class="line"># persistence_timeout 会话保持时间对动态网页非常有用，为集群系统中的seesion共享提供了一个很好的解决方案</div><div class="line"># 用户的请求会一直分发到某个服务节点，直至超过这个会话的保持时间（指最大无响应超时时间）</div><div class="line"># =[用户操作动态页面如果在50s没有执行任何操作则被分发到另外的节点]</div><div class="line">#----------------------------------------------------------------------------------------------------</div><div class="line"></div><div class="line">    real_server 192.168.201.100 443 &#123;                          # 设置real server段开始的标识 [ IP为真实IP地址]</div><div class="line">                                                               # 格式：real_server realIP port [IP 和 port 之间空格隔开]</div><div class="line">                                                               -----------------------------------------------------------------</div><div class="line">        weight 1                                               # 用于配置real server节点的权值，权值大小用数字表示，数字越大，权值越高</div><div class="line">                                                               # 设置权值大小可以为不同性能的服务器分配不同的负载</div><div class="line">                                                               ------------------------------------------------------------------</div><div class="line"></div><div class="line">        SSL_GET &#123;                                              # 健康检查 SSL_GET    </div><div class="line">            url &#123;                                              # 指定SSL检查的URL信息，可以指定多个</div><div class="line">              path /index.html                                 # 后跟详细的URL路径</div><div class="line">              digest ff20ad2481f97b1754ef3e12ecd3a9cc          # SSL检查后的摘要信息，可以通过genhash命令工具获取</div><div class="line">#-----------------------------------------------------------------</div><div class="line"># [root@lucia keepalived]# genhash -s 192.168.201.100 -p 80 -u /index.html</div><div class="line">#-----------------------------------------------------------------</div><div class="line">            &#125;</div><div class="line">            url &#123;</div><div class="line">              path /mrtg/</div><div class="line">              digest 9b3a0c85a887a256d6939da88aabd8cd</div><div class="line">            &#125;</div><div class="line">            connect_timeout 3                                  # 表示无响应超时时间，单位为秒</div><div class="line">            nb_get_retry 3                                     # 表示重试次数</div><div class="line">            delay_before_retry 3                               # 表示充实间隔</div><div class="line">        &#125; </div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"> </div><div class="line">virtual_server 10.10.10.2 1358 &#123;</div><div class="line">    delay_loop 6</div><div class="line">    lb_algo rr </div><div class="line">    lb_kind NAT</div><div class="line">    persistence_timeout 50</div><div class="line">    protocol TCP</div><div class="line"> </div><div class="line">    sorry_server 192.168.200.200 1358                          # 备份节点，在所有real serer失效后，启用备份节点</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<hr>
-<blockquote>
-<ul>
-<li>VRRP原理参考文档如下：<ul>
-<li><a href="http://bbs.nanjimao.com/thread-790-1-1.html" target="_blank" rel="external">http://bbs.nanjimao.com/thread-790-1-1.html</a> （此篇写的很好）</li>
-<li><a href="http://blog.chinaunix.net/uid-26575352-id-3529109.html" target="_blank" rel="external">http://blog.chinaunix.net/uid-26575352-id-3529109.html</a></li>
-<li>keepalived.conf 参考书籍 《高性能Linux服务器构建实战》</li>
-</ul>
-</li>
-</ul>
-</blockquote>
-<hr>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;keepalived-介绍&quot;&gt;&lt;a href=&quot;#keepalived-介绍&quot; class=&quot;headerlink&quot; title=&quot;keepalived 介绍&quot;&gt;&lt;/a&gt;keepalived 介绍&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;keepalived 是 Linux下一
-    
-    </summary>
-    
-    
-      <category term="keepalived" scheme="http://yoursite.com/tags/keepalived/"/>
     
   </entry>
   
