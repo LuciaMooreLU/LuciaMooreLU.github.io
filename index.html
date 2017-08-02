@@ -147,19 +147,19 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-ceshi" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-offset" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/06/25/ceshi/">ceshi</a>
+      <a class="article-title" href="/2017/06/25/offset/">offset家族</a>
     </h1>
   
 
         
-        <a href="/2017/06/25/ceshi/" class="archive-article-date">
+        <a href="/2017/06/25/offset/" class="archive-article-date">
   	<time datetime="2017-06-25T14:16:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-25</time>
 </a>
         
@@ -179,125 +179,65 @@
 
 
 
-        
-      
+        <p><img src="https://www.z4a.net/images/2017/07/02/offset.png" alt="offset.png"></p>
+<p><br></p>
+<h2 id="定位父级-offsetParent"><a href="#定位父级-offsetParent" class="headerlink" title="定位父级 offsetParent"></a>定位父级 offsetParent</h2><blockquote>
+<p>定义：当前元素最近的经过定位(position不等于static)的父级元素</p>
+</blockquote>
+<ul>
+<li><strong>元素自身有fixed定位，offsetParent的结果为null</strong><br>当元素自身有fixed固定定位时，固定定位的元素相对于视窗进行定位，没有定位父级，返回的offsetParent的结果为null</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;div id=&quot;test&quot; style=&quot;position:fixed&quot;&gt;&lt;/div&gt;    </div><div class="line">&lt;script&gt;</div><div class="line">//firefox并没有考虑固定定位的问题，返回&lt;body&gt;，其他浏览器都返回null</div><div class="line">console.log(test.offsetParent); </div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
+<ul>
+<li><strong>元素自身无fixed定位，且父级元素都未经过定位，offsetParent的结果为\<body\></body\></strong></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;div id=&quot;test&quot;&gt;&lt;/div&gt;    </div><div class="line">&lt;script&gt;</div><div class="line">console.log(test.offsetParent);//&lt;body&gt;</div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
+<ul>
+<li>元素自身无fixed定位，且父级元素存在经过定位的元素，offsetParent的结果为离自身元素最近的经过定位的父级元素</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&lt;div id=&quot;div0&quot; style=&quot;position:absolute;&quot;&gt;</div><div class="line">    &lt;div id=&quot;div1&quot; style=&quot;position:absolute;&quot;&gt;</div><div class="line">        &lt;div id=&apos;test&apos;&gt;&lt;/div&gt;    </div><div class="line">    &lt;/div&gt;    </div><div class="line">&lt;/div&gt;</div><div class="line">&lt;script&gt;</div><div class="line">console.log(test.offsetParent);    //&lt;div id=&quot;div1&quot;&gt;</div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
+<ul>
+<li><body>元素的parentNode是null</body></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">console.log(document.body.offsetParent);//null</div></pre></td></tr></table></figure>
+<h3 id="IE7-浏览器bug"><a href="#IE7-浏览器bug" class="headerlink" title="IE7 - 浏览器bug"></a>IE7 - 浏览器bug</h3><ul>
+<li>对于定位父级offsetParent来说，IE7-浏览器存在以下bug</li>
+</ul>
+<ol>
+<li>【bug1】当元素本身经过绝对定位或相对定位，且父级元素无经过定位的元素时，IE7-浏览器下，offsetParent是<html></html></li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">&lt;div id=&quot;test&quot; style=&quot;position:absolute;&quot;&gt;&lt;/div&gt;    </div><div class="line">&lt;script&gt;</div><div class="line">//IE7-浏览器返回&lt;html&gt;，其他浏览器返回&lt;body&gt;</div><div class="line">console.log(test.offsetParent);</div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;div id=&quot;test&quot; style=&quot;position:relative;&quot;&gt;&lt;/div&gt;    </div><div class="line">&lt;script&gt;</div><div class="line">//IE7-浏览器返回&lt;html&gt;，其他浏览器返回&lt;body&gt;</div><div class="line">console.log(test.offsetParent);</div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
+<ol>
+<li>【bug2】如果父级元素存在触发haslayout的元素或经过定位的元素，且offsetParent的结果为离自身元素最近的经过定位或触发haslayout的父级元素</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&lt;div id=&quot;div0&quot; style=&quot;display:inline-block;&quot;&gt;</div><div class="line">    &lt;div id=&apos;test&apos;&gt;&lt;/div&gt;    </div><div class="line">&lt;/div&gt;</div><div class="line">&lt;script&gt;</div><div class="line">//IE7-浏览器返回&lt;div id=&quot;div0&quot;&gt;，其他浏览器返回&lt;body&gt;</div><div class="line">console.log(test.offsetParent);</div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&lt;div id=&quot;div0&quot; style=&quot;display:inline-block;&quot;&gt;</div><div class="line">    &lt;div id=&apos;test&apos;&gt;&lt;/div&gt;    </div><div class="line">&lt;/div&gt;</div><div class="line">&lt;script&gt;</div><div class="line">//IE7-浏览器返回&lt;div id=&quot;div0&quot;&gt;，其他浏览器返回&lt;body&gt;</div><div class="line">console.log(test.offsetParent);</div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&lt;div id=&quot;div0&quot; style=&quot;display:inline-block;&quot;&gt;</div><div class="line">    &lt;div id=&quot;div1&quot; style=&quot;position:absolute;&quot;&gt;</div><div class="line">        &lt;div id=&apos;test&apos;&gt;&lt;/div&gt;    </div><div class="line">    &lt;/div&gt;    </div><div class="line">&lt;/div&gt;</div><div class="line">&lt;script&gt;</div><div class="line">//所有浏览器都返回&lt;div id=&quot;div1&quot;&gt;</div><div class="line">console.log(test.offsetParent);</div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
+<h2 id="offsetWidth-offsetHeight"><a href="#offsetWidth-offsetHeight" class="headerlink" title="offsetWidth / offsetHeight"></a>offsetWidth / offsetHeight</h2><ul>
+<li>得到对象自己的宽度和高度</li>
+<li>offsetWidth =  width  + border  +  padding</li>
+<li>offsetHeight 和 offsetWidth 同理</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">&lt;div id=&quot;box&quot; style=&quot;width:220px;border: 1px solid red;padding: 10px;height: 20px;&quot;&gt;&lt;/div&gt;</div><div class="line"></div><div class="line">&lt;script&gt;</div><div class="line">    function $(id) &#123;</div><div class="line">        return document.getElementById(id);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    //offsetWidth = border + padding + width;</div><div class="line"></div><div class="line">    var height = $(&quot;box&quot;).offsetHeight;</div><div class="line">    var width = $(&quot;box&quot;).offsetWidth;</div><div class="line">    console.log(width);  // 2+20+220 = 242</div><div class="line">    console.log(height); // 2 + 20 + 20 = 42</div><div class="line"></div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
+<h2 id="offsetLeft-offsetTop"><a href="#offsetLeft-offsetTop" class="headerlink" title="offsetLeft / offsetTop"></a>offsetLeft / offsetTop</h2><ul>
+<li><p>返回当前元素距离某个父辈元素左边缘的距离</p>
+<ul>
+<li>如果父辈元素中有定位的元素，那么就返回距离当前元素最近的定位元素边缘的距离</li>
+<li>如果父辈元素中没有定位元素，那么就返回相对于body左边缘距离</li>
+<li>子盒子到定位的父盒子边框到边框的距离</li>
+</ul>
+</li>
+<li><p>offsetTop 同理</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">&lt;div id=&quot;bigBox&quot; style=&quot;width:500px;border: 1px solid red;padding: 10px;height: 500px;margin-left: 50px;&quot;&gt;</div><div class="line">    &lt;div id=&quot;smallBox&quot; style=&quot;width: 50px;height: 50px;border: 1px solid #ccc;&quot;&gt;&lt;/div&gt;</div><div class="line">&lt;/div&gt;</div><div class="line"></div><div class="line">&lt;script&gt;</div><div class="line">    function $(id) &#123;</div><div class="line">        return document.getElementById(id);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    var left = $(&quot;smallBox&quot;).offsetLeft;</div><div class="line">    console.log(left);  // 50 + 10 + 1 =61px</div><div class="line"></div><div class="line">//smallBox的父辈没有定位，所以以当前body页面为准，计算当前页面到smallBox之间的距离</div><div class="line"></div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
+<p>　[<strong>注意</strong>]如果存在垂直滚动条，offsetWidth也包括垂直滚动条的宽度；如果存在水平滚动条，offsetHeight也包括水平滚动条的高度</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">&lt;div id=&quot;test&quot; style=&quot;width:100px; height:100px; padding:10px; margin:10px; border:1px solid black; overflow: scroll;&quot;&gt;&lt;/div&gt;    </div><div class="line">&lt;script&gt;</div><div class="line">//IE8-浏览器将垂直滚动条的宽度计算在width宽度和height高度中，width和height的值仍然是100px；</div><div class="line">//而其他浏览器则把垂直滚动条的宽度从width宽度中移出，把水平滚动条的高度从height高度中移出，则滚动条宽度为17px，width宽度和height高度为剩下的83px</div><div class="line"></div><div class="line"></div><div class="line">// 获取css样式属性值</div><div class="line"></div><div class="line">if(window.getComputedStyle)&#123;  //标准浏览器</div><div class="line">    console.log(getComputedStyle(test).width,getComputedStyle(test).height)//83px</div><div class="line">    </div><div class="line">&#125;else&#123;                       //IE浏览器</div><div class="line">    console.log(test.currentStyle.width,test.currentStyle.height);//100px </div><div class="line">&#125;</div><div class="line">//122=1+10+100+10+1</div><div class="line">console.log(test.offsetWidth,test.offsetHeight);</div><div class="line"></div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>文档主要参考 <a href="http://www.cnblogs.com/xiaohuochai/p/5828369.html" target="_blank" rel="external">http://www.cnblogs.com/xiaohuochai/p/5828369.html</a> </p>
+</blockquote>
 
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/06/25/ceshi/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-  
-    <article id="post-scroll" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/06/24/scroll/">scroll</a>
-    </h1>
-  
-
-        
-        <a href="/2017/06/24/scroll/" class="archive-article-date">
-  	<time datetime="2017-06-24T13:26:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-24</time>
-</a>
-        
-      </header>
-    
-
-<!-- 目录内容 -->
-   
-<!-- 目录内容结束 -->
-
-
-
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-
-
-
-
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/06/24/scroll/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-  
-    <article id="post-js05" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/06/21/js05/">js05</a>
-    </h1>
-  
-
-        
-        <a href="/2017/06/21/js05/" class="archive-article-date">
-  	<time datetime="2017-06-21T11:17:27.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-21</time>
-</a>
-        
-      </header>
-    
-
-<!-- 目录内容 -->
-   
-<!-- 目录内容结束 -->
-
-
-
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-
-
-
-
-        
       
 
       
@@ -305,188 +245,22 @@
     <div class="article-info article-info-index">
       
       
-      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">offset</a>
+        		</li>
+      		
+		</ul>
+	</div>
 
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/06/21/js05/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-  
-    <article id="post-one" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/06/15/one/">one</a>
-    </h1>
-  
-
-        
-        <a href="/2017/06/15/one/" class="archive-article-date">
-  	<time datetime="2017-06-15T09:27:54.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-15</time>
-</a>
-        
-      </header>
-    
-
-<!-- 目录内容 -->
-   
-<!-- 目录内容结束 -->
-
-
-
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-
-
-
-
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
       
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2017/06/15/one/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-  
-    <article id="post-jquery-01" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/06/12/jquery-01/">jquery-01</a>
-    </h1>
-  
-
-        
-        <a href="/2017/06/12/jquery-01/" class="archive-article-date">
-  	<time datetime="2017-06-12T15:37:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-12</time>
-</a>
-        
-      </header>
-    
-
-<!-- 目录内容 -->
-   
-<!-- 目录内容结束 -->
-
-
-
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-
-
-
-
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/06/12/jquery-01/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-  
-    <article id="post-jqury" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/06/11/jqury/">jqury</a>
-    </h1>
-  
-
-        
-        <a href="/2017/06/11/jqury/" class="archive-article-date">
-  	<time datetime="2017-06-11T15:54:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-11</time>
-</a>
-        
-      </header>
-    
-
-<!-- 目录内容 -->
-   
-<!-- 目录内容结束 -->
-
-
-
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-
-
-
-
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/06/11/jqury/">展开全文 >></a>
+          <a class="article-more-a" href="/2017/06/25/offset/">展开全文 >></a>
         </p>
       
 
@@ -1257,9 +1031,619 @@
 
 
   
+    <article id="post-javascript01" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/06/05/javascript01/">01-JS 基本概念</a>
+    </h1>
+  
+
+        
+        <a href="/2017/06/05/javascript01/" class="archive-article-date">
+  	<time datetime="2017-06-05T15:43:43.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-05</time>
+</a>
+        
+      </header>
+    
+
+<!-- 目录内容 -->
+   
+<!-- 目录内容结束 -->
+
+
+
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+
+
+
+
+        <p><br></p>
+<h1 id="基本要点"><a href="#基本要点" class="headerlink" title="基本要点"></a>基本要点</h1><ul>
+<li>注释<ul>
+<li>// 单行注释</li>
+<li>/* 多行注释 */</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>JS 书写位置</p>
+<ul>
+<li><p>行内式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;button onclick=&quot;alert(&apos;你好吗&apos;)&quot;&gt;点击我&lt;/button&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p>内嵌式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;script type=”text/javascript”&gt;  &lt;/script&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p>外链式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;script type=”text/javascript” src=”xxx.js”&gt;&lt;/script&gt;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>入口函数</p>
+<ul>
+<li>页面(结构、样式、节点)加载完毕后，才会执行函数体内的js部分<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">window.onload = function()&#123; </div><div class="line">    内部放js</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h1><h2 id="命名方法和规则"><a href="#命名方法和规则" class="headerlink" title="命名方法和规则"></a>命名方法和规则</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var my_value = &quot;true&quot;;</div><div class="line">var myValue = &quot;true&quot;;</div></pre></td></tr></table></figure>
+<ul>
+<li><p>驼峰命名法</p>
+<ul>
+<li><p>全部小写</p>
+<p>单词与单词间用下划线分割</p>
+</li>
+<li><p>大小写混写</p>
+<p>第一个单词首字母小写，其他首字母大写</p>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>规则<blockquote>
+<ul>
+<li>变量命名必须以字母或是下标符号”_”或者”$”为开头。</li>
+<li>变量名长度不能超过255个字符。</li>
+<li>变量名中不允许使用空格。</li>
+<li>不用使用脚本语言中保留的关键字及保留符号作为变量名。</li>
+<li>变量名区分大小写。(javascript是区分大小写的语言)</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<h2 id="作用域"><a href="#作用域" class="headerlink" title="作用域"></a>作用域</h2><h3 id="全局变量和局部变量"><a href="#全局变量和局部变量" class="headerlink" title="全局变量和局部变量"></a>全局变量和局部变量</h3><table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:center">全局变量</th>
+<th style="text-align:center">局部变量</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">包含</td>
+<td style="text-align:center">在函数体外定义的变量；在函数体内部定义的无var的变量</td>
+<td style="text-align:center">在函数内部使用var 声明的变量</td>
+</tr>
+<tr>
+<td style="text-align:center">调用</td>
+<td style="text-align:center">任何位置</td>
+<td style="text-align:center">当前函数体内部</td>
+</tr>
+</tbody>
+</table>
+<p>e.g.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">function square(num)&#123;</div><div class="line">    total = num * num;</div><div class="line">    return num;</div><div class="line">&#125;</div><div class="line">var num = 10;</div><div class="line">var number = square(20);</div><div class="line">alert(total);</div><div class="line"></div><div class="line">==&gt; 400</div></pre></td></tr></table></figure></p>
+<h3 id="优先级"><a href="#优先级" class="headerlink" title="优先级"></a>优先级</h3><ol>
+<li>局部变量高于同名 全局变量</li>
+<li>参数变量高于同名全局变量</li>
+<li>局部变量高于同名参数变量</li>
+</ol>
+<p>==》 全局变量 &lt;  参数变量 &lt; 局部变量</p>
+<h3 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h3><ul>
+<li>全部变量是全局对象的属性</li>
+<li><p>局部变量是调用对象的属性</p>
+</li>
+<li><p>作用域链</p>
+<ul>
+<li>内层函数可访问外层函数局部变量</li>
+<li>外层函数不能访问内层函数局部变量</li>
+</ul>
+</li>
+<li><p>生命周期</p>
+<ul>
+<li>局部变量： 除非被显示删除，否则一直存在</li>
+<li>局部变量： 自声明起至函数运行完毕或被显示删除</li>
+<li>回收机制： 标记清除 引用计数</li>
+</ul>
+</li>
+</ul>
+<p><br></p>
+<h1 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h1><h2 id="字符型"><a href="#字符型" class="headerlink" title="字符型"></a>字符型</h2><ul>
+<li>字符型(String)</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">转换字符型</div><div class="line">1.String();</div><div class="line">2.利用 &quot; &quot;</div></pre></td></tr></table></figure>
+<h2 id="数值型"><a href="#数值型" class="headerlink" title="数值型"></a>数值型</h2><ul>
+<li>数值型<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">1. 进制  0 八进制 0x 十六进制 </div><div class="line">2. 转换数值型</div><div class="line">   - * /</div><div class="line">   Number();</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="布尔型"><a href="#布尔型" class="headerlink" title="布尔型"></a>布尔型</h2><ul>
+<li>布尔型(boolean)<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">转换成布尔型</div><div class="line">&gt; 利用 !! ||  Boolean()</div><div class="line">e.g. </div><div class="line">var num = 0;</div><div class="line">console.log(typeof !!num); || console.log(typeof (Boolean(num)));</div><div class="line"></div><div class="line">boolean</div><div class="line"></div><div class="line"></div><div class="line">parseInt(值，进制)   //没有进制时取整</div><div class="line">parseFloat();</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="null"><a href="#null" class="headerlink" title="null"></a>null</h2><ul>
+<li>null 空的，没有值</li>
+</ul>
+<h2 id="undefined"><a href="#undefined" class="headerlink" title="undefined"></a>undefined</h2><ul>
+<li>undefined 未定义，有值未赋值 </li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">javascript</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/06/05/javascript01/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+  
+    <article id="post-nginx" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/06/03/nginx/">安装nginx服务器</a>
+    </h1>
+  
+
+        
+        <a href="/2017/06/03/nginx/" class="archive-article-date">
+  	<time datetime="2017-06-03T09:30:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-03</time>
+</a>
+        
+      </header>
+    
+
+<!-- 目录内容 -->
+   
+<!-- 目录内容结束 -->
+
+
+
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+
+
+
+
+        <h1 id="相关说明"><a href="#相关说明" class="headerlink" title="相关说明"></a>相关说明</h1><ul>
+<li>操作系统：Ubuntu</li>
+<li>源码目录：/usr/local/src</li>
+<li>编译环境开发库已安装<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">apt-get install build-essential</div><div class="line">apt-get install libtool</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="安装Nginx"><a href="#安装Nginx" class="headerlink" title="安装Nginx"></a>安装Nginx</h1><h2 id="安装PCRE库"><a href="#安装PCRE库" class="headerlink" title="安装PCRE库"></a>安装PCRE库</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">cd /usr/local/src</div><div class="line">sudo wget ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.40.tar.gz</div><div class="line">sudo tar -zxvf pcre-8.40.tar.gz</div><div class="line">cd pcre-8.40</div><div class="line">sudo ./configure</div><div class="line">sudo make &amp;&amp; make install</div></pre></td></tr></table></figure>
+<h2 id="安装zlib库"><a href="#安装zlib库" class="headerlink" title="安装zlib库"></a>安装zlib库</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">cd /usr/local/src</div><div class="line">sudo wget http://zlib.net/zlib-1.2.11.tar.gz</div><div class="line">sudo tar -zxvf zlib-1.2.11.tar.gz</div><div class="line">cd zlib-1.2.11</div><div class="line">sudo ./configure</div><div class="line">sudo make &amp;&amp; make install</div></pre></td></tr></table></figure>
+<h2 id="安装SSL"><a href="#安装SSL" class="headerlink" title="安装SSL"></a>安装SSL</h2> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">cd /usr/local/src</div><div class="line">sudo wget https://www.openssl.org/source/openssl-1.0.1t.tar.gz</div><div class="line">sudo tar -zxvf openssl-1.0.1t.tar.gz</div><div class="line">cd openssl-1.0.1t</div><div class="line">sudo ./config</div><div class="line">sudo make &amp;&amp; make install</div></pre></td></tr></table></figure>
+<h2 id="安装nginx"><a href="#安装nginx" class="headerlink" title="安装nginx"></a>安装nginx</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">cd /usr/local/src</div><div class="line">sudo wget http://nginx.org/download/nginx-1.4.2.tar.gz</div><div class="line">sudo tar -zxvf nginx-1.4.2.tar.gz</div><div class="line">cd nginx-1.4.2</div><div class="line">sudo ./configure --sbin-path=/usr/local/nginx/nginx \</div><div class="line"> --conf-path=/usr/local/nginx/nginx.conf \</div><div class="line"> --pid-path=/usr/local/nginx/nginx.pid \</div><div class="line"> --with-http_ssl_module \</div><div class="line"> --with-pcre=/usr/local/src/pcre-8.40 \</div><div class="line"> --with-zlib=/usr/local/src/zlib-1.2.11 \</div><div class="line"> --with-openssl=/usr/local/src/openssl-1.0.1t</div><div class="line"> </div><div class="line"> sudo make &amp;&amp; make install</div></pre></td></tr></table></figure>
+<h1 id="Nginx"><a href="#Nginx" class="headerlink" title="Nginx"></a>Nginx</h1><ul>
+<li>启动<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo /usr/local/nginx/nginx</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>重新加载</p>
+   <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo /usr/local/nginx/nginx -s reload</div></pre></td></tr></table></figure>
+</li>
+<li><p>更改主目录</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">server &#123;</div><div class="line">        listen       80;</div><div class="line">         server_name  localhost;</div><div class="line"></div><div class="line">          #charset koi8-r;</div><div class="line"></div><div class="line">           #access_log  logs/host.access.log  main;</div><div class="line"></div><div class="line">	           location / &#123;</div><div class="line">		               root   /home/lucia/Flat-Design;</div><div class="line">			                   index  index.html index.htm;</div><div class="line">					           &#125;</div><div class="line"></div><div class="line">						           #error_page  404              /404.html;</div></pre></td></tr></table></figure>
+<ul>
+<li>cd /usr/local/nginx/nginx.conf</li>
+<li><p>vim搜索/root  然后修改为自己所需的主目录</p>
+<h1 id="附录-Make编译选项"><a href="#附录-Make编译选项" class="headerlink" title="附录 Make编译选项"></a>附录 Make编译选项</h1><pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">--prefix=path    定义一个目录，存放服务器上的文件 ，也就是nginx的安装目录。默认使用 /usr/local/nginx。</div><div class="line">--sbin-path=path 设置nginx的可执行文件的路径，默认为  prefix/sbin/nginx.</div><div class="line">--conf-path=path  设置在nginx.conf配置文件的路径。nginx允许使用不同的配置文件启动，通过命令行中的-c选项。默认为prefix/conf/nginx.conf.</div><div class="line">--pid-path=path  设置nginx.pid文件，将存储的主进程的进程号。安装完成后，可以随时改变的文件名 ， 在nginx.conf配置文件中使用 PID指令。默认情况下，文件名 为prefix/logs/nginx.pid.</div><div class="line">--error-log-path=path 设置主错误，警告，和诊断文件的名称。安装完成后，可以随时改变的文件名 ，在nginx.conf配置文件中 使用 的error_log指令。默认情况下，文件名 为prefix/logs/error.log.</div><div class="line">--http-log-path=path  设置主请求的HTTP服务器的日志文件的名称。安装完成后，可以随时改变的文件名 ，在nginx.conf配置文件中 使用 的access_log指令。默认情况下，文件名 为prefix/logs/access.log.</div><div class="line">--user=name  设置nginx工作进程的用户。安装完成后，可以随时更改的名称在nginx.conf配置文件中 使用的 user指令。默认的用户名是nobody。</div><div class="line">--group=name  设置nginx工作进程的用户组。安装完成后，可以随时更改的名称在nginx.conf配置文件中 使用的 user指令。默认的为非特权用户。</div><div class="line">--with-select_module --without-select_module 启用或禁用构建一个模块来允许服务器使用select()方法。该模块将自动建立，如果平台不支持的kqueue，epoll，rtsig或/dev/poll。</div><div class="line">--with-poll_module --without-poll_module 启用或禁用构建一个模块来允许服务器使用poll()方法。该模块将自动建立，如果平台不支持的kqueue，epoll，rtsig或/dev/poll。</div><div class="line">--without-http_gzip_module — 不编译压缩的HTTP服务器的响应模块。编译并运行此模块需要zlib库。</div><div class="line">--without-http_rewrite_module  不编译重写模块。编译并运行此模块需要PCRE库支持。</div><div class="line">--without-http_proxy_module — 不编译http_proxy模块。</div><div class="line">--with-http_ssl_module — 使用https协议模块。默认情况下，该模块没有被构建。建立并运行此模块的OpenSSL库是必需的。</div><div class="line">--with-pcre=path — 设置PCRE库的源码路径。PCRE库的源码（版本4.4 - 8.30）需要从PCRE网站下载并解压。其余的工作是Nginx的./ configure和make来完成。正则表达式使用在location指令和 ngx_http_rewrite_module 模块中。</div><div class="line">--with-pcre-jit —编译PCRE包含“just-in-time compilation”（1.1.12中， pcre_jit指令）。</div><div class="line">--with-zlib=path —设置的zlib库的源码路径。要下载从 zlib（版本1.1.3 - 1.2.5）的并解压。其余的工作是Nginx的./ configure和make完成。ngx_http_gzip_module模块需要使用zlib 。</div><div class="line">--with-cc-opt=parameters — 设置额外的参数将被添加到CFLAGS变量。例如,当你在FreeBSD上使用PCRE库时需要使用:--with-cc-opt=&quot;-I /usr/local/include。.如需要需要增加 select()支持的文件数量:--with-cc-opt=&quot;-D FD_SETSIZE=2048&quot;.</div><div class="line">--with-ld-opt=parameters —设置附加的参数，将用于在链接期间。例如，当在FreeBSD下使用该系统的PCRE库,应指定:--with-ld-opt=&quot;-L /usr/local/lib&quot;</div></pre></td></tr></table></figure>
+</code></pre></li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">nginx</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/06/03/nginx/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+  
+    <article id="post-script" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/05/25/script/">GIT/MAVEN 打包生成软件安装脚本</a>
+    </h1>
+  
+
+        
+        <a href="/2017/05/25/script/" class="archive-article-date">
+  	<time datetime="2017-05-25T15:22:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-05-25</time>
+</a>
+        
+      </header>
+    
+
+<!-- 目录内容 -->
+   
+<!-- 目录内容结束 -->
+
+
+
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+
+
+
+
+        <h1 id="场景需求"><a href="#场景需求" class="headerlink" title="场景需求"></a>场景需求</h1><p>测试人员通过TAG迁出相应的代码，使用MAVEN打成war包后，再与相应的依赖包打成TAR包，做成一键安装软件</p>
+<p> <img src="http://oh4uobiuk.bkt.clouddn.com/autoinstall.png" alt="autoinstall"></p>
+<h2 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h2><p>├── backup # 生成的软件安装包备份目录</p>
+<p>├── git_mvn # 从git迁出的源代码目录</p>
+<p>│ └──XXXX</p>
+<p>├── package # 软件安装包</p>
+<p>│ ├── conf # 软件配置目录</p>
+<p>│ ├── rpm # 软件依赖所需的rpm包目录</p>
+<p>│ ├── XXXX_setup.sh 软件安装执行脚本（MASTER）</p>
+<p>│ ├── script # 软件所需的其他脚本</p>
+<p>│ ├── software</p>
+<p>│ ├── sql # 软件所需的初始化语句</p>
+<p>│ └── war # 软件war包</p>
+<p>└──package.sh # 打包脚本</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>从OSC@GIT上根据 TAG 迁出的源代码打成 war 包，将其放置在 package/war 目录下，将 package 下 的所有文件及目录打成软件安装包（softeware_version.tar.gz）</p>
+<p>= package.sh</p>
+<h1 id="场景分析"><a href="#场景分析" class="headerlink" title="场景分析"></a>场景分析</h1><ul>
+<li>搭建 GIT / MAVEN 环境</li>
+<li>编写 package.sh<h2 id="搭建GIT环境"><a href="#搭建GIT环境" class="headerlink" title="搭建GIT环境"></a>搭建GIT环境</h2></li>
+</ul>
+<h3 id="Step-1-安装所需的包"><a href="#Step-1-安装所需的包" class="headerlink" title="Step 1: 安装所需的包"></a>Step 1: 安装所需的包</h3><p>源代码编译GIT之前，确保系统安装了所需的包或者通过以下命令来安装它</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@lucia ~]# yum install curl-devel expat-devel gettext-devel openssl-devel zlib-devel perl-ExtUtils-MakeMaker package -y</div><div class="line">[root@lucia ~]# yum install gcc  -y (下载 编译器 )</div><div class="line">[root@lucia ~]# yum install wget (使用wget 下载软件包)</div></pre></td></tr></table></figure>
+<h3 id="Step-2：下载并编译GIT源代码"><a href="#Step-2：下载并编译GIT源代码" class="headerlink" title="Step 2：下载并编译GIT源代码"></a>Step 2：下载并编译GIT源代码</h3><p>从 git-scm 下载最新Git源代码或者简单的使用以下载命令下载Git 1.8.5.6<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@lucia ~]# cd /usr/src</div><div class="line">[root@lucia src]# wget https://www.kernel.org/pub/software/scm/git/git-1.8.5.6.tar.gz</div><div class="line">[root@lucia src]# tar -zxvf git-1.8.5.6.tar.gz</div></pre></td></tr></table></figure></p>
+<p>在下载提取源代码后，使用以下命令来编译源代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[root@lucia src]# cd git-1.8.5.6</div><div class="line">[root@lucia git-1.8.5.6]# make prefix=/usr/local/git all</div><div class="line">[root@lucia git-1.8.5.6]# make prefix=/usr/local/git install</div><div class="line">[root@lucia git-1.8.5.6]# echo &quot;export PATH=$PATH:/usr/local/git/bin&quot; &gt;&gt; /etc/bashrc # 设置环境变量</div><div class="line">[root@lucia git-1.8.5.6]# source /etc/bashrc</div></pre></td></tr></table></figure>
+<h3 id="Step-4：下载apache-maven"><a href="#Step-4：下载apache-maven" class="headerlink" title="Step 4：下载apache-maven"></a>Step 4：下载apache-maven</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">[root@lucia git-1.8.5.6]# cd /usr/src/</div><div class="line">[root@lucia src]# wget -c --no-check-certificate --no-cookies --header &quot;Cookie: oraclelicense=accept-securebackup-cookie&quot; http://download.oracle.com/otn-pub/java/jdk/7u60-b19/jdk-7u60-linux-x64.rpm    # JDK 下载地址 http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html</div><div class="line">[root@lucia src]# wget http://mirrors.cnnic.cn/apache/maven/maven-3/3.3.3/binaries/apache-maven-3.3.3-bin.tar.gz</div><div class="line">[root@lucia src]# tar -zxvf apache-maven-3.3.3-bin.tar.gz</div><div class="line">[root@lucia src]# mv apache-maven-3.3.3 /usr/local/maven3</div><div class="line"> </div><div class="line">[root@lucia src]# cat &gt;&gt; /etc/profile &lt;&lt; EOF  # 设置环境变量</div><div class="line">&gt; MAVEN_HOME=/usr/local/maven3</div><div class="line">&gt; export MAVEN_HOME</div><div class="line">&gt; export PATH=$&#123;PATH&#125;:$&#123;MAVEN_HOME&#125;/bin</div><div class="line">&gt; EOF</div><div class="line">[root@lucia src]# source /etc/profile</div></pre></td></tr></table></figure>
+<h3 id="Step-5：-告诉GIT你的名字和email"><a href="#Step-5：-告诉GIT你的名字和email" class="headerlink" title="Step 5： 告诉GIT你的名字和email"></a>Step 5： 告诉GIT你的名字和email</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@lucia src]# git config --global user.name &quot;lucia&quot;</div><div class="line">[root@lucia src]# git config --global user.email &quot;luciaxxxxx@XXX.com</div></pre></td></tr></table></figure>
+<h3 id="Step-6-拉取GIT源代码进行MAVEN打包"><a href="#Step-6-拉取GIT源代码进行MAVEN打包" class="headerlink" title="Step 6 : 拉取GIT源代码进行MAVEN打包"></a>Step 6 : 拉取GIT源代码进行MAVEN打包</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[root@lucia src]# mkdir -p /lucia/git_maven</div><div class="line">[root@lucia src]# cd /lucia/git_maven</div><div class="line">[root@lucia git_maven]# git clone git@git.oschina.net:XXXXX/XXXXX.git （需要验证用户名及密码，跳过验证一步，需要主机信任）</div><div class="line">[root@lucia git_maven]# cd XXXX</div><div class="line">[root@lucia git_maven]# mvn package</div></pre></td></tr></table></figure>
+<h2 id="编写package-sh"><a href="#编写package-sh" class="headerlink" title="编写package.sh"></a>编写package.sh</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line">#!/bin/bash</div><div class="line"># defined Dirctory</div><div class="line">GIT_REPO=https://git.oschina.net/XXXXX/XXXXX.git   #software 仓库URL地址</div><div class="line">SCRIPTS_DIR=/lucia                        # 定义脚本所在位置 SCRIPTS_DIR=`pwd` 或者指定安装路径 /Lucia</div><div class="line">PACKAGE_DIR=$&#123;SCRIPTS_DIR&#125;/package        # 定义软件安装脚本所在的目录</div><div class="line">BACKUP_DIR=$&#123;SCRIPTS_DIR&#125;/backup          # 定义生成软件安装包备份目录</div><div class="line">GIT_PAG=$&#123;SCRIPTS_DIR&#125;/git_mvn            # 定义源代码所放目录</div><div class="line">SW_GIT=$&#123;GIT_PAG&#125;/XXXX                    # 定义软件源代码名字</div><div class="line">TIMESTAMP=$(date +&apos;%Y%m%d%H%M%S&apos;)         # 定义时间戳生成格式</div><div class="line">#define TarName</div><div class="line">PRODUCT_NAME=XXXX                                        # 定义项目名称</div><div class="line">PRODUCT_VERSION=1.0.10                                   # 定义项目版本</div><div class="line">PACKAGE_NAME=$&#123;PRODUCT_NAME&#125;_$&#123;PRODUCT_VERSION&#125;.tar.gz   # 定义软件安装包名称格式</div><div class="line">TAG_NAME=TAG_XXXX1000_1.0.10_build20160115               # TAG</div><div class="line"> </div><div class="line">function add_gitPage()&#123;</div><div class="line">	[ -d $&#123;SW_GIT&#125; ] &amp;&amp; rm -rf $&#123;SW_GIT&#125;                     </div><div class="line">	mkdir -p $&#123;GIT_PAG&#125; </div><div class="line">    cd $&#123;GIT_PAG&#125;  </div><div class="line">	git clone $&#123;GIT_REPO&#125;                             # 拉取全局代码                        </div><div class="line">	cd $&#123;SW_GIT&#125;</div><div class="line">	git checkout -b new_branch_name $&#123;TAG_NAME&#125;       #新建且切换分支，根据TAG迁出代码</div><div class="line">	source /etc/profile</div><div class="line">	mvn package                                       #打包</div><div class="line">	cd $&#123;SW_GIT&#125;/target</div><div class="line">	mv *.war $&#123;TAG_NAME&#125;.war </div><div class="line">&#125;</div><div class="line">function add_tarPage()&#123;</div><div class="line">	cd $&#123;PACKAGE_DIR&#125;/war</div><div class="line">	rm -rf TAG_XXXX*                                  #删除之前war目录中的项目war包</div><div class="line">	\cp $&#123;SW_GIT&#125;/target/$&#123;TAG_NAME&#125;.war ./   </div><div class="line">	[ -d $&#123;BACKUP_DIR&#125; ] || mkdir -p $&#123;BACKUP_DIR&#125;</div><div class="line">	</div><div class="line">	cd $&#123;SCRIPTS_DIR&#125;</div><div class="line">	[ -f $&#123;PACKAGE_NAME&#125; ] &amp;&amp; mv $&#123;PACKAGE_NAME&#125; $&#123;BACKUP_DIR&#125;/$&#123;PACKAGE_NAME&#125;_$&#123;TIMESTAMP&#125;</div><div class="line">	</div><div class="line">	cd $&#123;PACKAGE_DIR&#125;</div><div class="line">		tar -zcvf $&#123;PRODUCT_NAME&#125;_$&#123;PRODUCT_VERSION&#125;.tar.gz *</div><div class="line">		mv $&#123;PRODUCT_NAME&#125;_$&#123;PRODUCT_VERSION&#125;.tar.gz $&#123;SCRIPTS_DIR&#125;</div><div class="line">	</div><div class="line">&#125;</div><div class="line">add_gitPage</div><div class="line">add_tarPage</div></pre></td></tr></table></figure>
+<p>通过执行sh package.sh 生成XXXX_Version.tar.gz；即可完成一键安装包的制作</p>
+<h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><ul>
+<li>附1：如何主机信任？（OSC）</li>
+</ul>
+<p>代码库→点击管理→点击部署公钥管理→点击添加公钥<br>点击查看怎样生成公钥，将公钥添加到此处（此处不多解释）</p>
+<ul>
+<li>附2：GIT环境安装脚本<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">#!/bin/bash</div><div class="line"># this script is order to install git</div><div class="line">yum install curl-devel expat-devel gettext-devel openssl-devel zlib-devel perl-ExtUtils-MakeMaker package wget gcc -y</div><div class="line">if [ $? = 0 ];then</div><div class="line">    cd /usr/src</div><div class="line">    wget https://www.kernel.org/pub/software/scm/git/git-1.8.5.6.tar.gz</div><div class="line">    if  [ $? = 0 ];then</div><div class="line">    tar -zxvf git-1.8.5.6.tar.gz</div><div class="line">    cd git-1.8.5.6    </div><div class="line">    make prefix=/usr/local/git all</div><div class="line">    make prefix=/usr/local/git install</div><div class="line">    echo &quot;export PATH=$PATH:/usr/local/git/bin&quot; &gt;&gt; /etc/bashrc </div><div class="line">    source /etc/bashrc</div><div class="line">    else    </div><div class="line">    echo wget git_tar failed</div><div class="line">else</div><div class="line">echo yum install failed</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="题外话"><a href="#题外话" class="headerlink" title="题外话"></a>题外话</h3><p>若需要执行tar包中的xxxx_setup.sh，需要写install.sh去调用它</p>
+<ul>
+<li>install.sh 的思路如下：<ul>
+<li>定义软件名称、版本、等（与package中的版本保持一致）</li>
+<li>判断最大盘符</li>
+<li>定义安装目录 (define XXXX)</li>
+<li>设置环境变量 (source /etc/profile)</li>
+<li>解压缩一键安装包 (tar -zxf XXX -C XXX)</li>
+<li>执行一键安装包中的XXXX_setup.sh脚本<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">#判断最大盘符</div><div class="line">maxPath=&quot;$(df -k | grep `df -k | grep -v Filesystem | awk &apos;&#123;print $4&#125;&apos; | awk &apos;&#123;max=max&gt;$1?max:$1&#125;END&#123;print max&#125;&apos;` | awk &apos;&#123;print $6&#125;&apos;)&quot;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">shell</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/05/25/script/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+  
+    <article id="post-pptp" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/05/25/pptp/">PPTP_VPN Client 安装</a>
+    </h1>
+  
+
+        
+        <a href="/2017/05/25/pptp/" class="archive-article-date">
+  	<time datetime="2017-05-25T15:19:54.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-05-25</time>
+</a>
+        
+      </header>
+    
+
+<!-- 目录内容 -->
+   
+<!-- 目录内容结束 -->
+
+
+
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+
+
+
+
+        <h1 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h1><h2 id="实验需求"><a href="#实验需求" class="headerlink" title="实验需求"></a>实验需求</h2><p>客户内网服务器vpn拨号，根据获取PPP账号进行SSH连接</p>
+<h2 id="实验实现"><a href="#实验实现" class="headerlink" title="实验实现"></a>实验实现</h2><p>服务器：CentOS 6.5-minimal<br>软 件：PPTP_VPN Client</p>
+<h1 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h1><h2 id="安装软件PPTP-VPN-Client"><a href="#安装软件PPTP-VPN-Client" class="headerlink" title="安装软件PPTP_VPN_Client"></a>安装软件PPTP_VPN_Client</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum -y install pptp pptp-setup</div></pre></td></tr></table></figure>
+<h2 id="使用pptpsetup命令创建VPN节点"><a href="#使用pptpsetup命令创建VPN节点" class="headerlink" title="使用pptpsetup命令创建VPN节点"></a>使用pptpsetup命令创建VPN节点</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">pptpsetup  --create myvpn --server XX.XXX.XX.XX --username aaa --password 123456 --encrypt --start</div><div class="line">#------pptpsetup命令及说明--------#</div><div class="line"># pptpsetup  --create &lt;TUNNEL&gt; --server &lt;ip address/hostname&gt; [--domain &lt;DOMAIN NAME&gt;] --u sername &lt;USERNAME&gt; [--password &lt;PASSWORD&gt;] [--encrypt] [--start]</div><div class="line"># pptpsetup –delete &lt;TUNNEL&gt; 删除一个节点</div></pre></td></tr></table></figure>
+<p><strong>Options:</strong></p>
+<ul>
+<li>TUNNEL 创建的连接名称，自指定。</li>
+<li>SERVER PPTP SERVER的IP或域名。</li>
+<li>DOMAIN 所在的域，很多Windows的服务器都是使- 用“域”来管理认证的。</li>
+<li>USERNAME VPN 用户名（域用户名）</li>
+<li>PASSWORD VPN上用户密码，也可以没这个参数，命令稍后会自动询问，这样保证账号安全</li>
+<li>–encrypt 表示启用加密，不必指定加密方式，命令会读取配置文件中的加密方式<br>当没使用–encrypt 连接时出现下面的错误时，表示使用了加密，这点也可以和VPN的管理员联系确认一下，遇到下面的情况可以加上该参数。</li>
+<li>CHAP authentication succeeded</li>
+<li>LCP terminated by peer (ZM-76-^@&lt;M-Mt^@^@^BM-f ) 类似乱码</li>
+<li>–start 创建连接完后马上连接</li>
+</ul>
+<h3 id="使用该命令后实际上创建了两个配置文件"><a href="#使用该命令后实际上创建了两个配置文件" class="headerlink" title="使用该命令后实际上创建了两个配置文件"></a>使用该命令后实际上创建了两个配置文件</h3><ul>
+<li>/etc/ppp/chap-secrets</li>
+<li>/etc/ppp/peers/连接名</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"># written by pptpsetup</div><div class="line">pty &quot;pptp 58.247.83.58 --nolaunchpppd&quot;</div><div class="line">lock</div><div class="line">noauth</div><div class="line">nobsdcomp</div><div class="line">nodeflate</div><div class="line">name vpn</div><div class="line">remotename myvpn</div><div class="line">ipparam myvpn</div><div class="line">require-mppe-128</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">#defaultroute  #使用本连接作为默认路由,本文单网卡没意义，可以不添加，说明见附录</div><div class="line">persist #当连接丢失时让pppd再次拨号，已验证</div><div class="line">require-mppe-128</div><div class="line">refuse-pap</div><div class="line">refuse-chap</div><div class="line">refuse-eap</div><div class="line">refuse-mschap</div></pre></td></tr></table></figure>
+<h2 id="设置拨号脚本"><a href="#设置拨号脚本" class="headerlink" title="设置拨号脚本"></a>设置拨号脚本</h2><p>拨号脚本pon 和poff在下面的目录 /usr/share/doc/ppp-*/scripts/ 里:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">cp /usr/share/doc/ppp-2.4.5/scripts/pon /usr/sbin</div><div class="line">cp /usr/share/doc/ppp-2.4.5/scripts/poff /usr/sbin</div><div class="line">chmod +x /usr/sbin/pon /usr/sbin/poff</div><div class="line">#使pon和poff脚本拥有执行权限</div></pre></td></tr></table></figure></p>
+<p>这样就可以通过pon/poff 来启停VPN连接。也可以使用 pppd call / killall pppd来启动/停止。</p>
+<h2 id="设置开机自动拨号，并在拨号后改变路由"><a href="#设置开机自动拨号，并在拨号后改变路由" class="headerlink" title="设置开机自动拨号，并在拨号后改变路由"></a>设置开机自动拨号，并在拨号后改变路由</h2><p>把启动拨号的命令添加到/etc/rc.d/local文件中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">pppd call myvpn</div><div class="line">sleep 10s</div><div class="line">ip route delete default</div><div class="line">ip route add default dev ppp0</div></pre></td></tr></table></figure>
+<blockquote>
+<ul>
+<li>注明：查看VPN Log；相应的LOG可以在/var/log/message 中查看</li>
+<li>相关文档参考：<a href="http://netside.blog.51cto.com/766556/870961" target="_blank" rel="external">http://netside.blog.51cto.com/766556/870961</a></li>
+</ul>
+</blockquote>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">vpn</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/05/25/pptp/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+  
+    <article id="post-MyLife" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/01/16/MyLife/">Intro</a>
+    </h1>
+  
+
+        
+        <a href="/2017/01/16/MyLife/" class="archive-article-date">
+  	<time datetime="2017-01-16T11:55:18.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-01-16</time>
+</a>
+        
+      </header>
+    
+
+<!-- 目录内容 -->
+   
+<!-- 目录内容结束 -->
+
+
+
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+
+
+
+
+        <script>
+    if("luxiansen"==prompt("请输入密码"))
+    {
+        // alert("正确");
+
+      document.write("你看过凌晨四点的洛杉矶吗？"
+            +"<br />"
+            +"得不到是因为没有想要到发疯"
+            +"<br />"
+            +"你以为的极限弄不好只是别人的起点"
+            +"<br />"
+            +"所有被千夫所指的困难，都是为了淘汰掉懦夫");
+
+
+    }
+    else
+    {
+        alert("错误");
+        location="http://luciamoorelu.github.io"; 
+    }
+</script>
+
+
+
+
+
+
+
+
+
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">随笔</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/01/16/MyLife/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+  
   
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
     </nav>
   
 
@@ -1377,11 +1761,11 @@ return o(t,i(n),arguments.length<3?void 0:u(arguments[2]))}})},function(t,n,r){v
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
+                <a href="javascript:void(0)" class="js-tag color1">CentOS  分区</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">CentOS  分区</a>
+                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1394,6 +1778,10 @@ return o(t,i(n),arguments.length<3?void 0:u(arguments[2]))}})},function(t,n,r){v
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">offset</a>
               </li>
              
               <li class="article-tag-list-item">

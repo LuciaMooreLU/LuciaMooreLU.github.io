@@ -6,15 +6,21 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>one | Lucia&#39;s Note</title>
+  <title>offset家族 | Lucia&#39;s Note</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="article">
-<meta property="og:title" content="one">
-<meta property="og:url" content="http://yoursite.com/2017/06/15/one/index.html">
+  <meta name="description" content="定位父级 offsetParent 定义：当前元素最近的经过定位(position不等于static)的父级元素   元素自身有fixed定位，offsetParent的结果为null当元素自身有fixed固定定位时，固定定位的元素相对于视窗进行定位，没有定位父级，返回的offsetParent的结果为null  12345&amp;lt;div id=&amp;quot;test&amp;quot; style=&amp;">
+<meta name="keywords" content="offset">
+<meta property="og:type" content="article">
+<meta property="og:title" content="offset家族">
+<meta property="og:url" content="http://yoursite.com/2017/06/25/offset/index.html">
 <meta property="og:site_name" content="Lucia&#39;s Note">
-<meta property="og:updated_time" content="2017-06-15T09:27:54.690Z">
+<meta property="og:description" content="定位父级 offsetParent 定义：当前元素最近的经过定位(position不等于static)的父级元素   元素自身有fixed定位，offsetParent的结果为null当元素自身有fixed固定定位时，固定定位的元素相对于视窗进行定位，没有定位父级，返回的offsetParent的结果为null  12345&amp;lt;div id=&amp;quot;test&amp;quot; style=&amp;">
+<meta property="og:image" content="https://www.z4a.net/images/2017/07/02/offset.png">
+<meta property="og:updated_time" content="2017-07-02T13:36:48.737Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="one">
+<meta name="twitter:title" content="offset家族">
+<meta name="twitter:description" content="定位父级 offsetParent 定义：当前元素最近的经过定位(position不等于static)的父级元素   元素自身有fixed定位，offsetParent的结果为null当元素自身有fixed固定定位时，固定定位的元素相对于视窗进行定位，没有定位父级，返回的offsetParent的结果为null  12345&amp;lt;div id=&amp;quot;test&amp;quot; style=&amp;">
+<meta name="twitter:image" content="https://www.z4a.net/images/2017/07/02/offset.png">
   
     <link rel="alternative" href="/atom.xml" title="Lucia&#39;s Note" type="application/atom+xml">
   
@@ -146,20 +152,20 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-one" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-offset" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      one
+      offset家族
     </h1>
   
 
         
-        <a href="/2017/06/15/one/" class="archive-article-date">
-  	<time datetime="2017-06-15T09:27:54.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-15</time>
+        <a href="/2017/06/25/offset/" class="archive-article-date">
+  	<time datetime="2017-06-25T14:16:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-25</time>
 </a>
         
       </header>
@@ -178,7 +184,65 @@
 
 
 
-        
+        <p><img src="https://www.z4a.net/images/2017/07/02/offset.png" alt="offset.png"></p>
+<p><br></p>
+<h2 id="定位父级-offsetParent"><a href="#定位父级-offsetParent" class="headerlink" title="定位父级 offsetParent"></a>定位父级 offsetParent</h2><blockquote>
+<p>定义：当前元素最近的经过定位(position不等于static)的父级元素</p>
+</blockquote>
+<ul>
+<li><strong>元素自身有fixed定位，offsetParent的结果为null</strong><br>当元素自身有fixed固定定位时，固定定位的元素相对于视窗进行定位，没有定位父级，返回的offsetParent的结果为null</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;div id=&quot;test&quot; style=&quot;position:fixed&quot;&gt;&lt;/div&gt;    </div><div class="line">&lt;script&gt;</div><div class="line">//firefox并没有考虑固定定位的问题，返回&lt;body&gt;，其他浏览器都返回null</div><div class="line">console.log(test.offsetParent); </div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
+<ul>
+<li><strong>元素自身无fixed定位，且父级元素都未经过定位，offsetParent的结果为\<body\></body\></strong></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;div id=&quot;test&quot;&gt;&lt;/div&gt;    </div><div class="line">&lt;script&gt;</div><div class="line">console.log(test.offsetParent);//&lt;body&gt;</div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
+<ul>
+<li>元素自身无fixed定位，且父级元素存在经过定位的元素，offsetParent的结果为离自身元素最近的经过定位的父级元素</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&lt;div id=&quot;div0&quot; style=&quot;position:absolute;&quot;&gt;</div><div class="line">    &lt;div id=&quot;div1&quot; style=&quot;position:absolute;&quot;&gt;</div><div class="line">        &lt;div id=&apos;test&apos;&gt;&lt;/div&gt;    </div><div class="line">    &lt;/div&gt;    </div><div class="line">&lt;/div&gt;</div><div class="line">&lt;script&gt;</div><div class="line">console.log(test.offsetParent);    //&lt;div id=&quot;div1&quot;&gt;</div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
+<ul>
+<li><body>元素的parentNode是null</body></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">console.log(document.body.offsetParent);//null</div></pre></td></tr></table></figure>
+<h3 id="IE7-浏览器bug"><a href="#IE7-浏览器bug" class="headerlink" title="IE7 - 浏览器bug"></a>IE7 - 浏览器bug</h3><ul>
+<li>对于定位父级offsetParent来说，IE7-浏览器存在以下bug</li>
+</ul>
+<ol>
+<li>【bug1】当元素本身经过绝对定位或相对定位，且父级元素无经过定位的元素时，IE7-浏览器下，offsetParent是<html></html></li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">&lt;div id=&quot;test&quot; style=&quot;position:absolute;&quot;&gt;&lt;/div&gt;    </div><div class="line">&lt;script&gt;</div><div class="line">//IE7-浏览器返回&lt;html&gt;，其他浏览器返回&lt;body&gt;</div><div class="line">console.log(test.offsetParent);</div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;div id=&quot;test&quot; style=&quot;position:relative;&quot;&gt;&lt;/div&gt;    </div><div class="line">&lt;script&gt;</div><div class="line">//IE7-浏览器返回&lt;html&gt;，其他浏览器返回&lt;body&gt;</div><div class="line">console.log(test.offsetParent);</div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
+<ol>
+<li>【bug2】如果父级元素存在触发haslayout的元素或经过定位的元素，且offsetParent的结果为离自身元素最近的经过定位或触发haslayout的父级元素</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&lt;div id=&quot;div0&quot; style=&quot;display:inline-block;&quot;&gt;</div><div class="line">    &lt;div id=&apos;test&apos;&gt;&lt;/div&gt;    </div><div class="line">&lt;/div&gt;</div><div class="line">&lt;script&gt;</div><div class="line">//IE7-浏览器返回&lt;div id=&quot;div0&quot;&gt;，其他浏览器返回&lt;body&gt;</div><div class="line">console.log(test.offsetParent);</div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&lt;div id=&quot;div0&quot; style=&quot;display:inline-block;&quot;&gt;</div><div class="line">    &lt;div id=&apos;test&apos;&gt;&lt;/div&gt;    </div><div class="line">&lt;/div&gt;</div><div class="line">&lt;script&gt;</div><div class="line">//IE7-浏览器返回&lt;div id=&quot;div0&quot;&gt;，其他浏览器返回&lt;body&gt;</div><div class="line">console.log(test.offsetParent);</div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&lt;div id=&quot;div0&quot; style=&quot;display:inline-block;&quot;&gt;</div><div class="line">    &lt;div id=&quot;div1&quot; style=&quot;position:absolute;&quot;&gt;</div><div class="line">        &lt;div id=&apos;test&apos;&gt;&lt;/div&gt;    </div><div class="line">    &lt;/div&gt;    </div><div class="line">&lt;/div&gt;</div><div class="line">&lt;script&gt;</div><div class="line">//所有浏览器都返回&lt;div id=&quot;div1&quot;&gt;</div><div class="line">console.log(test.offsetParent);</div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
+<h2 id="offsetWidth-offsetHeight"><a href="#offsetWidth-offsetHeight" class="headerlink" title="offsetWidth / offsetHeight"></a>offsetWidth / offsetHeight</h2><ul>
+<li>得到对象自己的宽度和高度</li>
+<li>offsetWidth =  width  + border  +  padding</li>
+<li>offsetHeight 和 offsetWidth 同理</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">&lt;div id=&quot;box&quot; style=&quot;width:220px;border: 1px solid red;padding: 10px;height: 20px;&quot;&gt;&lt;/div&gt;</div><div class="line"></div><div class="line">&lt;script&gt;</div><div class="line">    function $(id) &#123;</div><div class="line">        return document.getElementById(id);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    //offsetWidth = border + padding + width;</div><div class="line"></div><div class="line">    var height = $(&quot;box&quot;).offsetHeight;</div><div class="line">    var width = $(&quot;box&quot;).offsetWidth;</div><div class="line">    console.log(width);  // 2+20+220 = 242</div><div class="line">    console.log(height); // 2 + 20 + 20 = 42</div><div class="line"></div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
+<h2 id="offsetLeft-offsetTop"><a href="#offsetLeft-offsetTop" class="headerlink" title="offsetLeft / offsetTop"></a>offsetLeft / offsetTop</h2><ul>
+<li><p>返回当前元素距离某个父辈元素左边缘的距离</p>
+<ul>
+<li>如果父辈元素中有定位的元素，那么就返回距离当前元素最近的定位元素边缘的距离</li>
+<li>如果父辈元素中没有定位元素，那么就返回相对于body左边缘距离</li>
+<li>子盒子到定位的父盒子边框到边框的距离</li>
+</ul>
+</li>
+<li><p>offsetTop 同理</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">&lt;div id=&quot;bigBox&quot; style=&quot;width:500px;border: 1px solid red;padding: 10px;height: 500px;margin-left: 50px;&quot;&gt;</div><div class="line">    &lt;div id=&quot;smallBox&quot; style=&quot;width: 50px;height: 50px;border: 1px solid #ccc;&quot;&gt;&lt;/div&gt;</div><div class="line">&lt;/div&gt;</div><div class="line"></div><div class="line">&lt;script&gt;</div><div class="line">    function $(id) &#123;</div><div class="line">        return document.getElementById(id);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    var left = $(&quot;smallBox&quot;).offsetLeft;</div><div class="line">    console.log(left);  // 50 + 10 + 1 =61px</div><div class="line"></div><div class="line">//smallBox的父辈没有定位，所以以当前body页面为准，计算当前页面到smallBox之间的距离</div><div class="line"></div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
+<p>　[<strong>注意</strong>]如果存在垂直滚动条，offsetWidth也包括垂直滚动条的宽度；如果存在水平滚动条，offsetHeight也包括水平滚动条的高度</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">&lt;div id=&quot;test&quot; style=&quot;width:100px; height:100px; padding:10px; margin:10px; border:1px solid black; overflow: scroll;&quot;&gt;&lt;/div&gt;    </div><div class="line">&lt;script&gt;</div><div class="line">//IE8-浏览器将垂直滚动条的宽度计算在width宽度和height高度中，width和height的值仍然是100px；</div><div class="line">//而其他浏览器则把垂直滚动条的宽度从width宽度中移出，把水平滚动条的高度从height高度中移出，则滚动条宽度为17px，width宽度和height高度为剩下的83px</div><div class="line"></div><div class="line"></div><div class="line">// 获取css样式属性值</div><div class="line"></div><div class="line">if(window.getComputedStyle)&#123;  //标准浏览器</div><div class="line">    console.log(getComputedStyle(test).width,getComputedStyle(test).height)//83px</div><div class="line">    </div><div class="line">&#125;else&#123;                       //IE浏览器</div><div class="line">    console.log(test.currentStyle.width,test.currentStyle.height);//100px </div><div class="line">&#125;</div><div class="line">//122=1+10+100+10+1</div><div class="line">console.log(test.offsetWidth,test.offsetHeight);</div><div class="line"></div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>文档主要参考 <a href="http://www.cnblogs.com/xiaohuochai/p/5828369.html" target="_blank" rel="external">http://www.cnblogs.com/xiaohuochai/p/5828369.html</a> </p>
+</blockquote>
+
       
 
       
@@ -186,6 +250,17 @@
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">offset</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
@@ -236,7 +311,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2017/06/15/one/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2017/06/25/offset/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -250,18 +325,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2017/06/21/js05/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          js05
-        
-      </div>
-    </a>
   
-  
-    <a href="/2017/06/12/jquery-01/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">jquery-01</div>
+    <a href="/2017/06/09/function/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">封装classaname 函数</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -393,11 +459,11 @@ return o(t,i(n),arguments.length<3?void 0:u(arguments[2]))}})},function(t,n,r){v
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
+                <a href="javascript:void(0)" class="js-tag color1">CentOS  分区</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">CentOS  分区</a>
+                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -410,6 +476,10 @@ return o(t,i(n),arguments.length<3?void 0:u(arguments[2]))}})},function(t,n,r){v
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">offset</a>
               </li>
              
               <li class="article-tag-list-item">
